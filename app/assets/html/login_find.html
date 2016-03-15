@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>MAKE US _ CMS</title>
+<link href="http://fonts.googleapis.com/css?family=Noto+Sans:400,700" rel="stylesheet">
+<link rel="stylesheet" href="css/default.css" />
+<link rel="stylesheet" href="css/default2.css" />
+<!--[if lt IE 9]>
+<script src="js/html5shiv.js"></script>
+<![endif]-->
+<script src="js/jquery-1.7.2.min.js"></script>
+<script src="js/design.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+	var gnbDep1 = 0;		//GNB 1depth
+	var lnbDep1 = 0;		//LNB 1depth
+	var lnbDep2 = 0;		//LNB 2depth
+</script>
+<div class="account_find">
+	<!-- 비밀번호 찾기 -->
+	<div id="find_pw" class="account_form find_pw">
+		<form>
+			<h1>
+				<strong>비밀번호 찾기</strong>
+			</h1>
+			<h2>
+				이메일과 OTP를 입력하시면<br>
+				이메일로 <span>임시 비밀번호</span>를 보내 드립니다!!
+			</h2>
+			<ul>
+				<li><input type="text" class="txt" placeholder="이메일"/></li>
+				<li><input type="text" class="txt" placeholder="OPT"/></li>
+			</ul>
+			<a class="btn_account btn_account_blue" href="#">비밀번호 찾기</a>
+		</form>
+	</div>
+	<!-- OPT 찾기 -->
+	<div id="find_otp" class="account_form find_otp">
+		<form>
+			<h1>
+				<strong>OTP 재발급</strong>
+			</h1>
+			<h2>
+				이메일과 비밀번호를 입력하시면<br>
+				이메일로 <span class="txt_blue">새로운 OTP</span>를 보내 드립니다!!
+			</h2>
+			<ul>
+				<li><input type="text" class="txt" placeholder="이메일"/></li>
+				<li><input type="password" class="txt" placeholder="비밀번호"/></li>
+			</ul>
+			<a class="btn_account btn_account_blue2" href="#">OTP 재발급</a>
+		</form>
+	</div>
+</div>
+</body>
+</html>

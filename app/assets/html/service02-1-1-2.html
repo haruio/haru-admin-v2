@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>MAKE US _ CMS</title>
+<link href="http://fonts.googleapis.com/css?family=Noto+Sans:400,700" rel="stylesheet">
+<link rel="stylesheet" href="css/default.css" />
+<!--[if lt IE 9]>
+<script src="js/html5shiv.js"></script>
+<![endif]-->
+<script src="js/jquery-1.7.2.min.js"></script>
+<script src="js/design.js"></script>
+</head>
+<body>
+
+<!--HEADER-->
+<header>
+	<h1><a href=""><img src="img/logo.png" alt="MAKE US" /></a></h1>
+		<ul>
+			<li><a href="contents01.html">Contents Management</a></li>
+			<li><a href="service01.html">Service Management</a></li>
+			<li><a href="system01.html">System Management</a></li>
+		</ul>
+		<dl>
+			<dt>Korea</dt>
+			<dd>
+				<a href="" class="on">Korea</a>
+				<a href="">English</a>
+				<a href="">Indonesia</a>
+			</dd>
+		</dl>
+		<p>
+			<b><a href="">PinkjjangPinkjjang</a></b>
+			<img src="img/default.png" alt="" /><a href="">3</a>
+		</p>
+</header>
+<!--/HEADER-->
+
+<section id="container">
+	<nav>
+		<ul id="lnb" class="service">
+			<li><a href="service01.html" class="l2_a">서비스 관리</a>
+				<ul>
+					<li><a href="service01.html">추천 컨텐츠</a></li>
+					<li><a href="service01_b.html">카테고리 관리</a></li>
+					<li><a href="service01_c.html">채널 관리</a></li>
+					<li><a href="service01_d.html">메인피드 관리</a></li>
+					<li><a href="service01_e.html">추천 검색어 관리</a></li>
+					<li><a href="service01_f.html">배너 관리</a></li>
+				</ul>
+			</li>
+			<li><a href="service02.html" class="l2_b">유저 관리</a>
+				<ul>
+					<li><a href="service02.html">유저 리스트</a></li>
+					<li><a href="">유저 통계</a></li>
+					<li><a href="">Ban List</a></li>
+				</ul>
+			</li>
+			<li><a href="service03.html" class="l2_c">댓글 관리</a></li>
+			<li><a href="service04.html" class="l2_d">신고 관리</a>
+				<ul>
+					<li><a href="">댓글</a></li>
+					<li><a href="">컨텐츠</a></li>
+				</ul>
+			</li>
+			<li><a href="service05.html" class="l2_e">Push</a></li>
+		</ul>
+	</nav>
+	
+	<!--페이지활성화-->
+	<script type="text/javascript">
+	var gnbDep1 = 2;		//GNB 1depth
+	var lnbDep1 = 1;		//LNB 1depth
+	var lnbDep2 = 1;		//LNB 2depth
+	</script>
+	<!--contents-->
+	<article>
+		<hgroup>
+			<h2>추천 컨텐츠 등록</h2>
+		</hgroup>
+		<div id="contents">
+			<div id="service_add">
+				<table class="writeTable">
+				<colgroup><col width="154px" /><col width="*" /></colgroup>
+				<tbody>
+				<tr>
+					<th>추천 컨텐츠</th>
+					<td>
+						<a class="btn_file btn_w120">Choose file</a>
+					</td>
+				</tr>
+				<tr>
+					<th>시작일</th>
+					<td>
+						<input type="text" placeholder="2015-08-08" class="txt t3" /><a href="" class="btn_calendar"></a>
+					</td>
+				</tr>
+				<tr>
+					<th>종료일</th>
+					<td>
+						<input type="text" placeholder="2015-08-08" class="txt t3" /><a href="" class="btn_calendar"></a>
+					</td>
+				</tr>
+				</tbody>
+				</table>
+			</div>
+			<p class="btn_r btnbox_w960">
+				<a href="" class="purple">등록하기</a>
+				<a href="" class="gray">취소하기</a>
+			</p>
+		</div>
+	</article>
+	<!--pop-->
+	<div class="pop" id="main_feed_add">
+		<h2>추천 컨텐츠 등록</h2>
+		<fieldset id="search_box">
+			<input type="text" placeholder="검색어를 입력해주세요." /><a href="" class="btn_search"></a>
+		</fieldset>
+		<div class="table_wrap">
+			<table class="listTable">
+				<colgroup><col width="18%" /><col width="*" /><col width="15%" /></colgroup>
+				<thead>
+				<tr>
+					<th>썸네일</th>
+					<th colspan="2">제목</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr>
+					<td><img src="http://assets2.moncast.com/thumb/4ada80b7b068013a.jpeg" alt="" /></td>
+					<td class="al">[여동] 길 가다가 한국 팬을 만난 일본 원톱 아이돌</td>
+					<td><a href="" class="btn_select">선택</a></td>
+				</tr>
+				<tr class="on">
+					<td><img src="http://assets2.moncast.com/thumb/4ada80b7b068013a.jpeg" alt="" /></td>
+					<td class="al">[여동] 길 가다가 한국 팬을 만난 일본 원톱 아이돌</td>
+					<td><a href="" class="btn_select">선택</a></td>
+				</tr>
+				<tr>
+					<td><img src="http://assets2.moncast.com/thumb/4ada80b7b068013a.jpeg" alt="" /></td>
+					<td class="al">[여동] 길 가다가 한국 팬을 만난 일본 원톱 아이돌</td>
+					<td><a href="" class="btn_select">선택</a></td>
+				</tr>
+				<tr>
+					<td><img src="http://assets2.moncast.com/thumb/4ada80b7b068013a.jpeg" alt="" /></td>
+					<td class="al">[여동] 길 가다가 한국 팬을 만난 일본 원톱 아이돌</td>
+					<td><a href="" class="btn_select">선택</a></td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+		<p class="pagination">
+			<a href=""><img src="img/paging1.png" alt="이전" /></a>
+				<span>
+					<a href="" class="on">1</a>
+					<a href="">2</a>
+					<a href="">3</a>
+					<a href="">4</a>
+					<a href="">5</a>
+					<a href="">6</a>
+					<a href="">7</a>
+					<a href="">8</a>
+					<a href="">9</a>
+					<a href="">10</a>
+				</span>
+			<a href=""><img src="img/paging2.png" alt="다음" /></a>
+		</p>
+		<p class="btn_c">
+			<a href="" class="purple">확인</a>
+			<a href="" class="gray">취소</a>
+		</p>
+	</div>
+	<!--/pop-->
+	<!--/contents-->
+</section>
+
+</body>
+</html>

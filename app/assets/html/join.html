@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>MAKE US _ CMS</title>
+<link href="http://fonts.googleapis.com/css?family=Noto+Sans:400,700" rel="stylesheet">
+<link rel="stylesheet" href="css/default.css" />
+<link rel="stylesheet" href="css/default2.css" />
+<!--[if lt IE 9]>
+<script src="js/html5shiv.js"></script>
+<![endif]-->
+<script src="js/jquery-1.7.2.min.js"></script>
+<script src="js/design.js"></script>
+</head>
+<body style="overflow: hidden;">
+<script type="text/javascript">
+	var gnbDep1 = 0;		//GNB 1depth
+	var lnbDep1 = 0;		//LNB 1depth
+	var lnbDep2 = 0;		//LNB 2depth
+</script>
+<div id="join" class="account_form join_box">
+	<form>
+		<h1>
+			<img src="img/logo2.png" alt=""/>
+			<strong>회원가입</strong>
+		</h1>
+		<ul>
+			<li><input type="text" class="txt" placeholder="이름"/></li>
+			<li><input type="text" class="txt" placeholder="이메일"/></li>
+			<li><input type="password" class="txt" placeholder="비밀번호"/></li>
+			<li><input type="password" class="txt" placeholder="비밀번호 확인"/></li>
+			<li>
+				<input type="text" class="txt" placeholder="슬랙 ID"/>
+				<div class="account_alert2">슬랙에 Push를 위해 필요합니다.</div>
+			</li>
+			<li>
+				<label>
+					<select>
+						<option>팀장 선택</option>
+						<option>팀장1</option>
+						<option>팀장2</option>
+						<option>팀장3</option>
+					</select>
+				</label>
+				<div class="account_alert2">담당자(자신의 팀장)를 선택하면 됩니다.</div>
+			</li>
+		</ul>
+		<a class="btn_account btn_account_purple" href="#">회원가입</a>
+		<p class="txt_gray">팀장의 승인과 동시에 로그인 가능합니다.<br>
+			이메일로 OTP가 발송되며,<br>다운 받으신 후에 사용하시면 됩니다.</p>
+	</form>
+</div>
+</body>
+</html>

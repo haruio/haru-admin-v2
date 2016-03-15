@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>MAKE US _ CMS</title>
+<link href="http://fonts.googleapis.com/css?family=Noto+Sans:400,700" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css" />
+  <!--[if lt IE 9]>
+  <script src="../js/html5shiv.js"></script>
+  <![endif]-->
+  <script src="../js/jquery-1.7.2.min.js"></script>
+  <script src="../js/design.js"></script>
+</head>
+<body>
+
+<!--HEADER-->
+<header>
+	<h1><a href=""><img src="img/logo.png" alt="MAKE US" /></a></h1>
+		<ul>
+			<li><a href="contents01.html">Contents Management</a></li>
+			<li><a href="service01.html">Service Management</a></li>
+			<li><a href="system01.html">System Management</a></li>
+		</ul>
+		<dl>
+			<dt>Korea</dt>
+			<dd>
+				<a href="" class="on">Korea</a>
+				<a href="">English</a>
+				<a href="">Indonesia</a>
+			</dd>
+		</dl>
+		<p>
+			<b><a href="">PinkjjangPinkjjang</a></b>
+			<img src="img/default.png" alt="" /><a href="">3</a>
+		</p>
+</header>
+<!--/HEADER-->
+
+<section id="container">
+	<nav>
+		<div>
+			<dl>
+				<dt>Channels</dt>
+				<dd><a href=""><img src="http://assets2.moncast.com/channel/713f94bf61bb8b8c.jpeg" alt="" /><b>아이돌</b><span>요즘 HOT한 아이돌</span></a></dd>
+			</dl>
+			<ul>
+				<li><a href=""><img src="http://assets2.moncast.com/channel/713f94bf61bb8b8c.jpeg" alt="" /><b>Davichi in Hong Kong</b><span>Davichi in Hong Kong Davichi in Hong Kong</span></a></li>
+				<li class="on"><a href=""><img src="http://assets2.moncast.com/channel/713f94bf61bb8b8c.jpeg" alt="" /><b>아이돌</b><span>요즘 HOT한 아이돌</span></a></li>
+				<li><a href=""><img src="http://assets2.moncast.com/channel/713f94bf61bb8b8c.jpeg" alt="" /><b>Davichi in Hong Kong</b><span>Davichi in Hong Kong Davichi in Hong Kong</span></a></li>
+				<li><a href=""><img src="http://assets2.moncast.com/channel/713f94bf61bb8b8c.jpeg" alt="" /><b>Davichi in Hong Kong</b><span>Davichi in Hong Kong Davichi in Hong Kong</span></a></li>
+				<li><a href=""><img src="http://assets2.moncast.com/channel/713f94bf61bb8b8c.jpeg" alt="" /><b>Davichi in Hong Kong</b><span>Davichi in Hong Kong Davichi in Hong Kong</span></a></li>
+				<li><a href=""><img src="http://assets2.moncast.com/channel/713f94bf61bb8b8c.jpeg" alt="" /><b>아이돌</b><span>요즘 HOT한 아이돌</span></a></li>
+				<li><a href=""><img src="http://assets2.moncast.com/channel/713f94bf61bb8b8c.jpeg" alt="" /><b>Davichi in Hong Kong</b><span>Davichi in Hong Kong Davichi in Hong Kong</span></a></li>
+			</ul>
+			<dl class="category">
+				<dt>Category</dt>
+				<dd><a href="">Entertainment</a></dd>
+			</dl>
+			<ul class="category">
+				<li><a href="">Entertainment</a></li>
+				<li><a href="">Entertainment</a></li>
+				<li class="on"><a href="">Entertainment</a></li>
+				<li><a href="">Entertainment</a></li>
+				<li><a href="">Entertainment</a></li>
+				<li><a href="">Entertainment</a></li>
+				<li><a href="">Entertainment</a></li>
+				<li><a href="">Entertainment</a></li>
+			</ul>
+		</div>
+		<a href="contents01_add.html">컨텐츠 작성하기</a>
+		<ul id="lnb">
+			<li><a href="contents01.html" class="l1_a">My Contents</a><b>9</b></li>
+			<li><a href="contents02.html" class="l1_b">Contents List</a>
+				<ul>
+					<li><a href="contents02.html">발행된 Contents</a><b>96</b></li>
+					<li><a href="contents02.html">예약된 Contents</a></li>
+					<li><a href="contents02.html">삭제된 Contents</a></li>
+				</ul>
+			</li>
+			<li><a href="contents03.html" class="l1_c">Contents 검수</a></li>
+		</ul>
+	</nav>
+
+	<script type="text/javascript">
+	var gnbDep1 = 1;		//GNB 1depth
+	var lnbDep1 = 0;		//LNB 1depth
+	var lnbDep2 = 0;		//LNB 2depth
+	</script>
+	<!--contents-->
+	<article id="contents_add" class="add">
+		<ul id="tab_menu">
+			<li><a href="contents01_add.html">Image Type</a></li>
+			<li><a href="contents01_add_movie.html" class="on">Video Type</a></li>
+		</ul>
+		<!--컨텐츠 정보-->
+		<div id="add_info">
+			<table class="writeTable">
+				<colgroup><col width="154px" /><col width="*" /></colgroup>
+				<tbody>
+				<tr>
+					<th>제목</th>
+					<td><input type="text" class="txt t1" placeholder="최대 한글 25자, 영문 50자를 넘지 않게 해 주세요.." /></td>
+				</tr>
+				<tr>
+					<th>공유화면 이미지</th>
+					<td>
+						<input type="text" class="txt t2" id="filen" /><span class="btn_file">Choose file<input type="file" onchange="javascript: document.getElementById('filen').value = this.value" /></span>
+						<a href="#" class="btn_preview has"><img src="http://assets2.moncast.com/channel/713f94bf61bb8b8c.jpeg" alt="" /></a>
+						<a href="" class="btn_del"></a>
+					</td>
+				</tr>
+				<tr>
+					<th>썸네일</th>
+					<td>
+						<input type="text" class="txt t2" id="filen2" /><span class="btn_file">Choose file<input type="file" onchange="javascript: document.getElementById('filen2').value = this.value" /></span>
+						<a href="#" class="btn_preview"></a>
+					</td>
+				</tr>
+				<tr>
+					<th>라스트커버 이미지</th>
+					<td>
+						<input type="text" class="txt t2" id="filen3" /><span class="btn_file">Choose file<input type="file" onchange="javascript: document.getElementById('filen2').value = this.value" /></span>
+						<a href="#" class="btn_preview"></a>
+					</td>
+				</tr>
+				<tr>
+					<th>카테고리</th>
+					<td>
+						<select  style="width:360px">
+							<option>두근두근 가상연애</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th>채널</th>
+					<td>
+						<p class="channel_list">
+							<a href="" class="on">Humor</a>
+							<a href="">Issue</a>
+							<a href="">Entertainment</a>
+							<a href="" class="on">Music</a>
+							<a href="">Good Tip</a>
+							<a href="">Beauty</a>
+							<a href="">NSFW</a>
+						</p>
+					</td>
+				</tr>
+				<tr>
+					<th>키워드</th>
+					<td><input type="text" class="txt t1" placeholder="검색에 사용되며, 엔터, 쉼표(.) 키를 누르면 등록됩니다." /></td>
+				</tr>
+				<tr>
+					<th>영상 주소</th>
+					<td><input type="text" class="txt t1" /></td>
+				</tr>
+				<tr>
+					<th>출처</th>
+					<td><input type="text" class="txt t1" /></td>
+				</tr>
+				</tbody>
+			</table>
+			<button id="add_info_btn"></button>
+		</div>
+		<!--/컨텐츠 정보-->
+		<!--컨텐츠 내용-->
+		<div id="add_images">
+			<h3>컨텐츠 내용</h3>
+				<div class="moive">
+					<dl class="info">
+						<dt>영상 미리보기</dt>
+						<dd>(Youtube영상이 아닐 경우 동영상 파일을 끌어다 놓으세요!!)</dd>
+					</dl>
+				</div>
+				<div class="moive">
+					<p><img src="http://assets2.moncast.com/thumb/d231327b9111e655.jpeg" alt="" /></p>
+				</div>
+				<ul id="drag_list2">
+					<li>
+						<p class="img"><img src="http://assets2.moncast.com/attach/1435305041384_410dd53e3068d622079463771adfb900" alt="" /></p>
+						<p class="text">입력된 텍스트입니다. 입력된 텍스트입니다. 입력된 텍스트입니다. 입력된 텍스트입니다. 입력된 텍스트입니다. 입력된 텍스트입니다. 입력된 텍스트입니다. 입력된 텍스트입니다. 입력된 텍스트입니다. 입력된 텍스트입니다. 입력된 텍스트입니다. </p>
+					<input type="image" src="img/btn_close.png" alt="닫기" />
+					</li>
+					<li>
+						<p class="img"><b class="info">※ 이곳에 이미지를 끌어다 넣으세요!</b></p>
+						<p class="text"><textarea>텍스트를 입력하세요.</textarea></p>
+						<input type="image" src="img/btn_close.png" alt="닫기" />
+					</li>
+					<li>
+						<p class="text"><textarea>텍스트를 입력하세요.</textarea></p>
+						<input type="image" src="img/btn_close.png" alt="닫기" />
+					</li>
+				</ul>
+				<p class="btn_add">
+					<a href=""><img src="img/icon_images2.png" alt="이미지추가" /></a>
+					<a href=""><img src="img/icon_text.png" alt="텍스트추가" /></a>
+				</p>
+				<p class="btn_r">
+					<a href="" class="gray">목록으로</a>
+					<a href="" class="purple">승인요청</a>
+				</p>
+		</div>
+		<!--/컨텐츠 내용-->
+		<script src="js/jquery-ui-1.8.custom.min.js"></script>
+		<script>
+			if($("#contents_add").hasClass("add")) { $("#container>nav>a").addClass("on") }
+			h = $("#add_info").outerHeight();
+			$("#contents_add").animate({ 'padding-top':h+123},0);
+			/*컨텐츠 정보 닫기*/
+			$("#add_info_btn").click(function(){
+				if($(this).hasClass("close")) {
+					$(this).removeClass("close").parent().animate({ 'height':h},200).find("table").fadeIn(200);
+					$("#contents_add").animate({ 'padding-top':h+123},200);
+				} else {
+					$(this).addClass("close").parent().animate({ 'height':'30px'},200).find("table").fadeOut(200);
+					$("#contents_add").animate({ 'padding-top':'153px'},200);
+				}
+			});
+			/*드래그*/
+			$('#drag_list2').sortable({placeholder: 'placeholder'});
+		</script>
+	</article>
+	<!--/contents-->
+</section>
+
+</body>
+</html>
