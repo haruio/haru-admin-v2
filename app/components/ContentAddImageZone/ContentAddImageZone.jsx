@@ -4,7 +4,7 @@ import React from 'react'
 import debug from 'debug'
 const log = debug('application:VideoInfoPanel.jsx')
 
-import intlStores from '../../stores/IntlStore'
+import intlStores from '../../utils/IntlStore'
 
 const txt1 = require('image!../../assets/img/txt1.png')
 const icon_images = require('image!../../assets/img/icon_images.png')

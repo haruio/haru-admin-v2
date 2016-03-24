@@ -1,10 +1,12 @@
 import React from 'react'
+import ImmutablePropTypes from 'react-immutable-proptypes'
 
 
 import debug from 'debug'
-const log = debug('application:PageList.jsx')
+const log = debug('application:ContentList.jsx')
 
 import ContentListItem from '../ContentListItem'
+
 /**
  * A component to ContentList
  * author : jungun.park
@@ -13,24 +15,12 @@ import ContentListItem from '../ContentListItem'
 export default class ContentList extends React.Component {
   static defaultProps = {
     listId: 'list'
-  };
+  }
 
   static propTypes = {
     listId: React.PropTypes.string,
-    listTitle: React.PropTypes.string.isRequired
-  };
-
-  state = {
-    content : [{}, {}]
-  }
-
-  componentDidMount() {
-    //공통리스트 Hover 이벤트
-    $('.list>li').hover(function () {
-      $(this).find('div p').stop().fadeIn(300).stop().animate({ opacity:1 }, 100)
-    }, function () {
-      $(this).find('div p').stop().fadeOut(300)
-    })
+    listTitle: React.PropTypes.string.isRequired,
+    content: ImmutablePropTypes.list
   }
 
   get EmptyElement() {
@@ -40,10 +30,10 @@ export default class ContentList extends React.Component {
   }
 
   get listItem() {
-    if(this.state.content.length == 0) {
+    if(this.props.content.size == 0) {
       return this.EmptyElement
     } else {
-      return this.state.content.map((con, i) => {
+      return this.props.content.map((con, i) => {
         return (
           <ContentListItem key={i} content={con} type={this.props.type}/>
         )

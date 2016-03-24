@@ -3,7 +3,7 @@ import React from 'react'
 import debug from 'debug'
 const log = debug('application:LangSelector.jsx')
 
-import intlStores from '../../../stores/IntlStore.js'
+import intlStores from '../../../utils/IntlStore.js'
 
 import cn from 'classnames'
 

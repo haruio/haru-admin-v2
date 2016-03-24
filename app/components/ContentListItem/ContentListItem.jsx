@@ -4,7 +4,9 @@ import React from 'react'
 import debug from 'debug'
 const log = debug('application:ContentListItem.jsx')
 
-import { CONTENT } from '../../constants/AppConstants'
+import { CONTENT, POPUP } from '../../constants/AppConstants'
+import PopupActions from '../../actions/PopupActions'
+
 
 const ct_edit1 = require('image!../../assets/img/ct_edit1.png')
 const ct_edit2 = require('image!../../assets/img/ct_edit2.png')
@@ -33,6 +35,17 @@ export default class ContentListItem extends React.Component {
     }
   }
 
+  showHistoryPopup() {
+    PopupActions.openPopup(POPUP.HISTORY, {})
+  }
+  showPublishPopup() {
+    PopupActions.openPopup(POPUP.PUBLISH, {})
+  }
+  showRejectPopup() {
+    PopupActions.openPopup(POPUP.REJECT, {})
+  }
+
+
   get getHoverButton() {
     switch (this.props.type) {
       case CONTENT.CREATE:
@@ -41,37 +54,37 @@ export default class ContentListItem extends React.Component {
           <span>
             <a href=""><img src={ct_edit1} alt="" title="수정"/></a>
             <a href=""><img src={ct_edit2} alt="" title="삭제"/></a>
-            <a href=""><img src={ct_edit3} alt="" title="히스토리"/></a>
+            <a onClick={this.showHistoryPopup}><img src={ct_edit3} alt="" title="히스토리"/></a>
           </span>)
       case CONTENT.WAITING:
-          return (
-            <span>
-              <a href=""><img src={ct_edit3} alt="" title="히스토리"/></a>
-              <a href=""><img src={ct_edit7} alt="" title="취소"/></a>
-            </span>)
+        return (
+          <span>
+            <a onClick={this.showHistoryPopup}><img src={ct_edit3} alt="" title="히스토리"/></a>
+            <a href=""><img src={ct_edit7} alt="" title="취소"/></a>
+          </span>)
       case CONTENT.PUBLISHED:
       case CONTENT.RESERVED:
         return (
           <span>
             <a href=""><img src={ct_edit1} alt="" title="수정"/></a>
             <a href=""><img src={ct_edit2} alt="" title="삭제"/></a>
-            <a href=""><img src={ct_edit3} alt="" title="히스토리"/></a>
+            <a onClick={this.showHistoryPopup}><img src={ct_edit3} alt="" title="히스토리"/></a>
           </span>
         )
       case CONTENT.DELETEED:
         return (
           <span>
             <a href=""><img src={ct_edit1} alt="" title="수정"/></a>
-            <a href=""><img src={ct_edit3} alt="" title="히스토리"/></a>
+            <a onClick={this.showHistoryPopup}><img src={ct_edit3} alt="" title="히스토리"/></a>
           </span>)
       case CONTENT.INSPECTION:
         return (
           <span>
           <a href=""><img src={ct_edit1} alt="" title="수정"/></a>
           <a href=""><img src={ct_edit2} alt="" title="삭제"/></a>
-          <a href=""><img src={ct_edit3} alt="" title="히스토리"/></a>
-          <a href=""><img src={ct_edit5} alt="" title="반려"/></a>
-          <a href=""><img src={ct_edit6} alt="" title="발행"/></a>
+          <a onClick={this.showHistoryPopup}><img src={ct_edit3} alt="" title="히스토리"/></a>
+          <a onClick={this.showRejectPopup}><img src={ct_edit5} alt="" title="반려"/></a>
+          <a onClick={this.showPublishPopup}><img src={ct_edit6} alt="" title="발행"/></a>
         </span>)
       default:
         return (
@@ -103,14 +116,45 @@ export default class ContentListItem extends React.Component {
       </p>)
   }
 
+  get renderTypeIcon() {
+    const content = this.props.content
+    if(content.get('type') === 'VDO') {
+      return <span className="movie">{content.get('strDuration')}</span>
+    } else {
+      return <span className="images">{content.get('imageCnt')}</span>
+    }
+  }
+
+  movseOver = () => {
+    $(this.refs.item).find('div p').stop().fadeIn(300).stop().animate({ opacity:1 }, 100)
+  }
+  mouseOut = () => {
+    $(this.refs.item).find('div p').stop().fadeOut(300)
+  }
+
   render() {
+    const content = this.props.content
+
+    let thumnail
+    let author
+    if(this.props.type == CONTENT.PUBLISHED ||
+      this.props.type == CONTENT.RESERVED ||
+      this.props.type == CONTENT.DELETEED) {
+      thumnail = content.get('thumbnailUrl')
+      author = content.get('postAuthor')
+    } else {
+      thumnail = content.get('thumbnail')
+      author = content.get('author')
+    }
+
     return (
-      <li>
+      <li ref="item" onMouseOver={this.movseOver} onMouseOut={this.mouseOut}>
         <div>
-          <span><img src="http://assets2.moncast.com/channel/713f94bf61bb8b8c.jpeg" alt=""/></span>
+          <span><img src={content.getIn(['channel', 'iconImageUrl'], null)} alt=""/></span>
           <b></b>
-          <em style={{ backgroundImage:'url(http://assets2.moncast.com/thumb/1219f9f5cf29b60b.jpeg)' }}>
-            <span className="movie">3:45</span></em>
+          <em style={{ backgroundImage:'url('+thumnail+')' }}>
+            {this.renderTypeIcon}
+          </em>
           <p>
             {this.getHoverButton}
           </p>
@@ -119,7 +163,7 @@ export default class ContentListItem extends React.Component {
         <dl>
           <dt>다비치 이해리가 아이유의 노래를 불렀다니 이해리가 아이유</dt>
           <dd>임시저장 : 2015-08-08 PM 12:25</dd>
-          <dd>작성자 : 김태희</dd>
+          <dd>{'작성자 : ' + author}</dd>
         </dl>
       </li>
     )

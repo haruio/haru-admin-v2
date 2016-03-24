@@ -4,7 +4,7 @@ import React from 'react'
 import debug from 'debug'
 const log = debug('application:VideoMetaPanel.jsx')
 
-import intlStores from '../../../stores/IntlStore'
+import intlStores from '../../../utils/IntlStore'
 
 /**
  * A component to ImageInfoPanel

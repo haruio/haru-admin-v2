@@ -11,7 +11,7 @@ import TestUtils from 'react-addons-test-utils'
 
 //var TestUtils = require('react-addons-test-utils')
 
-import Banner from './MetaPanel'
+import MetaPanel from './MetaPanel'
 
 
 describe('Component: Container', () => {
@@ -21,7 +21,7 @@ describe('Component: Container', () => {
     // expected
 
     const renderer = TestUtils.createRenderer()
-    renderer.render(<Banner className="banner" />)
+    renderer.render(<MetaPanel infopanel={{type:'image'}} />)
 
     const actual = renderer.getRenderOutput()
     const expected = true

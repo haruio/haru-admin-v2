@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router'
 import cn from 'classnames'
 
-import intlStores from '../../../stores/IntlStore'
+import intlStores from '../../../utils/IntlStore'
 
 /**
  * A component to LeftMenu
@@ -56,8 +56,7 @@ class LeftMenu extends React.Component {
             <li className={cn({ 'on': router.isActive('/service/user') })}><Link to="/service/user" className="l2_b">유저 관리</Link>
               <ul>
                 <li><Link to="/service/user/list" activeClassName="on">유저 리스트</Link></li>
-                <li><Link to="/service/user/stat" activeClassName="on">유저 통계</Link></li>
-                <li><Link to="/service/user/ban" activeClassName="on">Ban List</Link></li>
+                <li><Link to="/service/user/ban" activeClassName="on">Ban 유저 리스트</Link></li>
               </ul>
             </li>
             <li className={cn({ 'on': router.isActive('/service/comment') })}><Link to="/service/comment" className="l2_c">댓글 관리</Link></li>

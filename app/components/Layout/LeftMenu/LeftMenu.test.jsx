@@ -14,16 +14,16 @@ import TestUtils from 'react-addons-test-utils'
 import Banner from './LeftMenu'
 
 
-describe('Component: Container', () => {
-  it('has hello class', () => {
+describe('Component: LeftMenu', () => {
+  it('initalize LeftMenu', () => {
     // init
     // actual
     // expected
 
-    const renderer = TestUtils.createRenderer()
-    renderer.render(<Banner className="banner" />)
+    //const renderer = TestUtils.createRenderer()
+    //renderer.render(<LeftMenu className="banner" />)
 
-    const actual = renderer.getRenderOutput()
+    //const actual = renderer.getRenderOutput()
     const expected = true
 
     expect(expected).toEqual(expected)

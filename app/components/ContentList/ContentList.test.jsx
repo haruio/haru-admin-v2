@@ -11,7 +11,7 @@ import TestUtils from 'react-addons-test-utils'
 
 //var TestUtils = require('react-addons-test-utils')
 
-import Banner from './ContentList'
+import ContentList from './ContentList'
 
 
 describe('Component: Container', () => {
@@ -21,7 +21,7 @@ describe('Component: Container', () => {
     // expected
 
     const renderer = TestUtils.createRenderer()
-    renderer.render(<Banner className="banner" />)
+    renderer.render(<ContentList className="banner" />)
 
     const actual = renderer.getRenderOutput()
     const expected = true

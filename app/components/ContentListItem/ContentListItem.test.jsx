@@ -11,17 +11,17 @@ import TestUtils from 'react-addons-test-utils'
 
 //var TestUtils = require('react-addons-test-utils')
 
-import Banner from './ContentListItem'
+import ContentListItem from './ContentListItem'
 
 
-describe('Component: Container', () => {
-  it('has hello class', () => {
+describe('Component: ContentListItem', () => {
+  it('inital ContentListItem', () => {
     // init
     // actual
     // expected
 
     const renderer = TestUtils.createRenderer()
-    renderer.render(<Banner className="banner" />)
+    renderer.render(<ContentListItem className="" />)
 
     const actual = renderer.getRenderOutput()
     const expected = true

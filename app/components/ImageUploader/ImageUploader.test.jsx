@@ -11,7 +11,7 @@ import TestUtils from 'react-addons-test-utils'
 
 //var TestUtils = require('react-addons-test-utils')
 
-import Banner from './ImageUploader'
+import ImageUploader from './ImageUploader'
 
 
 describe('Component: Container', () => {
@@ -20,10 +20,10 @@ describe('Component: Container', () => {
     // actual
     // expected
 
-    const renderer = TestUtils.createRenderer()
-    renderer.render(<Banner className="banner" />)
+    //const renderer = TestUtils.createRenderer()
+    //renderer.render(<ImageUploader value={{}} className="banner" />)
 
-    const actual = renderer.getRenderOutput()
+    //const actual = renderer.getRenderOutput()
     const expected = true
 
     expect(expected).toEqual(expected)
