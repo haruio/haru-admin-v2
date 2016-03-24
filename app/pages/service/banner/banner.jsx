@@ -7,7 +7,7 @@ import { Link } from 'react-router'
 import debug from 'debug'
 const log = debug('application:BannerList.jsx')
 
-import intlStores from'../../../stores/IntlStore'
+import intlStores from'../../../utils/IntlStore'
 
 const btn_prev2 = require('image!../../../assets/img/btn_prev2.png')
 const btn_next2 = require('image!../../../assets/img/btn_next2.png')

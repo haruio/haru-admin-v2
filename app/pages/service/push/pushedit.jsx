@@ -12,7 +12,7 @@ const log = debug('application:mycontent.jsx')
 
 import PageList from '../../../components/PageList'
 
-import intlStores from '../../../stores/IntlStore'
+import intlStores from '../../../utils/IntlStore'
 
 
 export default class PushEdit extends React.Component {
@@ -39,7 +39,7 @@ export default class PushEdit extends React.Component {
   }
 
   uploadImage(target) {
-    var imageFile = $('#file-input-' + target)[0].files[0]
+    let imageFile = $('#file-input-' + target)[0].files[0]
     //PushActions.uploadImage(imageFile, target)
   }
 
@@ -86,7 +86,7 @@ export default class PushEdit extends React.Component {
         <hgroup>
           <h2>Push 관리</h2>
         </hgroup>
-        <div id="contents_info">
+        <div id="contents">
           <table className="writeTable">
             <colgroup>
               <col width="154px"/>
@@ -108,7 +108,7 @@ export default class PushEdit extends React.Component {
               <td>
                 <input type="text" className="txt t2" id="input-smallImage" readOnly/><span className="btn_file">{intlStores.get('cms.CMS_BTN_FIND')}
                 <input type="file" id="file-input-smallImage" onChange={this.uploadImage.bind(this, 'smallImage')}/></span>
-                <a id="btn-del-smallImage" className={this.state.smallImage != "" ? "btn_del" : "btn_del hide"} onClick={this.deleteImage.bind(this, 'smallImage')}></a>
+                <a id="btn-del-smallImage" className={this.state.smallImage != '' ? 'btn_del' : 'btn_del hide'} onClick={this.deleteImage.bind(this, 'smallImage')}></a>
               </td>
             </tr>
             <tr>

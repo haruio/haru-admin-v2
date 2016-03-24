@@ -2,37 +2,37 @@
  * Created by pheadra on 7/8/15.
  */
 import React from 'react'
-import { Link } from 'react-router'
+import {Link} from 'react-router'
+import {Container} from 'flux/utils'
+import cn from 'classnames'
+
 import moment from 'moment'
 
 import debug from 'debug'
 const log = debug('application:Post.jsx')
 
+import AppActions from '../../../actions/AppActions'
 import PageList from '../../../components/PageList'
-import intlStores from '../../../stores/IntlStore'
+import intlStores from '../../../utils/IntlStore'
+import PostStore from '../../../stores/RecommendPostStore'
+import PaginationStore from '../../../stores/PaginationStore'
 
+class RecommendPost extends React.Component {
 
-export default class Post extends React.Component {
-  constructor(props) {
-    super(props)
+  static getStores() {
+    return [PostStore, PaginationStore]
+  }
 
-    this.state = {
-      contents : [],
-      pagination : {
-        startPageNo : 0,
-        endPageNo : 0,
-        pageNo:0,
-        totalCount : 0
-      }
+  static calculateState() {
+    return {
+      contents: PostStore.getRecommendPosts(),
+      pagination: PaginationStore.getPagination()
     }
   }
 
+
   componentDidMount() {
-
-  }
-
-  editRecommendPost(recommendSeq) {
-
+    AppActions.getRecommendPostList(1, 10)
   }
 
   /***
@@ -40,29 +40,52 @@ export default class Post extends React.Component {
    * @param page {number} - 이동할 페이지
    */
   movePage(page) {
-
+    AppActions.getRecommendPostList(page, 10)
   }
 
-  searchContents() {
-
+  toggleCheckBox() {
+    if($('#checkAll').prop('checked')) {
+      $("input[name='postBox']").prop('checked',true)
+    }else{
+      $("input[name='postBox']").prop('checked',false)
+    }
   }
 
-  render() {
-    const ContentList = this.state.contents.map((content) => {
-      return(
-        <tr>
-          <td><input type="checkbox" name="postBox" value={content.recommendSeq} /></td>
-          <td>{content.recommendSeq}</td>
-          <td><img src={content.thumbnailUrl} alt="" className="thumbnail" /></td>
-          <td className="al" ><a onClick={this.editRecommendPost.bind(null, content.recommendSeq)} >{content.postTitle}</a></td>
+  deleteSelectedItem() {
+    let checkedList = []
+    $("input[name='postBox']:checked").each(function () {
+      checkedList.push($(this).val())
+    })
+
+    if (checkedList.length > 0 && window.confirm(intlStores.get('common.COMMON_MSG_DEL'))) {
+      AppActions.deleteRecommendPostList(checkedList)
+      $("input[name='postBox']").prop('checked', false)
+    }
+  }
+  searchContents = () => {
+    const searchfield = $('#searchField option:selected').val()
+    const searchtext = this.refs.searchText.value
+    AppActions.getRecommendPostList(1, 10, '', '', searchfield, searchtext)
+  }
+
+  get getRecommendPostList() {
+    return this.state.contents.map((content) => {
+      return (
+        <tr key={content.get('recommendSeq')}>
+          <td><input type="checkbox" name="postBox" value={content.get('recommendSeq')}/></td>
+          <td>{content.get('recommendSeq')}</td>
+          <td><img src={content.get('thumbnailUrl')} alt="" className="thumbnail"/></td>
+          <td className="al"><Link to={'/service/mgmt/post/' + content.get('recommendSeq')}>{content.get('postTitle')}</Link></td>
           <td></td>
-          <td>{moment(content.recommendStartDt).format('YYYY-MM-DD')}</td>
-          <td>{moment(content.recommendEndDt).format('YYYY-MM-DD')}</td>
-          <td>{content.recommendPct}%</td>
+          <td>{moment(content.get('recommendStartDt')).format('YYYY-MM-DD')}</td>
+          <td>{moment(content.get('recommendEndD')).format('YYYY-MM-DD')}</td>
+          <td>{content.get('recommendPct')}%</td>
         </tr>
       )
     })
+  }
 
+  render() {
     return (
       <article>
         <hgroup>
@@ -74,17 +97,28 @@ export default class Post extends React.Component {
                 <option value="TITLE">{intlStores.get('cms.CMS_FLD_TITLE')}</option>
               </select>
             </p>
-            <input type="text" placeholder="Search" id="searchText" /><a onClick={this.searchContents} className="btn_search"></a>
+            <input type="text" placeholder="Search" ref="searchText" id="searchText"/><a onClick={this.searchContents}
+                                                                        className="btn_search"></a>
           </fieldset>
         </hgroup>
         <div id="contents">
-          <p className="table_info">{intlStores.get('common.COMMON_FLD_TOTAL')+' '+this.state.pagination.totalCount+' '+intlStores.get('common.COMMON_FLD_COUNT')}</p>
+          <p
+            className="table_info">{intlStores.get('common.COMMON_FLD_TOTAL') + ' ' + this.state.pagination.get('totalCount') + ' ' + intlStores.get('common.COMMON_FLD_COUNT')}</p>
           <div className="table_wrap">
             <table className="listTable">
-              <colgroup><col width="5%" /><col width="5%" /><col width="10%" /><col width="*" /><col width="10%" /><col width="13%" /><col width="13%" /><col width="10%" /></colgroup>
+              <colgroup>
+                <col width="5%"/>
+                <col width="5%"/>
+                <col width="10%"/>
+                <col width="*"/>
+                <col width="10%"/>
+                <col width="13%"/>
+                <col width="13%"/>
+                <col width="10%"/>
+              </colgroup>
               <thead>
               <tr>
-                <th><input type="checkbox" id="checkAll" onClick={this.toggleCheckBox} /></th>
+                <th><input type="checkbox" id="checkAll" onClick={this.toggleCheckBox}/></th>
                 <th>No</th>
                 <th>{intlStores.get('cms.CMS_FLD_THUMBNAIL')}</th>
                 <th>{intlStores.get('cms.CMS_FLD_TITLE')}</th>
@@ -95,7 +129,7 @@ export default class Post extends React.Component {
               </tr>
               </thead>
               <tbody>
-              {ContentList}
+              {this.getRecommendPostList}
               </tbody>
             </table>
           </div>
@@ -110,3 +144,6 @@ export default class Post extends React.Component {
     )
   }
 }
+
+const RecommendPostContainer = Container.create(RecommendPost)
+export default RecommendPostContainer

@@ -3,35 +3,40 @@
  */
 import React from 'react'
 import { Link } from 'react-router'
-
+import {Container} from 'flux/utils'
 import cn from 'classnames'
 import moment from 'moment'
 
 import debug from 'debug'
-const log = debug('application:mycontent.jsx')
+const log = debug('application:Push.jsx')
 
+import AppActions from '../../../actions/AppActions'
 import PageList from '../../../components/PageList'
+import PushStore from '../../../stores/PushStore'
+import PaginationStore from '../../../stores/PaginationStore'
+import intlStores from '../../../utils/IntlStore'
 
-import intlStores from '../../../stores/IntlStore'
 
+class Push extends React.Component {
+  static getStores() {
+    return [PushStore, PaginationStore]
+  }
 
-export default class Push extends React.Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      pushes : [],
-      pagination: {
-        startPageNo : 0,
-        endPageNo : 0,
-        pageNo:0,
-        totalCount : 0
-      }
+  static calculateState() {
+    return {
+      pushes: PushStore.getPushes(),
+      pagination: PaginationStore.getPagination()
     }
   }
 
-  componentDidMount() {
+  componentWillMount() {
+    this.getPushList({pageNo:1})
 
+  }
+
+  getPushList = (searchObj) => {
+    this.state.searchObj = (searchObj != null) ? $.extend(this.state.searchObj, searchObj) : {searchStartDate:'', searchEndDate:'', searchField:'', searchText:''}
+    AppActions.getPushList(this.state.searchObj)
   }
 
   setComma(number) {
@@ -50,29 +55,42 @@ export default class Push extends React.Component {
     //this.getPushList({pushId:"", pageNo:pageNo})
   }
 
-  render() {
-    let pushList = null
-    if(this.state.pushes != null && this.state.pushes.length != 0) {
+  get pushList() {
+    const pushes = this.state.pushes
 
-      pushList = this.state.pushes.map((push, i) => {
-        // 왜 클래스 네임을 썻을까???
-        let pushStatus = cn({
-          'sm.SM_FLD_PUSH_STAT_PUING': push.pushStatus == 'PUING',
-          'sm.SM_FLD_PUSH_STAT_PUED': push.pushStatus == 'PUED',
-          'sm.SM_FLD_PUSH_STAT_CAED': push.pushStatus == 'CAED',
-          'sm.SM_FLD_PUSH_STAT_APR': push.pushStatus == 'APR'
-        })
+    let pushList = null
+    if(pushes.size != 0) {
+      pushList = pushes.map((push, i) => {
+        let pushStatus
+        switch(push.get('pushStatus')) {
+          case 'PUING' :
+            pushStatus = 'sm.SM_FLD_PUSH_STAT_PUING'
+            break
+          case 'PUED' :
+            pushStatus = 'sm.SM_FLD_PUSH_STAT_PUED'
+            break
+          case 'CAED' :
+            pushStatus = 'sm.SM_FLD_PUSH_STAT_CAED'
+            break
+          case 'RVED' :
+            pushStatus = 'SM_FLD_PUSH_STAT_RVED'
+            break
+          case 'APR' :
+            pushStatus = 'sm.SM_FLD_PUSH_STAT_APR'
+            break
+        }
 
         return (
           <tr key={i}>
-            <td>{this.state.pagination.totalCount - i}</td>
-            <td>{push.message.type}</td>
-            <td><a onClick={this.onPopupPushDetail.bind(null, { pushId:push.pushId })}>{push.message.title}</a></td>
-            <td>{push.stats.published || 0}</td>
-            <td>{push.stats.reveived || 0}</td>
-            <td>{push.stats.opened || 0}</td>
+            <td>{this.state.pagination.get('totalCount') - ((10 * this.state.pagination.get('pageNo')) + i)}</td>
+            <td>{push.getIn(['message', 'type'], '')}</td>
+            <td><a onClick={this.onPopupPushDetail.bind(null, { pushId:push.get('pushId') })}>{push.getIn(['message', 'title'], '')}</a></td>
+            <td>{push.getIn(['stats', 'requested'], 0)}</td>
+            <td>{push.getIn(['stats', 'published'], 0)}</td>
+            <td>{push.getIn(['stats', 'received'], 0)}</td>
+            <td>{push.getIn(['stats', 'opened'], 0)}</td>
             <td>{intlStores.get(pushStatus)}</td>
-            <td>{moment(push.createDt).format('YYYY-MM-DD')}</td>
+            <td>{moment(push.get('createDt')).format('YYYY-MM-DD')}</td>
           </tr>
         )
       })
@@ -81,7 +99,10 @@ export default class Push extends React.Component {
         <td colSpan="8">{intlStores.get('sm.SM_MSG_NO_CONTENTS')}</td>
       </tr>)
     }
+    return pushList
+  }
 
+  render() {
     return (
       <article>
         <hgroup>
@@ -99,18 +120,19 @@ export default class Push extends React.Component {
         </hgroup>
 
         <div id="contents">
-          <p className="table_info">{intlStores.get('common.COMMON_FLD_TOTAL')} {this.setComma(this.state.pagination.totalCount || 0)} {intlStores.get('common.COMMON_FLD_COUNT')}</p>
+          <p className="table_info">{intlStores.get('common.COMMON_FLD_TOTAL')} {this.setComma(this.state.pagination.get('totalCount'))} {intlStores.get('common.COMMON_FLD_COUNT')}</p>
           <div className="table_wrap">
             <table className="listTable">
               <colgroup>
                 <col width="6%" />
                 <col width="10%" />
-                <col width="20%" />
-                <col width="13%" />
-                <col width="13%" />
-                <col width="13%" />
                 <col width="*" />
-                <col width="13%" />
+                <col width="8%" />
+                <col width="8%" />
+                <col width="8%" />
+                <col width="8%" />
+                <col width="12%" />
+                <col width="12%" />
               </colgroup>
               <thead>
               <tr>
@@ -118,6 +140,7 @@ export default class Push extends React.Component {
                 <th>{intlStores.get('sm.SM_FLD_PUSH_TYPE')}</th>
                 <th>{intlStores.get('sm.SM_FLD_TITLE')}</th>
                 <th>{intlStores.get('sm.SM_FLD_PUSH_COUNT')}</th>
+                <th>{intlStores.get('sm.SM_FLD_PUSH_SUCCESS')}</th>
                 <th>{intlStores.get('sm.SM_FLD_PUSH_REACH')}</th>
                 <th>{intlStores.get('sm.SM_FLD_PUSH_INFLOW')}</th>
                 <th>{intlStores.get('sm.SM_FLD_PUSH_CANCEL')}</th>
@@ -125,7 +148,7 @@ export default class Push extends React.Component {
               </tr>
               </thead>
               <tbody>
-              {pushList}
+              {this.pushList}
               </tbody>
             </table>
           </div>
@@ -133,9 +156,10 @@ export default class Push extends React.Component {
           <p className="btn_r">
             <Link to="/service/push/new" className="purple">발송 등록하기</Link>
           </p>
-          {/*<PushPopup ref="pushPopup" pushId={this.state.pushId} />*/}
         </div>
       </article>
     )
   }
 }
+const PushContainer = Container.create(Push)
+export default PushContainer

@@ -3,25 +3,41 @@
  */
 import React from 'react'
 import ReactDOM from 'react-dom'
+import {Container} from 'flux/utils'
 import debug from 'debug'
-const log = debug('application:mycontent.jsx')
+const log = debug('application:MyContent.jsx')
 
 import TabMenu from '../../components/Layout/TabMenu'
 import MyContentHead from '../../components/MyContentHead'
 import ContentList from '../../components/ContentList'
-import intlStores from '../../stores/IntlStore'
+import intlStores from '../../utils/IntlStore'
 
-import { CONTENT } from '../../constants/AppConstants'
+import { CONTENT, POPUP } from '../../constants/AppConstants'
+import ContentActions from '../../actions/ContentActions'
+
+import MyContentsStore from '../../stores/MyContentsStore'
+import PopupActions from '../../actions/PopupActions'
 
 export default class MyContent extends React.Component {
-  constructor(props) {
-    super(props)
+  static getStores() {
+    return [MyContentsStore]
+  }
 
+  static calculateState() {
+    return {
+      writing: MyContentsStore.getContentsInWriting(),
+      ready: MyContentsStore.getContentsInReady(),
+      reject: MyContentsStore.getContentsInReject()
+    }
+  }
+
+  componentWillMount() {
+    ContentActions.getMyContents()
   }
 
   componentDidMount() {
     window.addEventListener('scroll', this.scrollListener)
-    this.scrollListener();
+    this.scrollListener()
   }
 
   componentWillUnmount() {
@@ -78,12 +94,15 @@ export default class MyContent extends React.Component {
       <article id="my_contents" ref="mycontent">
         <TabMenu  />
         <MyContentHead ref="mycontenthead" moveSection={this.moveSection} />
-        <ContentList ref="create"  listId="create"  listTitle={intlStores.get('cms.CMS_FLD_CREATING')} type={CONTENT.CREATE}/>
-        <ContentList ref="waiting" listId="waiting" listTitle={intlStores.get('cms.CMS_FLD_WAITING')}  type={CONTENT.WAITING}/>
-        <ContentList ref="return"  listId="return"  listTitle={intlStores.get('cms.CMS_FLD_REJECT')}   type={CONTENT.RETRUN}/>
+        <ContentList ref="create"  listId="create"  listTitle={intlStores.get('cms.CMS_FLD_CREATING')} content={this.state.writing} type={CONTENT.CREATE}/>
+        <ContentList ref="waiting" listId="waiting" listTitle={intlStores.get('cms.CMS_FLD_WAITING')}  content={this.state.ready} type={CONTENT.WAITING}/>
+        <ContentList ref="return"  listId="return"  listTitle={intlStores.get('cms.CMS_FLD_REJECT')}   content={this.state.reject} type={CONTENT.RETRUN}/>
         {/* TODO: 밑에 공백이 필요해서 더 좋은 방법을 찾아보자 */}
         <div style={{ height:'600px' }}></div>
       </article>
     )
   }
 }
+
+const MyContentContainer = Container.create(MyContent)
+export default MyContentContainer

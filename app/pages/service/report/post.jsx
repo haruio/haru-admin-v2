@@ -2,29 +2,32 @@
  * Created by pheadra on 7/8/15.
  */
 import React from 'react'
-import moment from 'moment';
+import {Container} from 'flux/utils'
+import moment from 'moment'
 
 import debug from 'debug'
 const log = debug('application:ReportPost.jsx')
 
 import PageList from '../../../components/PageList'
-import intlStores from '../../../stores/IntlStore'
+import intlStores from '../../../utils/IntlStore'
+
+import PaginationStore from '../../../stores/PaginationStore'
+//TODO : 임시로 같이 씀.
+import ReportCommentsStore from '../../../stores/ReportCommentsStore'
 
 
-export default class ReportPost extends React.Component {
-  constructor(props) {
-    super(props)
+class ReportPost extends React.Component {
+  static getStores() {
+    return [ReportCommentsStore, PaginationStore]
+  }
 
-    this.state = {
-      contents : [],
-      pagination : {
-        startPageNo : 0,
-        endPageNo : 0,
-        pageNo:0,
-        totalCount : 0
-      }
+  static calculateState() {
+    return {
+      comments: ReportCommentsStore.getReportComments(),
+      pagination: PaginationStore.getPagination()
     }
   }
+
 
   componentDidMount() {
 
@@ -64,7 +67,7 @@ export default class ReportPost extends React.Component {
           </fieldset>
         </hgroup>
         <div id="contents">
-          <p className="table_info">{intlStores.get('common.COMMON_FLD_TOTAL')+' '+this.state.pagination.totalCount+' '+intlStores.get('common.COMMON_FLD_COUNT')}</p>
+          <p className="table_info">{intlStores.get('common.COMMON_FLD_TOTAL')+' '+this.state.pagination.get('totalCount')+' '+intlStores.get('common.COMMON_FLD_COUNT')}</p>
           <div className="table_wrap">
             <table className="listTable">
               <colgroup><col width="6%" /><col width="13%" /><col width="27%" /><col width="27%" /><col width="*" /><col width="14%" /></colgroup>
@@ -92,3 +95,5 @@ export default class ReportPost extends React.Component {
   }
 }
 //        <UserProfilePopup ref="userProfile" userId={this.state.userId} />
+const ReportPostContainer = Container.create(ReportPost)
+export default ReportPostContainer

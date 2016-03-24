@@ -11,7 +11,7 @@ let cx = classNames.bind(styles)
 import AuthActions from '../../actions/AuthActions.js'
 import LangSelector from '../../components/Layout/LangSelector'
 import UserStore from '../../stores/UserStore'
-import intlStores from '../../stores/IntlStore.js'
+import intlStores from '../../utils/IntlStore.js'
 import utility from '../../utils/util'
 
 const logo2 = require('image!../../assets/img/logo2.png')

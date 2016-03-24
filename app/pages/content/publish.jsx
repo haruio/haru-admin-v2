@@ -2,9 +2,10 @@
  * Created by pheadra on 7/8/15.
  */
 import React from 'react'
+import {Container} from 'flux/utils'
 
 import debug from 'debug'
-const log = debug('application:Inspection.jsx')
+const log = debug('application:Publish.jsx')
 
 import TabMenu from '../../components/Layout/TabMenu'
 import SearchBar from '../../components/Layout/SearchBar'
@@ -12,23 +13,27 @@ import SearchBar from '../../components/Layout/SearchBar'
 import ContentList from '../../components/ContentList'
 import PageList from '../../components/PageList'
 
-import intlStores from '../../stores/IntlStore'
+import intlStores from '../../utils/IntlStore'
 import { CONTENT } from '../../constants/AppConstants'
 
-export default class Publish extends React.Component {
-  constructor(props) {
-    super(props)
+import ContentActions from '../../actions/ContentActions'
+import ContentListStore from '../../stores/ContentListStore'
+import PaginationStore from '../../stores/PaginationStore'
 
+class Publish extends React.Component {
+  static getStores() {
+    return [ContentListStore, PaginationStore]
   }
 
-  state = {
-    pagination : {
-      startPageNo: 0,
-      endPageNo: 0,
-      pageNo:0,
-      prevPageNo:0,
-      nextPageNo:0
+  static calculateState() {
+    return {
+      publish: ContentListStore.getContentList(),
+      pagination: PaginationStore.getPagination()
     }
+  }
+
+  componentWillMount() {
+    ContentActions.getViewedContents()
   }
 
   movePage() {
@@ -36,13 +41,17 @@ export default class Publish extends React.Component {
   }
 
   render() {
+    log(this.state)
     return (
       <article id="contents_list">
         <TabMenu />
         <SearchBar />
-        <ContentList listTitle={intlStores.get('cms.MENU_TXT_SUBMITTED_CONTENTS')}  type={CONTENT.PUBLISHED}/>
+        <ContentList listTitle={intlStores.get('cms.MENU_TXT_SUBMITTED_CONTENTS')}  content={this.state.publish} type={CONTENT.PUBLISHED}/>
         <PageList pageObj={this.state.pagination} clickAction={this.movePage} />
       </article>
     )
   }
 }
+
+const PublishContainer = Container.create(Publish)
+export default PublishContainer

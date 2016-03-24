@@ -11,7 +11,7 @@ import ContentAddImageZone from '../../components/ContentAddImageZone'
 // 이미지 에서만 사용됨
 import ContentDetailPopup from '../../components/ContentDetailPopUp'
 
-import intlStores from '../../stores/IntlStore'
+import intlStores from '../../utils/IntlStore'
 
 /**
  * A page to Compose

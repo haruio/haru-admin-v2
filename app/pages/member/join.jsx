@@ -7,7 +7,7 @@ import { Link } from 'react-router'
 import debug from 'debug'
 const log = debug('application:join.jsx')
 
-import intlStores from '../../stores/IntlStore.js'
+import intlStores from '../../utils/IntlStore.js'
 
 import LangSelector from '../../components/Layout/LangSelector'
 const logo2 = require('image!../../assets/img/logo2.png')
