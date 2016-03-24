@@ -8,6 +8,7 @@ export default keyMirror({
    * My Content
    */
   GET_CONTENT: null,
+  GET_MYCONTENT: null,
   DELETE_CONTENT: null,
 
   /**
@@ -87,6 +88,7 @@ export default keyMirror({
    * Recommend  - by Keigun
    */
   GET_RECOMMEND_POST_LIST: null,
+  GET_RECOMMEND_POST_DETAIL: null,
   GET_RECOMMEND_POST: null,
   GET_RECOMMEND_KEYWORD: null,
   MOVE_RECOMMEND_KEYWORD_LIST: null,
@@ -154,7 +156,11 @@ export default keyMirror({
   PUSH_GET_CHANNELS: null,
   PUSH_GET_CATEGORIES: null,
   PUSH_POST_CONTENTS: null,
-  PUSH_DETAIL: null
+  PUSH_DETAIL: null,
+
+  OPEN_POPUP : null,
+  CLOSE_POPUP : null,
+  CLOSE_ALL_POPUP: null
 })
 
 export const URL = 'http://admin.dingo.tv/kerberos'
@@ -204,3 +210,26 @@ export const IMAGE_VALIDATION = {
     }
   }
 }
+
+export const POPUP = keyMirror({
+  ALERT: null,
+  CONFIRM: null,
+  MEMBER: null,
+  REJECT: null,
+  PUBLISH: null,
+  HISTORY: null,
+  PUBLISHEDCONTENT: null,
+  MAINFEED:null,
+
+
+  DATE_SELECTOR: null,
+  UPLOAD_DCP: null,
+  CONTENT_FORM: null,
+  CONTENT_HISTORY: null,
+  SHARE_POST: null,
+  EDIT_POST: null,
+  DAILY_SCHEDULE: null,
+  PLATFORM_SELECTOR: null,
+  REGISTER_CHANNEL: null,
+  CHANNEL_USER: null
+}, '-', 'Popup')

@@ -10,6 +10,16 @@ import Header from '../components/Layout/Header'
 import LeftMenu from '../components/Layout/LeftMenu'
 
 import AppAction from '../actions/AppActions'
+import {POPUP} from '../constants/AppConstants'
+
+import Popup from '../components/Popup'
+import MemberPopup from '../components/Popup/MemberPopup'
+import HistoryPopup from '../components/Popup/HistoryPopup'
+import RejectPopup from '../components/Popup/RejectPopup'
+import PublishPopup from '../components/Popup/PublishPopup'
+import MainFeedPopup from '../components/Popup/MainFeedPopup'
+import PublishedContentPopup from '../components/Popup/PublishedContentPopup'
+
 /*
 import ga from 'react-google-analytics'
 var GAInitiailizer = ga.Initializer
@@ -27,8 +37,8 @@ export default class App extends React.Component {
     //GA initalize
     //var GA_TRACKING_CODE = 'UA-53731828-10'
     //ga('create', GA_TRACKING_CODE, 'auto')
-  }
 
+  }
   render() {
     return (
       <section>
@@ -37,6 +47,14 @@ export default class App extends React.Component {
           <LeftMenu/>
           {this.props.children}
         </section>
+        <Popup>
+          <MemberPopup key={POPUP.MEMBER}/>
+          <HistoryPopup key={POPUP.HISTORY}/>
+          <RejectPopup key={POPUP.REJECT}/>
+          <PublishPopup key={POPUP.PUBLISH}/>
+          <MainFeedPopup key={POPUP.MAINFEED}/>
+          <PublishedContentPopup key={POPUP.PUBLISHEDCONTENT}/>
+        </Popup>
       </section>
     )
   }

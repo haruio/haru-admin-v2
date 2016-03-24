@@ -2,27 +2,25 @@
  * Created by jungenpark on 2/15/16.
  */
 import Immutable from 'immutable'
-import { ReduceStore } from 'flux/utils'
+import {ReduceStore} from 'flux/utils'
 
 import AppConstants from '../constants/AppConstants'
 import AppDispatcher from '../dispatcher/AppDispatcher'
 
 import debug from 'debug'
-const log = debug('application:ChannelStore.jsx')
+const log = debug('application:ReportCommentsStore.jsx')
 
-class ChannelStore extends ReduceStore {
+class ReportCommentsStore extends ReduceStore {
   getInitialState() {
     return Immutable.List()
   }
 
-  getChannels() {
+  getReportComments() {
     return this.getState()
   }
 
   reduce(state, action) {
     switch (action.type) {
-      case AppConstants.GET_CHANNELS:
-        return Immutable.fromJS(action.contents)
       default:
         return state
     }
@@ -30,5 +28,5 @@ class ChannelStore extends ReduceStore {
 }
 
 // Export a singleton instance of the store
-const instance = new ChannelStore(AppDispatcher)
+const instance = new ReportCommentsStore(AppDispatcher)
 export default instance

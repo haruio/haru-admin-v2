@@ -6,11 +6,32 @@ import AppConstants from '../constants/AppConstants.js'
 import request from 'superagent'
 import utility from '../utils/util.js'
 
+export const APPVERSION = 'v0.9'
+export const BUILDVERSION = '10'
+
+const API_VERSION = 'v1'
+export const DINGOURL = `http://dev-id-api.dingo.tv/${API_VERSION}`
 export const URL = 'http://dev-admin.dingo.tv/kerberos'
 export let currentuser = {
   accesstoken: localStorage.getItem('ls.AccessToken'),
   location: localStorage.getItem('ls.i18n') != null || localStorage.getItem('ls.i18n') != undefined ? localStorage.getItem('ls.i18n') : 'en_US'
 }
+
+/***
+ * middleware_accesstoken
+ * superagent middleware : access token 이 있으면 header에 추가
+ * @param request {object}
+ * @returns {*}
+ */
+export function middleware_accesstoken(request) {
+  if (currentuser.accesstoken != null) {
+    request.set('x-auth-token', currentuser.accesstoken)
+  }
+  //request.set('Content-Type', 'application/json')
+  request.type('json')
+  return request
+}
+
 
 const AuthActions = {
   /***

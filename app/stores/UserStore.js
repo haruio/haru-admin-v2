@@ -20,7 +20,7 @@ class UserStore extends ReduceStore {
   }
 
   getUser() {
-    return this.getState()
+    return this.getState().get('user')
   }
 
   getAccessToken() {
@@ -46,8 +46,13 @@ class UserStore extends ReduceStore {
   reduce(state, action) {
     switch (action.type) {
       case AppConstants.USER_LOGIN:
-        browserHistory.replace('/content/mycontent')
-        return state.set('user', action.user).set('token', action.accessToken)
+        {
+          // TODO : 관련 로직 추가적으로 생각해보자 아직은 답이 없어서 ㅠㅠ 
+          setTimeout(function () {
+            browserHistory.replace('/content/mycontent')
+          })
+          return state.set('user', action.user).set('token', action.accessToken)
+        }
       case AppConstants.USER_LOGINFAIL:
         return state.clear().set('error', {code: 4, msg: action.message})
       case AppConstants.USER_LOGOUT:

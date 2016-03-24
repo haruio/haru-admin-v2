@@ -1,5 +1,5 @@
 import CryptoJS from 'crypto-js'
-
+import sweetalert from 'sweetalert'
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////         URL Parsing 관련 메소드              ///////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -39,7 +39,7 @@ export default {
    */
   errorHandler(err, res) {
     if(res.body && res.body.errorCode && (res.body.errorCode == 'ADMIN.MISSING_SESSION_TOKEN' || res.body.errorCode == 'ADMIN.INVALID_SESSION_TOKEN')) {
-      alert(res.body.message)
+      sweetalert(res.body.message)
       location.href = '/'
       return true
     } else if(res.body && res.body.errorCode && res.body.message) {
@@ -127,49 +127,48 @@ export default {
       host = 'dev-admin.dingo.tv';
     }
 
-    localStorage.setItem("ls.Protocol", protocol);
-    localStorage.setItem("ls.Host", host);
+    localStorage.setItem('ls.Protocol', protocol)
+    localStorage.setItem('ls.Host', host)
   },
 
   getProtocol() {
-    return localStorage.getItem("ls.Protocol");
+    return localStorage.getItem('ls.Protocol')
   },
 
   getHost() {
-    return localStorage.getItem("ls.Host");
+    return localStorage.getItem('ls.Host')
   },
 
   getUrl(type) {
-    var host = this._getRequestServiceType(type);
-    return (localStorage.getItem("ls.Protocol") + host);
+    var host = this._getRequestServiceType(type)
+    return (localStorage.getItem('ls.Protocol') + host)
   },
 
   getUserUrl(type) {
-    var host = this._getRequestServiceType(type);
-    return ('https://' + host);
+    var host = this._getRequestServiceType(type)
+    return ('https://' + host)
   },
 
   getServiceUrl() {
-    var prelocale = /\w*([\-])/g.exec(this.getHost());
-    //console.log(prelocale != null ? prelocale[0].replace("-", "") : "");
-    var predomain = prelocale != null ? prelocale[0].replace("-", ".") : "";
+    let prelocale = /\w*([\-])/g.exec(this.getHost())
+    let predomain = prelocale != null ? prelocale[0].replace('-', '.') : ''
 
-    return "http://"+ predomain + "dingo.tv/v/";
+    return `http://${predomain}dingo.tv/v/`
   },
 
   _getRequestServiceType(type) {
-    let host = "dev-admin.dingo.tv"
+    let host = 'dev-admin.dingo.tv'
     if(type == null || type == undefined) {
-      host = host + "/kerberos"
+      host = host + '/kerberos'
     } else {
-      host = host + "/" + type
+      host = host + '/' + type
     }
 
     return host
   },
 
   isManager() {
-    let managerYn = JSON.parse(localStorage.getItem("ls.UserModel")).managerYn
+    let managerYn = JSON.parse(localStorage.getItem('ls.UserModel')).managerYn
     if(managerYn != null
       && managerYn != undefined
       && managerYn == 'Y') {
@@ -180,7 +179,7 @@ export default {
   },
 
   isMyContents(createCid) {
-    let userSeq = JSON.parse(localStorage.getItem("ls.UserModel")).userSeq
+    let userSeq = JSON.parse(localStorage.getItem('ls.UserModel')).userSeq
     if( userSeq != null
       && userSeq != undefined
       && userSeq == createCid) {

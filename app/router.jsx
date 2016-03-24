@@ -25,10 +25,13 @@ import Category from './pages/service/category/category.jsx'
 import CategoryEdit from './pages/service/category/categoryedit.jsx'
 import Recommendkeyword from './pages/service/recommend/keyword.jsx'
 import RecommendPost from './pages/service/recommend/post.jsx'
-import RecommendPostEidt from './pages/service/recommend/postedit.jsx'
+import RecommendPostEdit from './pages/service/recommend/postedit.jsx'
 
-import User from './pages/service/user/user'
-import Comment from './pages/service/comment'
+import Member from './pages/service/member/member'
+import BanMember from './pages/service/member/banmember'
+
+
+import Comment from './pages/service/comment/comment'
 import ReportComment from './pages/service/report/comment'
 import ReportPost from './pages/service/report/post'
 
@@ -60,6 +63,7 @@ export default class extends React.Component {
   }
 
   requireAuth(nextState, replace) {
+    log(UserStore.isLoginSuccess())
     if (!UserStore.isLoginSuccess()) {
       replace({
         pathname: '/login',
@@ -109,8 +113,8 @@ export default class extends React.Component {
               <Route path="keyword" component={ Recommendkeyword }/>
 
               <Route path="post" component={ RecommendPost }/>
-              <Route path="post/new" component={ RecommendPostEidt }/>
-              <Route path="post/:id" component={ RecommendPostEidt }/>
+              <Route path="post/new" component={ RecommendPostEdit }/>
+              <Route path="post/:id" component={ RecommendPostEdit }/>
 
               <Route path="channel" component={ Channel }/>
               <Route path="channel/new" component={ ChannelEdit }/>
@@ -123,15 +127,17 @@ export default class extends React.Component {
             <Route path="user">
               <IndexRedirect to="list" />
               {/*activeclass 이슈로 이렇게 처리함 list를 인덱스로 잡으면 stat, ban시에도 on이 되기 때문*/}
-              <Route path="list" component={ User }/>
-              <Route path="stat" component={ User }/>
-              <Route path="ban" component={ User }/>
+              <Route path="list" component={ Member }/>
+              <Route path="stat" component={ Member }/>
+              <Route path="ban" component={ BanMember }/>
             </Route>
 
             <Route path="comment" component={ Comment }/>
             <Route path="report">
               <IndexRedirect to="post" />
               <Route path="post" component={ ReportPost }/>
+              <Route path="post/new" component={ ReportPost }/>
+              <Route path="post/:id" component={ ReportPost }/>
               <Route path="comment" component={ ReportComment }/>
             </Route>
             <Route path="push">

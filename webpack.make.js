@@ -230,7 +230,7 @@ module.exports = function makeWebpackConfig(options) {
         title: 'Dingo CMS - Content Management System',
         favicon: 'app/assets/favicon/favicon.ico',
         template: 'app/assets/index.html', // Load a custom template
-        inject: 'body',
+        inject: 'body'
         //TODO : default meta data 넣기..
       })
     )

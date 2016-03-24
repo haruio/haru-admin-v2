@@ -2,7 +2,7 @@
  * Created by jungenpark on 2/15/16.
  */
 import Immutable from 'immutable'
-import { ReduceStore } from 'flux/utils'
+import { MapStore } from 'flux/utils'
 
 import AppConstants from '../constants/AppConstants'
 import AppDispatcher from '../dispatcher/AppDispatcher'
@@ -10,25 +10,24 @@ import AppDispatcher from '../dispatcher/AppDispatcher'
 import debug from 'debug'
 const log = debug('application:ChannelStore.jsx')
 
-class ChannelStore extends ReduceStore {
-  getInitialState() {
-    return Immutable.List()
-  }
-
-  getChannels() {
+class ChannelDetailStore extends MapStore {
+  getChannel() {
     return this.getState()
   }
 
   reduce(state, action) {
     switch (action.type) {
-      case AppConstants.GET_CHANNELS:
-        return Immutable.fromJS(action.contents)
+      case AppConstants.GET_CHANNEL_DETAIL:
+        return Immutable.Map(action.contents)
+      case AppConstants.CLEAR_CHANNEL_DETAIL:
+        return state.clear()
+      case AppConstants.UPLOAD_CHANNEL_IMAGE:
+        return state.set(action.target, action.image.resourceUrl)
       default:
         return state
     }
   }
 }
-
 // Export a singleton instance of the store
-const instance = new ChannelStore(AppDispatcher)
+const instance = new ChannelDetailStore(AppDispatcher)
 export default instance

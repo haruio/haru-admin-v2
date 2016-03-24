@@ -5,9 +5,8 @@ import './assets/vendor/jquery.cycle.all.js'
 // using jquery sortable
 import './assets/vendor/jquery-ui-1.8.custom.min.js'
 // using jquery-ui calendar
-import './assets/vendor/jquery-ui-1.9.2.custom.css'
-import './assets/vendor/jquery-ui-1.9.2.custom.js'
-
+//import './assets/vendor/jquery-ui-1.9.2.custom.css'
+//import './assets/vendor/jquery-ui-1.9.2.custom.js'
 
 import 'TraceKit'
 
@@ -17,6 +16,8 @@ const log = debug('application:bootstrap')
 // Enable debug messages outside of production
 if (process.env.NODE_ENV !== 'production') {
   debug.enable('application:*')
+} else {
+  debug.enable('-application:*')
 }
 
 TraceKit.report.subscribe(function yourLogger(errorReport) {

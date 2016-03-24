@@ -4,7 +4,7 @@
 import React from 'react'
 
 const logo2 = require("image!../assets/img/logo2.png")
-import intlStores from '../stores/IntlStore'
+import intlStores from '../utils/IntlStore'
 
 export default class NotFound extends React.Component {
   constructor(props) {

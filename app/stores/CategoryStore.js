@@ -7,15 +7,22 @@ import { ReduceStore } from 'flux/utils'
 import AppConstants from '../constants/AppConstants'
 import AppDispatcher from '../dispatcher/AppDispatcher'
 
-class ChannelStore extends ReduceStore {
+import debug from 'debug'
+const log = debug('application:CategoryStore.jsx')
+
+class CategoryStore extends ReduceStore {
   getInitialState() {
-    return Immutable.Map()
+    return Immutable.List()
+  }
+  getCategories() {
+    return this.getState()
   }
 
   reduce(state, action) {
+
     switch (action.type) {
-      case AppConstants.GET_BANNER:
-        return state.set('test', 'test')
+      case AppConstants.GET_CATEGORIES:
+        return Immutable.fromJS(action.contents)
       default:
         return state
     }
@@ -23,5 +30,5 @@ class ChannelStore extends ReduceStore {
 }
 
 // Export a singleton instance of the store
-const instance = new ChannelStore(AppDispatcher)
+const instance = new CategoryStore(AppDispatcher)
 export default instance

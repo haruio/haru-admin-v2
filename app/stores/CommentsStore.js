@@ -3,25 +3,32 @@
  */
 import Immutable from 'immutable'
 import { ReduceStore } from 'flux/utils'
-
+import { browserHistory } from 'react-router'
 import AppConstants from '../constants/AppConstants'
 import AppDispatcher from '../dispatcher/AppDispatcher'
 
-class ReduceStoreExample extends ReduceStore {
+import debug from 'debug'
+const log = debug('application:CommentsStore.jsx')
+
+class CommentsStore extends ReduceStore {
   getInitialState() {
-    return Immutable.Map()
+    return Immutable.List()
+  }
+
+  getComments() {
+    return this.getState()
   }
 
   reduce(state, action) {
+
     switch (action.type) {
-      case AppConstants.GET_BANNER:
-        return state.set('test', 'test')
+      case AppConstants.GET_COMMENTS:
+        return Immutable.fromJS(action.contents)
       default:
         return state
     }
   }
 }
 
-// Export a singleton instance of the store
-const instance = new ReduceStoreExample(AppDispatcher)
+const instance = new CommentsStore(AppDispatcher)
 export default instance

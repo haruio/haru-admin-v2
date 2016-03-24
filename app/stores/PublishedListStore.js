@@ -2,26 +2,34 @@
  * Created by jungenpark on 2/15/16.
  */
 import Immutable from 'immutable'
-import { ReduceStore } from 'flux/utils'
+import {ReduceStore} from 'flux/utils'
 
 import AppConstants from '../constants/AppConstants'
 import AppDispatcher from '../dispatcher/AppDispatcher'
 
 import debug from 'debug'
-const log = debug('application:ChannelStore.jsx')
+const log = debug('application:PublishedListStore.jsx')
 
-class ChannelStore extends ReduceStore {
+/***
+ * 예약 + 발행 완료된 리스트를 저장하는 곳
+ */
+class PublishedListStore extends ReduceStore {
   getInitialState() {
     return Immutable.List()
   }
 
-  getChannels() {
+  getContentList() {
     return this.getState()
+  }
+  getContentListById(id) {
+    return this.getState().find((item) => {
+      return item.get('postSeq') === id
+    })
   }
 
   reduce(state, action) {
     switch (action.type) {
-      case AppConstants.GET_CHANNELS:
+      case AppConstants.GET_PUBLISH_CONTENT:
         return Immutable.fromJS(action.contents)
       default:
         return state
@@ -30,5 +38,5 @@ class ChannelStore extends ReduceStore {
 }
 
 // Export a singleton instance of the store
-const instance = new ChannelStore(AppDispatcher)
+const instance = new PublishedListStore(AppDispatcher)
 export default instance
