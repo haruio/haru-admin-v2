@@ -2,30 +2,27 @@
  * Created by jungenpark on 2/15/16.
  */
 import Immutable from 'immutable'
-import { ReduceStore } from 'flux/utils'
-import { browserHistory } from 'react-router'
+import {ReduceStore} from 'flux/utils'
+
 import AppConstants from '../constants/AppConstants'
 import AppDispatcher from '../dispatcher/AppDispatcher'
 
 import debug from 'debug'
-const log = debug('application:MemberStore.jsx')
+const log = debug('application:BannerStore.jsx')
 
-class MemberStore extends ReduceStore {
+class BannerStore extends ReduceStore {
   getInitialState() {
     return Immutable.List()
   }
 
-  getMembers() {
+  getBanners() {
     return this.getState()
   }
 
   reduce(state, action) {
     switch (action.type) {
-      case AppConstants.GET_USERS:
-        return Immutable.fromJS(action.contents || {})
-      case AppConstants.GET_BAN_USERS:
-        return Immutable.fromJS(action.contents || {})
-
+      case AppConstants.GET_BANNER_LIST:
+        return Immutable.fromJS(action.contents)
       default:
         return state
     }
@@ -33,5 +30,5 @@ class MemberStore extends ReduceStore {
 }
 
 // Export a singleton instance of the store
-const instance = new MemberStore(AppDispatcher)
+const instance = new BannerStore(AppDispatcher)
 export default instance

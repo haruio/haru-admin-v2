@@ -8,24 +8,21 @@ import AppConstants from '../constants/AppConstants'
 import AppDispatcher from '../dispatcher/AppDispatcher'
 
 import debug from 'debug'
-const log = debug('application:MemberStore.jsx')
+const log = debug('application:MemberCommentStore.jsx')
 
-class MemberStore extends ReduceStore {
+class MemberCommentStore extends ReduceStore {
   getInitialState() {
-    return Immutable.List()
+    return Immutable.Map()
   }
 
-  getMembers() {
+  getMemberComment() {
     return this.getState()
   }
 
   reduce(state, action) {
     switch (action.type) {
-      case AppConstants.GET_USERS:
+      case AppConstants.GET_USER_COMMENT:
         return Immutable.fromJS(action.contents || {})
-      case AppConstants.GET_BAN_USERS:
-        return Immutable.fromJS(action.contents || {})
-
       default:
         return state
     }
@@ -33,5 +30,5 @@ class MemberStore extends ReduceStore {
 }
 
 // Export a singleton instance of the store
-const instance = new MemberStore(AppDispatcher)
+const instance = new MemberCommentStore(AppDispatcher)
 export default instance

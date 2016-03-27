@@ -31,9 +31,6 @@ class ReportComment extends React.Component {
 
   }
 
-  editRecommendPost(recommendSeq) {
-
-  }
 
   /***
    * Move Page
@@ -47,6 +44,10 @@ class ReportComment extends React.Component {
 
   }
 
+  toggleCheckBox = () => {
+    $("input[name='postBox']").prop('checked', $(this.refs.checkAll).prop('checked'))
+  }
+
   render() {
     return (
       <article>
@@ -55,21 +56,30 @@ class ReportComment extends React.Component {
           <fieldset id="search_box">
             <p>
               <label>{intlStores.get('common.COMMON_FLD_SEARCH_ITEM')}</label>
-              <select id="searchField">
+              <select id="searchField" ref="searchField">
                 <option value="TITLE">{intlStores.get('cms.CMS_FLD_TITLE')}</option>
               </select>
             </p>
-            <input type="text" placeholder="Search" id="searchText" /><a onClick={this.searchContents} className="btn_search"></a>
+            <input type="text" placeholder="Search" id="searchText" ref="searchText"/>
+            <a onClick={this.searchContents} className="btn_search"></a>
           </fieldset>
         </hgroup>
         <div id="contents">
-          <p className="table_info">{intlStores.get('common.COMMON_FLD_TOTAL')+' '+this.state.pagination.get('totalCount') +' '+intlStores.get('common.COMMON_FLD_COUNT')}</p>
+          <p
+            className="table_info">{intlStores.get('common.COMMON_FLD_TOTAL') + ' ' + this.state.pagination.get('totalCount') + ' ' + intlStores.get('common.COMMON_FLD_COUNT')}</p>
           <div className="table_wrap">
             <table className="listTable">
-              <colgroup><col width="6%" /><col width="13%" /><col width="27%" /><col width="27%" /><col width="*" /><col width="14%" /></colgroup>
+              <colgroup>
+                <col width="6%"/>
+                <col width="13%"/>
+                <col width="27%"/>
+                <col width="27%"/>
+                <col width="*"/>
+                <col width="14%"/>
+              </colgroup>
               <thead>
               <tr>
-                <th><input type="checkbox" id="checkAll" value="-1" onClick={this.checkAllHandler} /></th>
+                <th><input type="checkbox" id="checkAll" ref="checkAll" value="-1" onClick={this.toggleCheckBox}/></th>
                 <th>{intlStores.get('sm.SM_FLD_THUMBNAIL')}</th>
                 <th>{intlStores.get('sm.SM_FLD_TITLE')}</th>
                 <th>{intlStores.get('sm.SM_FLD_REPLY')}</th>
@@ -78,13 +88,15 @@ class ReportComment extends React.Component {
               </tr>
               </thead>
               <tbody>
-
+              <tr>
+                <td colSpan="7">{intlStores.get('sm.SM_MSG_NO_CONTENTS')}</td>
+              </tr>
               </tbody>
             </table>
           </div>
-          <PageList pageObj={this.state.pagination} clickAction={this.movePage} />
+          <PageList pageObj={this.state.pagination} clickAction={this.movePage}/>
           <p className="btn_r">
-            <a onClick={this.deleteComment} className="purple">삭제하기</a>
+            <a className="purple">삭제하기</a>
           </p>
         </div>
       </article>

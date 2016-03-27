@@ -43,12 +43,8 @@ class RecommendPost extends React.Component {
     AppActions.getRecommendPostList(page, 10)
   }
 
-  toggleCheckBox() {
-    if($('#checkAll').prop('checked')) {
-      $("input[name='postBox']").prop('checked',true)
-    }else{
-      $("input[name='postBox']").prop('checked',false)
-    }
+  toggleCheckBox = () => {
+    $("input[name='postBox']").prop('checked', $(this.refs.checkAll).prop('checked'))
   }
 
   deleteSelectedItem() {
@@ -66,6 +62,12 @@ class RecommendPost extends React.Component {
     const searchfield = $('#searchField option:selected').val()
     const searchtext = this.refs.searchText.value
     AppActions.getRecommendPostList(1, 10, '', '', searchfield, searchtext)
+  }
+
+  _handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      this.searchContents()
+    }
   }
 
   get getRecommendPostList() {
@@ -97,7 +99,7 @@ class RecommendPost extends React.Component {
                 <option value="TITLE">{intlStores.get('cms.CMS_FLD_TITLE')}</option>
               </select>
             </p>
-            <input type="text" placeholder="Search" ref="searchText" id="searchText"/><a onClick={this.searchContents}
+            <input type="text" placeholder="Search" ref="searchText" id="searchText" onKeyPress={this._handleKeyPress} /><a onClick={this.searchContents}
                                                                         className="btn_search"></a>
           </fieldset>
         </hgroup>
@@ -118,7 +120,7 @@ class RecommendPost extends React.Component {
               </colgroup>
               <thead>
               <tr>
-                <th><input type="checkbox" id="checkAll" onClick={this.toggleCheckBox}/></th>
+                <th><input type="checkbox" ref="checkAll" onClick={this.toggleCheckBox}/></th>
                 <th>No</th>
                 <th>{intlStores.get('cms.CMS_FLD_THUMBNAIL')}</th>
                 <th>{intlStores.get('cms.CMS_FLD_TITLE')}</th>

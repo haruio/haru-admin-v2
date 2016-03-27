@@ -12,6 +12,8 @@ const log = debug('application:ChannelStore.jsx')
 
 class ChannelDetailStore extends MapStore {
   getChannel() {
+    log('get')
+    log(this.getState().toJS())
     return this.getState()
   }
 

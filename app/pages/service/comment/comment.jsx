@@ -9,16 +9,19 @@ import debug from 'debug'
 const log = debug('application:Comment.jsx')
 
 import AppActions from '../../../actions/AppActions'
+import PopupActions from '../../../actions/PopupActions'
 import PageList from '../../../components/PageList'
+
 import CommentsStore from '../../../stores/CommentsStore'
 import PaginationStore from '../../../stores/PaginationStore'
+
 import intlStores from '../../../utils/IntlStore'
+import util from '../../../utils/util'
+import {POPUP} from '../../../constants/AppConstants'
 
 const defaultImage = require('image!../../../assets/img/default.png')
 
-
 class Comment extends React.Component {
-
   static getStores() {
     return [CommentsStore, PaginationStore]
   }
@@ -36,13 +39,13 @@ class Comment extends React.Component {
 
   // TODO : 꼭 변경하자. this.state 에 값을 넣고 있음.
   requetsCommentList = (searchObj) => {
-    this.state.searchObj = (searchObj != null) ? $.extend(this.state.searchObj, searchObj) : {
+    const searchObject = $.extend({
       searchStartDate: '',
       searchEndDate: '',
       searchField: '',
       searchText: ''
-    }
-    AppActions.getCommentList(this.state.searchObj)
+    }, searchObj)
+    AppActions.getCommentList(searchObject)
   }
 
   /***
@@ -53,6 +56,11 @@ class Comment extends React.Component {
     this.requetsCommentList({userId: '', pageNo: pageNo})
   }
 
+  /***
+   * Search Content
+   * searchField : Author, BODY
+   * searchText {String} - 검색할 단어
+   */
   searchContents = () => {
     this.requetsCommentList({
       searchField: this.refs.searchField.value,
@@ -60,39 +68,38 @@ class Comment extends React.Component {
     })
   }
 
-  checkAllHandler() {
+  /***
+   * 전체 체크 / 해지 하는 이벤트 핸들러
+   * @param event {MouseEvent} - mouse event object
+     */
+  _checkAllHandler(event) {
     $('tbody input:checkbox').attr('checked', $(event.target).is(':checked'))
   }
 
-  openPost(shortUrl) {
-    window.open('http://kr.dingo.tv/' + shortUrl, '_blank')
-  }
-
   onPopupUserProfile(userId) {
-    /*
-     if(userId != null) {
-     this.refs['userProfile'].readUserProfile({userId:userId})
-     $('#user_info').toggleClass('hide');
-     }*/
+    PopupActions.openPopup(POPUP.MEMBER, userId)
   }
 
-  onImageError(e) {
-    e.target.src = defaultImage
+  /***
+   * 검색시에 엔터키를 누르면 searchContent 함수를 호출
+   * @param e
+   * @private
+     */
+  _handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      this.searchContents()
+    }
   }
 
   get getCommentList() {
-    log(this.state.comments)
-    return this.state.comments.map((comment, i) => {
-      return (<tr key={i}>
+    return this.state.comments.map((comment) => {
+      return (<tr key={comment.get('commentSeq')}>
         <td><input type="checkbox" value={comment.get('commentSeq')} onClick={this.checkBoxHandler}/></td>
-        <td><img src={comment.get('postThumbnailUrl') || ''} onError={this.onImageError} className="thumbnail"/></td>
-        <td className="al"><a
-          onClick={this.openPost.bind(null, comment.get('postShortUrl'))}>{comment.get('postTitle')}</a></td>
-        <td className="al">{comment.get('commentTxt')} </td>
-        <td>
-          <a onClick={this.onPopupUserProfile.bind(null, comment.userId)}>{comment.get('commentAuthor')}</a>
-        </td>
-        <td>{moment(comment.createDt).format('YYYY-MM-DD')}</td>
+        <td onClick={this.onPopupUserProfile.bind(null, {userId:comment.get('userId'), tab:2})}><img src={comment.get('postThumbnailUrl') || ''} onError={(e) => {e.target.src = defaultImage}} className="thumbnail"/></td>
+        <td onClick={this.onPopupUserProfile.bind(null, {userId:comment.get('userId'), tab:2})} className="al">{comment.get('postTitle')}</td>
+        <td onClick={this.onPopupUserProfile.bind(null, {userId:comment.get('userId'), tab:2})} className="al">{comment.get('commentTxt')}</td>
+        <td onClick={this.onPopupUserProfile.bind(null, {userId:comment.get('userId'), tab:2})}>{comment.get('commentAuthor')}</td>
+        <td onClick={this.onPopupUserProfile.bind(null, {userId:comment.get('userId'), tab:2})}>{moment(comment.createDt).format('YYYY-MM-DD')}</td>
       </tr>)
     })
   }
@@ -106,11 +113,11 @@ class Comment extends React.Component {
             <p>
               <label>{intlStores.get('common.COMMON_FLD_SEARCH_ITEM')}</label>
               <select id="searchField" ref="searchField">
-                <option value="TITLE">{intlStores.get('cms.CMS_FLD_TITLE')}</option>
                 <option value="BODY">댓글내용</option>
+                <option value="AUTHOR">닉네임</option>
               </select>
             </p>
-            <input type="text" placeholder="Search" ref="searchText" id="searchText"/><a onClick={this.searchContents}
+            <input type="text" placeholder="Search" ref="searchText" id="searchText" onKeyPress={this._handleKeyPress}/><a onClick={this.searchContents}
                                                                                          className="btn_search"></a>
           </fieldset>
         </hgroup>
@@ -129,9 +136,9 @@ class Comment extends React.Component {
               </colgroup>
               <thead>
               <tr>
-                <th><input type="checkbox" id="checkAll" value="-1" onClick={this.checkAllHandler}/></th>
+                <th><input type="checkbox" id="checkAll" value="-1" onClick={this._checkAllHandler}/></th>
                 <th>{intlStores.get('sm.SM_FLD_THUMBNAIL')}</th>
-                <th>{intlStores.get('sm.SM_FLD_TITLE')}</th>
+                <th>POST {intlStores.get('sm.SM_FLD_TITLE')}</th>
                 <th>{intlStores.get('sm.SM_FLD_REPLY')}</th>
                 <th>{intlStores.get('sm.SM_FLD_USERNAME')}</th>
                 <th>{intlStores.get('sm.SM_FLD_DATE')}</th>
@@ -144,14 +151,13 @@ class Comment extends React.Component {
           </div>
           <PageList pageObj={this.state.pagination} clickAction={this.movePage}/>
           <p className="btn_r">
-            <a onClick={this.deleteComment} className="purple">{intlStores.get('common.COMMON_BTN_DELETE')}</a>
+            <a onClick={this.deleteComment} className="purple btn_w140">선택된 댓글 {intlStores.get('common.COMMON_BTN_DELETE')}</a>
           </p>
         </div>
       </article>
     )
   }
 }
-//        <UserProfilePopup ref="userProfile" userId={this.state.userId} />
 
 const CommentContainer = Container.create(Comment)
 export default CommentContainer

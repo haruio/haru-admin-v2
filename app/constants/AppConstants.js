@@ -98,11 +98,15 @@ export default keyMirror({
    */
   GET_CHANNELS: null,
   GET_CHANNEL_DETAIL: null,
+  DELETE_CHANNEL_IMAGE: null,
+  CLEAR_CHANNEL_DETAIL: null,
+  /**
+   * Category Management - by billy
+   */
   GET_CATEGORIES: null,
   GET_CATEGORY_DETAIL: null,
-  DELETE_CHANNEL_IMAGE: null,
   DELETE_CATEGORY_IMAGE: null,
-
+  CLEAR_CATEGORY_DETAIL: null,
   /**
    * MainFeed Management
    */
@@ -122,7 +126,7 @@ export default keyMirror({
   GET_USER_STAT_ACT: null,
   GET_USER_STAT_BAN: null,
   GET_USER_STAT_DEL: null,
-
+  GET_BAN_USERS : null,
   /**
    * Comment Management
    */

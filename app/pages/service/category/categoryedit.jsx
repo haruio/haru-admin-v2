@@ -37,8 +37,13 @@ class CategoryEdit extends React.Component {
     this.isAddCategory = this.context.router.isActive('/service/mgmt/category/new')
     if(!this.isAddCategory) {
       AppActions.getCategoryDetail(this.props.params.id)
+    } else {
+      setTimeout(() => {
+        AppActions.clearCategoryDetail()
+      })
     }
   }
+
 
   /***
    * input tag를 입력할때 마다 호출되는 onChange Handler

@@ -3,6 +3,8 @@
  */
 import React from 'react'
 import { Link } from 'react-router'
+import cn from 'classnames'
+import moment from 'moment'
 
 import debug from 'debug'
 const log = debug('application:BannerList.jsx')
@@ -13,6 +15,7 @@ const btn_prev2 = require('image!../../../assets/img/btn_prev2.png')
 const btn_next2 = require('image!../../../assets/img/btn_next2.png')
 const bg_calendar = require('image!../../../assets/img/bg_calendar.png')
 
+import AppActions from '../../../actions/AppActions'
 
 export default class BannerList extends React.Component {
   constructor(props) {
@@ -20,7 +23,53 @@ export default class BannerList extends React.Component {
 
   }
 
-  get TableHeader() {
+  componentDidMount()  {
+    this.setInitCalendar()
+
+    let initdate = moment().format('YYYY-MM-DD')
+    if (this.props.query != undefined && this.props.query.searchDate != undefined) {
+      this.state.searchDate = this.props.query.searchDate
+    }
+
+    $('#bannerDate').datepicker('setDate', initdate)
+
+    let platform = 'AND'
+    if (this.props.query != undefined && this.props.query.searchPlatform != undefined) {
+      this.state.platform = this.props.query.searchPlatform
+    }
+
+    this.getBannerList(1, initdate, platform)
+  }
+
+  setInitCalendar() {
+    const _self = this
+
+    $('#bannerDate').datepicker({
+      dateFormat :'yy-mm-dd',
+      onClose : function (dateText) {
+        _self.setState({searchDate:dateText})
+        _self.getBannerList(1) //???
+      }
+    })
+  }
+
+
+  getBannerList(page, initdate, platform) {
+    const startDate = moment(initdate + ' 00:00:00', 'YYYYMMDD HH:mm:ss').utc().format('YYYY-MM-DD HH:mm:ss')
+    const endDate = moment(initdate + ' 23:59:59', 'YYYYMMDD HH:mm:ss').utc().format('YYYY-MM-DD HH:mm:ss')
+
+    AppActions.getBannerList(page, 10, startDate, endDate, platform)
+  }
+
+  toggleCheckBox = () => {
+    $("input[name='postBox']").prop('checked', $(this.refs.checkAll).prop('checked'))
+  }
+
+  onShowCalendar() {
+    $("#bannerDate").datepicker('show')
+  }
+
+  get tableHeader() {
     return (
       <thead>
       <tr>
@@ -53,7 +102,26 @@ export default class BannerList extends React.Component {
       </thead>
     )
   }
+  get platformTab() {
+    return (
+      <ul id="tab_btns">
+      <li><button className="on">Android</button></li>
+      <li><button>IOS</button></li>
+      <li><button>PC Web</button></li>
+      <li><button>Mobile Web</button></li>
+    </ul>)
+  }
 
+  get calendarHead() {
+    return (
+      <div id="calendar_head">
+        <time><input type="hidden" id="bannerDate"/>2015-09-04(금)</time>
+        <input type="image" src={btn_prev2} alt="prev" className="prev" />
+        <input type="image" src={btn_next2} alt="next" className="next" />
+        <a onClick={this.onShowCalendar}><img src={bg_calendar} alt="달력" /></a>
+      </div>
+    )
+  }
   render() {
     return (
         <article>
@@ -61,22 +129,12 @@ export default class BannerList extends React.Component {
             <h2>배너 관리</h2>
           </hgroup>
           <div id="contents">
-            <ul id="tab_btns">
-              <li><button className="on">Android</button></li>
-              <li><button>IOS</button></li>
-              <li><button>PC Web</button></li>
-              <li><button>Mobile Web</button></li>
-            </ul>
-            <div id="calendar_head">
-              <time>2015-09-04(금)</time>
-              <input type="image" src={btn_prev2} alt="prev" className="prev" />
-              <input type="image" src={btn_next2} alt="next" className="next" />
-              <a href=""><img src={bg_calendar} alt="달력" /></a>
-            </div>
+            {this.platformTab}
+            {this.calendarHead}
             <div id="calendar_area">
               <table>
                 <colgroup><col width="130px" /><col width="*" /></colgroup>
-                {this.TableHeader}
+                {this.tableHeader}
                 <tbody>
                 <tr className="bn1">
                   <th>banner 01</th>
@@ -248,7 +306,7 @@ export default class BannerList extends React.Component {
                 <colgroup><col width="5%" /><col width="11%" /><col width="*" /><col width="13%" /><col width="12%" /><col width="17%" /><col width="17%" /></colgroup>
                 <thead>
                 <tr>
-                  <th><input type="checkbox" /></th>
+                  <th><input type="checkbox" ref="checkAll" onClick={this.toggleCheckBox}/></th>
                   <th>순서</th>
                   <th>배너</th>
                   <th>타입</th>
@@ -259,7 +317,7 @@ export default class BannerList extends React.Component {
                 </thead>
                 <tbody>
                 <tr>
-                  <td><input type="checkbox" /></td>
+                  <td><input type="checkbox" name="postBox" /></td>
                   <td className="bn1">banner 01</td>
                   <td><img className="thumbnail" src="http://assets2.moncast.com/thumb/4ada80b7b068013a.jpeg" alt="" /></td>
                   <td>Link_internal</td>
@@ -268,7 +326,7 @@ export default class BannerList extends React.Component {
                   <td>2011-08-12 pm 4:00</td>
                 </tr>
                 <tr>
-                  <td><input type="checkbox" /></td>
+                  <td><input type="checkbox" name="postBox" /></td>
                   <td className="bn2">banner 02</td>
                   <td><img className="thumbnail" src="http://assets2.moncast.com/thumb/4ada80b7b068013a.jpeg" alt="" /></td>
                   <td>Link_internal</td>
@@ -277,7 +335,7 @@ export default class BannerList extends React.Component {
                   <td>2011-08-12 pm 4:00</td>
                 </tr>
                 <tr>
-                  <td><input type="checkbox" /></td>
+                  <td><input type="checkbox" name="postBox" /></td>
                   <td className="bn3">banner 03</td>
                   <td><img className="thumbnail" src="http://assets2.moncast.com/thumb/4ada80b7b068013a.jpeg" alt="" /></td>
                   <td>Link_internal</td>
@@ -286,7 +344,7 @@ export default class BannerList extends React.Component {
                   <td>2011-08-12 pm 4:00</td>
                 </tr>
                 <tr>
-                  <td><input type="checkbox" /></td>
+                  <td><input type="checkbox" name="postBox" /></td>
                   <td className="bn4">banner 04</td>
                   <td><img className="thumbnail" src="http://assets2.moncast.com/thumb/4ada80b7b068013a.jpeg" alt="" /></td>
                   <td>Link_internal</td>
@@ -295,7 +353,7 @@ export default class BannerList extends React.Component {
                   <td>2011-08-12 pm 4:00</td>
                 </tr>
                 <tr>
-                  <td><input type="checkbox" /></td>
+                  <td><input type="checkbox" name="postBox" /></td>
                   <td className="bn5">banner 05</td>
                   <td><img className="thumbnail" src="http://assets2.moncast.com/thumb/4ada80b7b068013a.jpeg" alt="" /></td>
                   <td>Link_internal</td>
@@ -304,7 +362,7 @@ export default class BannerList extends React.Component {
                   <td>2011-08-12 pm 4:00</td>
                 </tr>
                 <tr>
-                  <td><input type="checkbox" /></td>
+                  <td><input type="checkbox" name="postBox" /></td>
                   <td className="bn0">default banner</td>
                   <td><img className="thumbnail" src="http://assets2.moncast.com/thumb/4ada80b7b068013a.jpeg" alt="" /></td>
                   <td>Link_internal</td>

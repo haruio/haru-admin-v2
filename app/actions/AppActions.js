@@ -23,12 +23,6 @@ import { currentuser, URL, middleware_accesstoken } from './AuthActions.js'
  */
 
 const AppActions = {
-  getBanner() {
-    AppDispatcher.handleViewAction({
-      actionType: AppConstants.GET_BANNER,
-      test: 'test'
-    })
-  },
   /***
    * Image Upload
    */
@@ -57,6 +51,115 @@ const AppActions = {
           })
         }
 
+      })
+  },
+  /**
+   * Banner by Keigun
+   */
+  getBannerList(pageNo, pageSize, startDate, endDate, platform) {
+    request.get(URL + '/sm/banners')
+      .use(middleware_accesstoken)
+      .query({ pageNum: pageNo, pageSize: pageSize })
+      .query({ startDate: startDate, endDate: endDate })
+      .query({ platform: platform})
+      .end(function (err, res) {
+
+        if(utility.errorHandler(err, res)) {
+          return
+        }
+
+        AppDispatcher.handleViewAction({
+          actionType: AppConstants.GET_BANNER_LIST,
+          contents : res.body.data,
+          pagination: {
+            pageSize: res.body.pageSize,
+            firstPageNo: res.body.firstPageNo,
+            startPageNo: res.body.startPageNo,
+            prevPageNo: res.body.prevPageNo,
+            pageNo: res.body.pageNo,
+            nextPageNo: res.body.nextPageNo,
+            endPageNo: res.body.endPageNo,
+            finalPageNo: res.body.finalPageNo,
+            totalCount: res.body.totalCount
+          }
+        })
+      })
+  },
+  getBanner(seq) {
+    request.get(`${URL}/sm/banners/${seq}`)
+      .use(middleware_accesstoken)
+      .end(function (err, res) {
+
+        if(utility.errorHandler(err, res)) {
+          return
+        }
+
+        AppDispatcher.handleViewAction({
+          actionType: AppConstants.GET_BANNER,
+          content : res.body
+        })
+
+        if(res.body && res.body.bannerUrl && (res.body.bannerUrl.indexOf('post') >= 0)) {
+          AppActions.getPostByUrl(res.body.bannerUrl.split(/post\//)[1])
+        }
+      })
+  },
+  deleteBannerImage(target) {
+    AppDispatcher.handleViewAction({
+      actionType: AppConstants.DELETE_BANNER_IMAGE,
+      target : target
+    })
+  },
+
+  getPostByUrl(url) {
+    request.get(`${URL}/contents/url/${url}`)
+      .use(middleware_accesstoken)
+      .end(function(err, res) {
+
+        if(utility.errorHandler(err, res)) {
+          return
+        }
+
+        AppDispatcher.handleViewAction({
+          actionType: AppConstants.GET_POST_DETAIL_BYURL,
+          post : res.body
+        })
+      })
+  },
+
+  createBanner(data) {
+    request.post(URL + '/sm/banners')
+      .use(middleware_accesstoken)
+      .send(data)
+      .end(function (err, res) {
+        if(utility.errorHandler(err, res)) {
+          return
+        }
+      })
+  },
+
+  modifyBanner(seq, data) {
+    request.put(`${URL}/sm/banners/${seq}`)
+      .use(middleware_accesstoken)
+      .send(data)
+      .end(function (err, res) {
+
+        if(utility.errorHandler(err, res)) {
+          return
+        }
+      })
+  },
+  deleteBannerList(idLists, startDate, endDate, platform) {
+    request.post(URL + '/sm/banners/delete')
+      .use(middleware_accesstoken)
+      .send({orderList: idLists})
+      .end(function (err, res) {
+
+        if(utility.errorHandler(err, res)) {
+          return
+        }
+
+        AppActions.getBannerList(1, 10, startDate, endDate, platform)
       })
   },
   /**
@@ -440,8 +543,6 @@ const AppActions = {
     request.get(URL + '/sm/users')
       .use(middleware_accesstoken)
       .query({
-        startDate: searchObj.searchStartDate,
-        endDate: searchObj.searchEndDate,
         searchField: searchObj.searchField,
         searchText: searchObj.searchText,
         searchUserStat: searchObj.searchUserStat
@@ -465,13 +566,39 @@ const AppActions = {
         })
       })
   },
-  readUserProfile(userObj) {
-    request.get(URL + '/sm/users/' + userObj.userId || -1)
+  readUserProfile(userId) {
+    request.get(URL + '/sm/users/' + userId || -1)
       .use(middleware_accesstoken)
       .end(function (err, res) {
         AppDispatcher.handleViewAction({
           type: AppConstants.GET_USER_PROFILE,
           contents: res.body
+        })
+      })
+  },
+  banUserList(searchObj) {
+    request.get(URL + '/sm/users/ban')
+      .use(middleware_accesstoken)
+      .query({
+        searchField: searchObj.searchField,
+        searchText: searchObj.searchText
+      })
+      .end(function (err, res) {
+
+        AppDispatcher.handleViewAction({
+          type: AppConstants.GET_BAN_USERS,
+          contents: res.body.data,
+          pagination: {
+            pageSize: res.body.pageSize,
+            firstPageNo: res.body.firstPageNo,
+            startPageNo: res.body.startPageNo,
+            prevPageNo: res.body.prevPageNo,
+            pageNo: res.body.pageNo,
+            nextPageNo: res.body.nextPageNo,
+            endPageNo: res.body.endPageNo,
+            finalPageNo: res.body.finalPageNo,
+            totalCount: res.body.totalCount
+          }
         })
       })
   },
@@ -580,6 +707,7 @@ const AppActions = {
       .query({searchText: userObj.userId||''})
       .query({pageNum: userObj.pageNo||1, pageSize: userObj.pageSize||5 })
       .end(function (err, res) {
+        log(res.body)
         AppDispatcher.handleViewAction({
           type: AppConstants.GET_USER_COMMENT,
           contents: res.body.data,

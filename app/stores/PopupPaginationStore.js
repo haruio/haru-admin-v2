@@ -36,6 +36,8 @@ class PopupPaginationStore extends MapStore {
     switch (action.type) {
       case AppConstants.GET_PUBLISH_CONTENT:
         return Immutable.fromJS(action.pagination)
+      case AppConstants.GET_USER_COMMENT:
+        return Immutable.fromJS(action.pagination)
       default:
         return state
     }

@@ -33,9 +33,6 @@ class ReportPost extends React.Component {
 
   }
 
-  editRecommendPost(recommendSeq) {
-
-  }
 
   /***
    * Move Page
@@ -49,9 +46,12 @@ class ReportPost extends React.Component {
 
   }
 
+
+  toggleCheckBox = () => {
+    $("input[name='postBox']").prop('checked', $(this.refs.checkAll).prop('checked'))
+  }
+
   render() {
-
-
     return (
       <article>
         <hgroup>
@@ -73,7 +73,7 @@ class ReportPost extends React.Component {
               <colgroup><col width="6%" /><col width="13%" /><col width="27%" /><col width="27%" /><col width="*" /><col width="14%" /></colgroup>
               <thead>
               <tr>
-                <th><input type="checkbox" id="checkAll" value="-1" onClick={this.checkAllHandler} /></th>
+                <th><input type="checkbox" id="checkAll" value="-1" ref="checkAll" onClick={this.toggleCheckBox} /></th>
                 <th>{intlStores.get('sm.SM_FLD_THUMBNAIL')}</th>
                 <th>{intlStores.get('sm.SM_FLD_TITLE')}</th>
                 <th>{intlStores.get('sm.SM_FLD_REPLY')}</th>
@@ -87,7 +87,7 @@ class ReportPost extends React.Component {
           </div>
           <PageList pageObj={this.state.pagination} clickAction={this.movePage} />
           <p className="btn_r">
-            <a onClick={this.deleteComment} className="purple">삭제하기</a>
+            <a  className="purple">삭제하기</a>
           </p>
         </div>
       </article>

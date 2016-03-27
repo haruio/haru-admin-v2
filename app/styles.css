@@ -99,7 +99,7 @@ header p>a{position:absolute;top:-3px;right:-8px;display:block;width:22px;height
 /*table*/
 .listTable{width:100%}
 .listTable th{background:#f6f8f8;padding:3px 0;height:45px;color:#5a6165;font-weight:600}
-.listTable td{border-top:1px solid #dee1e2;text-align:center;color:#5a6165;padding:3px 0;height:45px}
+.listTable td{border-top:1px solid #dee1e2;text-align:center;color:#5a6165;padding:3px 0;height:45px;text-overflow: ellipsis;overflow: hidden;}
 .listTable td.al{text-align:left;padding-left:15px}
 .listTable.modify .more{display:None}
 .listTable.modify .more a{opacity:0.4;padding:0 3px}
@@ -239,7 +239,7 @@ img.porfile{display:inline-block;width:43px;height:43px;border:1px solid #dbdfe2
 .pop .listTable th:first-child{border-top-left-radius:4px;border-bottom-left-radius:4px}
 .pop .listTable th:last-child{border-top-right-radius:4px;border-bottom-right-radius:4px}
 .pop .listTable td{border-top:none;border-bottom:1px solid #dee1e2;height:30px}
-.pop .listTable tr:hover{background:#d2d2d4;cursor:pointer;}
+.pop .listTable tr:hover{background:#f2f2f4;cursor:pointer;}
 
 .pop table .thumb{width:90%}
 .pop .pagination{padding:15px 0}
@@ -644,6 +644,7 @@ img.thumbnail{width:80px;height:40px;vertical-align:top;margin: 5px;}
 .listTable a.btn_delete:hover,
 .listTable a.btn_delete.on{background:url(assets/img/icon_delete.png) no-repeat;opacity:1 !important;}
 .listTable .on td{background:#e1e3e8}
+.listTable tr:hover{background:#f2f2f4;cursor:pointer;}
 .writeTable td>.list{width:100%;overflow:hidden;margin-left:0;}
 .writeTable td>.list>li{position:relative;float:left;margin:0;width:340px;border:1px solid #c9cacb;border-radius:5px;background:#fff;box-shadow:0 0 10px #ddd;overflow:hidden;}
 .writeTable td>.list>li dl{height:45px;margin-top:17px;padding:0 17px;}

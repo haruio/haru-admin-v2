@@ -79,10 +79,9 @@ class Push extends React.Component {
             pushStatus = 'sm.SM_FLD_PUSH_STAT_APR'
             break
         }
-
         return (
           <tr key={i}>
-            <td>{this.state.pagination.get('totalCount') - ((10 * this.state.pagination.get('pageNo')) + i)}</td>
+            <td>{this.state.pagination.get('totalCount') - (( 10 * (this.state.pagination.get('pageNo') -1)) + i) }</td>
             <td>{push.getIn(['message', 'type'], '')}</td>
             <td><a onClick={this.onPopupPushDetail.bind(null, { pushId:push.get('pushId') })}>{push.getIn(['message', 'title'], '')}</a></td>
             <td>{push.getIn(['stats', 'requested'], 0)}</td>

@@ -7,7 +7,7 @@ import cn from 'classnames'
 import moment from 'moment'
 
 import PageList from '../../PageList'
-import PopupPageinationStore from '../../../stores/PopupPaginationStore'
+import PopupPaginationStore from '../../../stores/PopupPaginationStore'
 import PublishedListStore from '../../../stores/PublishedListStore'
 import ContentActions from '../../../actions/ContentActions'
 import AppActions from '../../../actions/AppActions'
@@ -18,13 +18,13 @@ const log = debug('application:MainFeedPopup.jsx')
 class MainFeedPopup extends React.Component {
 
   static getStores() {
-    return [PublishedListStore, PopupPageinationStore]
+    return [PublishedListStore, PopupPaginationStore]
   }
 
   static calculateState() {
     return {
       publish: PublishedListStore.getContentList(),
-      pagination: PopupPageinationStore.getPagination()
+      pagination: PopupPaginationStore.getPagination()
     }
   }
 
