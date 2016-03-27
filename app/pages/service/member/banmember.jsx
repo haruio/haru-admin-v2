@@ -4,7 +4,6 @@
 import React from 'react'
 import moment from 'moment'
 import {Container} from 'flux/utils'
-import cn from 'classnames'
 
 import debug from 'debug'
 const log = debug('application:BanMember.jsx')
@@ -147,8 +146,6 @@ class BanMember extends React.Component {
         )
       })
     }
-
-
   }
   render() {
     return (
