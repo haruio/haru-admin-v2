@@ -17,7 +17,7 @@ import intlStores from '../../../utils/IntlStore'
 
 
 class PublishedContentPopup extends React.Component {
-  
+
   static getStores() {
     return [PublishedListStore, PopupPageinationStore]
   }
@@ -42,7 +42,12 @@ class PublishedContentPopup extends React.Component {
   }
 
   selectItem(id) {
-    AppActions.getPostDetail(PublishedListStore.getContentListById(id))
+    if(this.props.view == 'banner') {
+
+      AppActions.getBannerPost(PublishedListStore.getContentListById(id))
+    } else {
+      AppActions.getPostDetail(PublishedListStore.getContentListById(id))
+    }
     this.props.close()
   }
   /***

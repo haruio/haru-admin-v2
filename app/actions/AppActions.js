@@ -63,13 +63,12 @@ const AppActions = {
       .query({ startDate: startDate, endDate: endDate })
       .query({ platform: platform})
       .end(function (err, res) {
-
         if(utility.errorHandler(err, res)) {
           return
         }
 
         AppDispatcher.handleViewAction({
-          actionType: AppConstants.GET_BANNER_LIST,
+          type: AppConstants.GET_BANNER_LIST,
           contents : res.body.data,
           pagination: {
             pageSize: res.body.pageSize,
@@ -95,7 +94,7 @@ const AppActions = {
         }
 
         AppDispatcher.handleViewAction({
-          actionType: AppConstants.GET_BANNER,
+          type: AppConstants.GET_BANNER,
           content : res.body
         })
 
@@ -104,9 +103,14 @@ const AppActions = {
         }
       })
   },
+  clearBanner() {
+    AppDispatcher.handleViewAction({
+      type: AppConstants.CLEAR_BANNER
+    })
+  },
   deleteBannerImage(target) {
     AppDispatcher.handleViewAction({
-      actionType: AppConstants.DELETE_BANNER_IMAGE,
+      type: AppConstants.DELETE_BANNER_IMAGE,
       target : target
     })
   },
@@ -114,14 +118,14 @@ const AppActions = {
   getPostByUrl(url) {
     request.get(`${URL}/contents/url/${url}`)
       .use(middleware_accesstoken)
-      .end(function(err, res) {
+      .end(function (err, res) {
 
         if(utility.errorHandler(err, res)) {
           return
         }
 
         AppDispatcher.handleViewAction({
-          actionType: AppConstants.GET_POST_DETAIL_BYURL,
+          type: AppConstants.GET_POST_DETAIL_BYURL,
           post : res.body
         })
       })
@@ -161,6 +165,12 @@ const AppActions = {
 
         AppActions.getBannerList(1, 10, startDate, endDate, platform)
       })
+  },
+  getBannerPost(post) {
+    AppDispatcher.handleViewAction({
+      type: AppConstants.SELECT_BANNER_POST_DETAIL,
+      post: post
+    })
   },
   /**
    * Recommend Keyword - Keigun, edit jungun.park (20160318)

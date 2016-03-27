@@ -36,8 +36,6 @@ export default class ImageUploader extends React.Component {
     }
   }
   render() {
-    log('imageupload render')
-    log(this.props)
     const value = this.props.value.get(this.props.id) ? this.props.value.get(this.props.id) : ''
     return (
       <td>

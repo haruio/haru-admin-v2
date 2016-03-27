@@ -78,8 +78,9 @@ export default keyMirror({
   GET_BANNER_LIST: null,
   GET_BANNER_POST: null,
   GET_BANNER: null,
+  CLEAR_BANNER: null,
   GET_POST_DETAIL_BYURL: null,
-
+  SELECT_BANNER_POST_DETAIL: null,
   /**
    * Post
    */
@@ -257,6 +258,18 @@ export const IMAGE_VALIDATION = {
       size: 1500
     }
   },
+  BANNER: {
+    imgSmallUrl: {
+      width: 720,
+      height: 520,
+      size: 200
+    },
+    imgLargeUrl: {
+      width: 960,
+      height: 350,
+      size: 200
+    }
+  }
 }
 
 export const POPUP = keyMirror({

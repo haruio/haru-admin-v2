@@ -6,7 +6,6 @@ const log = debug('application:ImageMetaPanel.jsx')
 
 import intlStores from '../../../utils/IntlStore'
 import ImageUploader from '../../ImageUploader'
-import Immutable from 'Immutable'
 /**
  * A component to ImageMetaPanel
  * author : jungun.park

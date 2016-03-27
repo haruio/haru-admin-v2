@@ -100,7 +100,7 @@ class BanMember extends React.Component {
     if(this.state.members.size == 0) {
       return <tr>
         <td colSpan="7">{intlStores.get('sm.SM_MSG_NO_CONTENTS')}</td>
-      </tr>
+    </tr>
     } else {
       return this.state.members.map((user, i) => {
         let gender

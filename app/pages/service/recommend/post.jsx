@@ -18,6 +18,9 @@ import PostStore from '../../../stores/RecommendPostStore'
 import PaginationStore from '../../../stores/PaginationStore'
 
 class RecommendPost extends React.Component {
+  static contextTypes = {
+    router: React.PropTypes.object.isRequired
+  }
 
   static getStores() {
     return [PostStore, PaginationStore]
@@ -70,21 +73,32 @@ class RecommendPost extends React.Component {
     }
   }
 
+  _moveBannerDetail=(bannerSeq)=>{
+    this.context.router.push('/service/mgmt/post/' + bannerSeq)
+  }
+
   get getRecommendPostList() {
-    return this.state.contents.map((content) => {
-      return (
-        <tr key={content.get('recommendSeq')}>
-          <td><input type="checkbox" name="postBox" value={content.get('recommendSeq')}/></td>
-          <td>{content.get('recommendSeq')}</td>
-          <td><img src={content.get('thumbnailUrl')} alt="" className="thumbnail"/></td>
-          <td className="al"><Link to={'/service/mgmt/post/' + content.get('recommendSeq')}>{content.get('postTitle')}</Link></td>
-          <td></td>
-          <td>{moment(content.get('recommendStartDt')).format('YYYY-MM-DD')}</td>
-          <td>{moment(content.get('recommendEndD')).format('YYYY-MM-DD')}</td>
-          <td>{content.get('recommendPct')}%</td>
-        </tr>
-      )
-    })
+    // empty content
+    if(this.state.contents.size == 0) {
+      return <tr>
+        <td colSpan="8">{intlStores.get('sm.SM_MSG_NO_CONTENTS')}</td>
+      </tr>
+    } else {
+      return this.state.contents.map((content) => {
+        return (
+          <tr key={content.get('recommendSeq')}>
+            <td><input type="checkbox" name="postBox" value={content.get('recommendSeq')}/></td>
+            <td onClick={this._moveBannerDetail.bind(this, content.get('recommendSeq'))}>{content.get('recommendSeq')}</td>
+            <td onClick={this._moveBannerDetail.bind(this, content.get('recommendSeq'))}><img src={content.get('thumbnailUrl')} alt="" className="thumbnail"/></td>
+            <td onClick={this._moveBannerDetail.bind(this, content.get('recommendSeq'))}className="al">{content.get('postTitle')}</td>
+            <td onClick={this._moveBannerDetail.bind(this, content.get('recommendSeq'))}></td>
+            <td onClick={this._moveBannerDetail.bind(this, content.get('recommendSeq'))}>{moment(content.get('recommendStartDt')).format('YYYY-MM-DD')}</td>
+            <td onClick={this._moveBannerDetail.bind(this, content.get('recommendSeq'))}>{moment(content.get('recommendEndD')).format('YYYY-MM-DD')}</td>
+            <td onClick={this._moveBannerDetail.bind(this, content.get('recommendSeq'))}>{content.get('recommendPct')}%</td>
+          </tr>
+        )
+      })
+    }
   }
 
   render() {
@@ -99,8 +113,8 @@ class RecommendPost extends React.Component {
                 <option value="TITLE">{intlStores.get('cms.CMS_FLD_TITLE')}</option>
               </select>
             </p>
-            <input type="text" placeholder="Search" ref="searchText" id="searchText" onKeyPress={this._handleKeyPress} /><a onClick={this.searchContents}
-                                                                        className="btn_search"></a>
+            <input type="text" placeholder="Search" ref="searchText" id="searchText" onKeyPress={this._handleKeyPress} />
+            <a onClick={this.searchContents} className="btn_search"></a>
           </fieldset>
         </hgroup>
         <div id="contents">

@@ -22,7 +22,7 @@ class BannerStore extends ReduceStore {
   reduce(state, action) {
     switch (action.type) {
       case AppConstants.GET_BANNER_LIST:
-        return Immutable.fromJS(action.contents)
+        return Immutable.fromJS(action.contents || {})
       default:
         return state
     }
