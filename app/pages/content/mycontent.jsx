@@ -12,22 +12,20 @@ import MyContentHead from '../../components/MyContentHead'
 import ContentList from '../../components/ContentList'
 import intlStores from '../../utils/IntlStore'
 
-import { CONTENT, POPUP } from '../../constants/AppConstants'
+import { CONTENT } from '../../constants/AppConstants'
 import ContentActions from '../../actions/ContentActions'
-
-import MyContentsStore from '../../stores/MyContentsStore'
-import PopupActions from '../../actions/PopupActions'
+import MyContentListStore from '../../stores/MyContentListStore'
 
 export default class MyContent extends React.Component {
   static getStores() {
-    return [MyContentsStore]
+    return [MyContentListStore]
   }
 
   static calculateState() {
     return {
-      writing: MyContentsStore.getContentsInWriting(),
-      ready: MyContentsStore.getContentsInReady(),
-      reject: MyContentsStore.getContentsInReject()
+      writing: MyContentListStore.getContentsInWriting(),
+      ready: MyContentListStore.getContentsInReady(),
+      reject: MyContentListStore.getContentsInReject()
     }
   }
 
@@ -53,6 +51,7 @@ export default class MyContent extends React.Component {
       window.pageYOffset :
       (document.documentElement || document.body.parentNode || document.body).scrollTop
   }
+
   scrollListener = () => {
     // get current scroll position
     const waitingpos = ReactDOM.findDOMNode(this.refs.waiting).offsetTop - 300

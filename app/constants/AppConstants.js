@@ -212,7 +212,51 @@ export const IMAGE_VALIDATION = {
       height: 350,
       size: 100
     }
-  }
+  },
+  IMAGE: {
+    thumbnail: {
+      width: 345,
+      height: 230,
+      size: 30
+    },
+    shareImage: {
+      width: 484,
+      height: 252,
+      size: 50
+    },
+    lastImageUrl: {
+      width: 640,
+      height: 1136,
+      size: 100
+    },
+    content: {
+      width: 640,
+      height: 1136,
+      size: 1500
+    }
+  },
+  VIDEO: {
+    thumbnail: {
+      width: 345,
+      height: 230,
+      size: 30
+    },
+    shareImage: {
+      width: 484,
+      height: 252,
+      size: 50
+    },
+    lastImageUrl: {
+      width: 640,
+      height: 1136,
+      size: 100
+    },
+    content: {
+      width: 640,
+      height: 1136,
+      size: 1500
+    }
+  },
 }
 
 export const POPUP = keyMirror({

@@ -17,17 +17,17 @@ import intlStores from '../../utils/IntlStore'
 import { CONTENT } from '../../constants/AppConstants'
 
 import ContentActions from '../../actions/ContentActions'
-import InspectionsStore from '../../stores/InspectionsStore'
+import ContentListStore from '../../stores/ContentListStore'
 import PaginationStore from '../../stores/PaginationStore'
 
 class Inspection extends React.Component {
   static getStores() {
-    return [InspectionsStore, PaginationStore]
+    return [ContentListStore, PaginationStore]
   }
 
   static calculateState() {
     return {
-      inspections: InspectionsStore.getInspectionContent(),
+      inspections: ContentListStore.getContentList(),
       pagination: PaginationStore.getPagination()
     }
   }

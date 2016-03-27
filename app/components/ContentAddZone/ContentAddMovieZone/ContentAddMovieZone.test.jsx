@@ -11,7 +11,7 @@ import TestUtils from 'react-addons-test-utils'
 
 //var TestUtils = require('react-addons-test-utils')
 
-import Banner from './ImageInfoPanel'
+import Banner from './ContentAddMovieZone'
 
 
 describe('Component: Container', () => {

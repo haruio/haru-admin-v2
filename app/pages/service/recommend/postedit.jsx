@@ -36,7 +36,6 @@ class RecommendPostEdit extends React.Component {
 
   static calculateState() {
     const postdetail = PostStore.getRecommendPost()
-
     if ($('.txt.daterange').data('daterangepicker') !== undefined) {
       // 기존에 값이 있다면 변경
       $('.txt.daterange').data('daterangepicker')
@@ -57,13 +56,14 @@ class RecommendPostEdit extends React.Component {
     if (this.props.params.id !== undefined) {
       AppActions.getRecommendPost(this.props.params.id)
     } else {
-      AppActions.clearPostDetail()
-
+      setTimeout(() => {
+        AppActions.clearPostDetail()
+      })
     }
   }
 
   componentDidMount() {
-    /* 어쩔수 없이 jQuery로 개발 */
+    /* 어쩔수 없이 jQuery로 개발 daterangepicker 초기화 */
     $('.txt.daterange').daterangepicker({
       locale: {format: 'YYYY-MM-DD'}
     })
@@ -73,8 +73,7 @@ class RecommendPostEdit extends React.Component {
       $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'))
     })
   }
-
-
+  
   /***
    * Event Handlers
    */

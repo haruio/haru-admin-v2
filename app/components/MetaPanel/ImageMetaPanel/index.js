@@ -1,1 +1,1 @@
-export default from './ImageInfoPanel'
+export default from './ImageMetaPanel'

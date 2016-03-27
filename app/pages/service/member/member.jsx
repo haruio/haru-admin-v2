@@ -19,7 +19,6 @@ import intlStores from '../../../utils/IntlStore'
 import {POPUP} from '../../../constants/AppConstants'
 const userDefault = require('image!../../../assets/img/default.png')
 
-
 class Member extends React.Component {
   static getStores() {
     return [MemberStore, PaginationStore]
@@ -33,7 +32,7 @@ class Member extends React.Component {
   }
 
   componentDidMount() {
-    AppActions.getUserList({pageNo:1, searchField: '', searchText: '', searchUserStat: ''})
+      AppActions.getUserList({pageNo: 1, searchField: '', searchText: '', searchUserStat: ''})
   }
 
   /***

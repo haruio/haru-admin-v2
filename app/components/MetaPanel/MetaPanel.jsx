@@ -4,8 +4,8 @@ import React from 'react'
 import debug from 'debug'
 const log = debug('application:MetaPanel.jsx')
 
-import ImageInfoPanel from './ImageMetaPanel'
-import VideoInfoPanel from './VideoMetaPanel'
+import ImageMetaPanel from './ImageMetaPanel'
+import VideoMetaPanel from './VideoMetaPanel'
 
 /**
  * A component to MetaPanel
@@ -15,11 +15,11 @@ import VideoInfoPanel from './VideoMetaPanel'
 
 export default class MetaPanel extends React.Component {
   get InfoPanelComponent() {
-    switch (this.props.infopanel.type) {
+    switch (this.props.type) {
       case 'image' :
-        return ImageInfoPanel
+        return ImageMetaPanel
       case 'video' :
-        return VideoInfoPanel
+        return VideoMetaPanel
     }
   }
 

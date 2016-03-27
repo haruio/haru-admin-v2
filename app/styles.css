@@ -340,6 +340,8 @@ img.porfile{display:inline-block;width:43px;height:43px;border:1px solid #dbdfe2
 #contents_list.publish .list>li div p a{width:80px;height:80px;line-height:85px;margin:10px 5px}
 #add_info{position:fixed;top:123px;width:100%;background:#f0f3f4;border-bottom:1px solid #c9cdcf;padding:0 40px;z-index:10}
 #add_info table{margin:30px 0}
+#add_info table.writeTable .channel_list{width:800px}
+
 #add_info_btn{position:absolute;bottom:-20px;display:block;width:169px;height:20px;background:#f0f3f4 url(assets/img/close.png) no-repeat center;border:1px solid #c9cdcf;border-top:0;border-bottom-left-radius:3px;border-bottom-right-radius:3px;margin:-2px 0 0 190px;z-index:1;cursor:pointer}
 #add_info_btn.close{background-image:url(assets/img/open.png)}
 #add_images{position:relative;padding:40px 40px 20px 190px;background:#fff;}

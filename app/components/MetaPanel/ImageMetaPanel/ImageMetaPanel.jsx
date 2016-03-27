@@ -5,8 +5,8 @@ import debug from 'debug'
 const log = debug('application:ImageMetaPanel.jsx')
 
 import intlStores from '../../../utils/IntlStore'
-
-
+import ImageUploader from '../../ImageUploader'
+import Immutable from 'Immutable'
 /**
  * A component to ImageMetaPanel
  * author : jungun.park
@@ -15,9 +15,6 @@ import intlStores from '../../../utils/IntlStore'
 export default class ImageMetaPanel extends React.Component {
 
   componentDidMount() {
-    this.h = $("#add_info").height()
-
-    log(this.h)
     // 컨텐츠 내용 부분을 내리는 로직
     // 지금 시점에 $("#add_info").height();가 부적확함 왜일가?
     $("#contents_add").animate({'padding-top': 500 + 123}, 0)
@@ -47,7 +44,20 @@ export default class ImageMetaPanel extends React.Component {
     }
   }
 
+  get categoriesList() {
+    return this.props.categories.map((category) => {
+      return <option key={category.get('categorySeq')}>{category.get('name')}</option>
+    })
+  }
+
+  get channelList() {
+    return this.props.channels.map((channel) => {
+      return <a href="" key={channel.get('channelSeq')}>{channel.get('name')}</a>
+    })
+  }
+
   render() {
+    log(this.props)
     return (
       <div id="add_info">
         <table className="writeTable">
@@ -61,36 +71,22 @@ export default class ImageMetaPanel extends React.Component {
             <td><input type="text" className="txt t1" placeholder="최대 한글 25자, 영문 50자를 넘지 않게 해 주세요.."/></td>
           </tr>
           <tr>
-            <th>공유화면 이미지</th>
-            <td>
-              <input type="text" className="txt t2" id="filen"/><span className="btn_file">Choose file<input
-              type="file" onchange="javascript: document.getElementById('filen').value = this.value"/></span>
-              <a href="#" className="btn_preview has"><img
-                src="http://assets2.moncast.com/channel/713f94bf61bb8b8c.jpeg" alt=""/></a>
-              <a href="" className="btn_del"></a>
-            </td>
+            <th>썸네일</th>
+            <ImageUploader id="thumbnail" type="IMAGE" value={this.props.content}  ref="thumbnail" />
           </tr>
           <tr>
-            <th>썸네일</th>
-            <td>
-              <input type="text" className="txt t2" id="filen2"/><span className="btn_file">Choose file<input
-              type="file" onchange="javascript: document.getElementById('filen2').value = this.value"/></span>
-              <a href="#" className="btn_preview"></a>
-            </td>
+            <th>공유화면 이미지</th>
+            <ImageUploader id="shareImage" type="IMAGE" value={this.props.content}  ref="shareImage" />
           </tr>
           <tr>
             <th>라스트커버 이미지</th>
-            <td>
-              <input type="text" className="txt t2" id="filen3"/><span className="btn_file">Choose file<input
-              type="file" onchange="javascript: document.getElementById('filen2').value = this.value"/></span>
-              <a href="#" className="btn_preview"></a>
-            </td>
+            <ImageUploader id="lastImageUrl" type="IMAGE" value={this.props.content}  ref="lastImageUrl" />
           </tr>
           <tr>
             <th>카테고리</th>
             <td>
-              <select style={{"width":"360px"}}>
-                <option>두근두근 가상연애</option>
+              <select style={{width:'360px'}}>
+                {this.categoriesList}
               </select>
             </td>
           </tr>
@@ -98,13 +94,7 @@ export default class ImageMetaPanel extends React.Component {
             <th>채널</th>
             <td>
               <p className="channel_list">
-                <a href="" className="on">Humor</a>
-                <a href="">Issue</a>
-                <a href="">Entertainment</a>
-                <a href="" className="on">Music</a>
-                <a href="">Good Tip</a>
-                <a href="">Beauty</a>
-                <a href="">NSFW</a>
+                {this.channelList}
               </p>
             </td>
           </tr>

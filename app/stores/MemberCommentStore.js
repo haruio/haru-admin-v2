@@ -3,7 +3,6 @@
  */
 import Immutable from 'immutable'
 import { ReduceStore } from 'flux/utils'
-import { browserHistory } from 'react-router'
 import AppConstants from '../constants/AppConstants'
 import AppDispatcher from '../dispatcher/AppDispatcher'
 

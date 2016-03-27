@@ -13,6 +13,7 @@ const log = debug('application:ContentListStore.jsx')
 /***
  * content > list 전체를 담는 스토어
  * publish, reserved, deleted 상태
+ * inspection 상태 데이터
  */
 class ContentListStore extends ReduceStore {
   getInitialState() {
@@ -33,6 +34,8 @@ class ContentListStore extends ReduceStore {
         }
         return Immutable.fromJS(action.contents)
       case AppConstants.GET_DELETE_CONTENT:
+        return Immutable.fromJS(action.contents)
+      case AppConstants.GET_INSPECTION_CONTENT:
         return Immutable.fromJS(action.contents)
       default:
         return state

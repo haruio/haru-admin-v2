@@ -33,9 +33,9 @@ class CategoryEdit extends React.Component {
     }
   }
 
+
   componentWillMount() {
-    this.isAddCategory = this.context.router.isActive('/service/mgmt/category/new')
-    if(!this.isAddCategory) {
+    if(this.props.params.id !== undefined) {
       AppActions.getCategoryDetail(this.props.params.id)
     } else {
       setTimeout(() => {
@@ -91,14 +91,15 @@ class CategoryEdit extends React.Component {
     if (this.isAddCategory) {
       if(window.confirm(intlStores.get('common.COMMON_MSG_REG'))) {
         AppActions.addCategories(requestData)
+        this.context.router.push('/service/mgmt/category')
       }
     } else {
       if (window.confirm(intlStores.get('common.COMMON_MSG_EDIT'))) {
         requestData.categorySeq = this.props.params.id
         AppActions.putCategories(requestData)
+        this.context.router.push('/service/mgmt/category')
       }
     }
-    this.context.router.push('/service/mgmt/category')
   }
 
   render() {

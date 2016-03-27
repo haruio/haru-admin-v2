@@ -2,12 +2,12 @@ import React from 'react'
 
 
 import debug from 'debug'
-const log = debug('application:VideoInfoPanel.jsx')
+const log = debug('application:ContentAddImageZone.jsx')
 
-import intlStores from '../../utils/IntlStore'
+import intlStores from '../../../utils/IntlStore'
 
-const txt1 = require('image!../../assets/img/txt1.png')
-const icon_images = require('image!../../assets/img/icon_images.png')
+const txt1 = require('image!../../../assets/img/txt1.png')
+const icon_images = require('image!../../../assets/img/icon_images.png')
 
 /**
  * A component to ContentAddImageZone
@@ -16,7 +16,7 @@ const icon_images = require('image!../../assets/img/icon_images.png')
 
 export default class ContentAddImageZone extends React.Component {
 
-  componentDidUpdate() {
+  componentDidMount() {
     //드래그 리스트 sortable 처리
     $('#drag_list').sortable({ placeholder: 'placeholder' })
 

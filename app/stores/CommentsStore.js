@@ -10,6 +10,10 @@ import AppDispatcher from '../dispatcher/AppDispatcher'
 import debug from 'debug'
 const log = debug('application:CommentsStore.jsx')
 
+/***
+ * 댓글 관리 store
+ * /page/service/comment
+ */
 class CommentsStore extends ReduceStore {
   getInitialState() {
     return Immutable.List()

@@ -66,7 +66,7 @@ const ContentActions = {
         if(utility.errorHandler(err, res)) {
           return
         }
-
+        
         AppDispatcher.handleViewAction({
           type: AppConstants.GET_IMAGE_POST_OBJ,
           responseImagePostObj: res.body

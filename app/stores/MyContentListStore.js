@@ -8,9 +8,9 @@ import AppConstants from '../constants/AppConstants'
 import AppDispatcher from '../dispatcher/AppDispatcher'
 
 import debug from 'debug'
-const log = debug('application:MyContentsStore.jsx')
+const log = debug('application:MyContentListStore.jsx')
 
-class MyContentsStore extends ReduceStore {
+class MyContentListStore extends ReduceStore {
   getInitialState() {
     return Immutable.Map({writing:Immutable.List(), ready:Immutable.List(), reject:Immutable.List()})
   }
@@ -55,5 +55,5 @@ class MyContentsStore extends ReduceStore {
 }
 
 // Export a singleton instance of the store
-const instance = new MyContentsStore(AppDispatcher)
+const instance = new MyContentListStore(AppDispatcher)
 export default instance
