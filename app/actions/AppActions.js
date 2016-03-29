@@ -172,6 +172,18 @@ const AppActions = {
       post: post
     })
   },
+  ChangePlatform(platform) {
+    AppDispatcher.handleViewAction({
+      type: AppConstants.CHANGE_PLATFORM,
+      platform: platform
+    })
+  },
+  ChangeSearchDate(searchDate) {
+    AppDispatcher.handleViewAction({
+      type: AppConstants.CHANGE_SEACHDATE,
+      searchDate: searchDate
+    })
+  },
   /**
    * Recommend Keyword - Keigun, edit jungun.park (20160318)
    */

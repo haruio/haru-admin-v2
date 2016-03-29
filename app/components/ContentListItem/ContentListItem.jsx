@@ -1,12 +1,13 @@
 import React from 'react'
-
+import {Link} from 'react-router'
 
 import debug from 'debug'
 const log = debug('application:ContentListItem.jsx')
 
 import { CONTENT, POPUP } from '../../constants/AppConstants'
+import ContentActions from '../../actions/ContentActions'
 import PopupActions from '../../actions/PopupActions'
-
+import intlStores from '../../utils/IntlStore'
 
 const ct_edit1 = require('image!../../assets/img/ct_edit1.png')
 const ct_edit2 = require('image!../../assets/img/ct_edit2.png')
@@ -36,52 +37,84 @@ export default class ContentListItem extends React.Component {
   }
 
   showHistoryPopup() {
-    PopupActions.openPopup(POPUP.HISTORY, {})
+    PopupActions.openPopup(POPUP.HISTORY, {postSeq:this.props.content.get('postSeq')})
   }
   showPublishPopup() {
-    PopupActions.openPopup(POPUP.PUBLISH, {})
+    PopupActions.openPopup(POPUP.PUBLISH, {postSeq:this.props.content.get('postSeq')})
   }
   showRejectPopup() {
-    PopupActions.openPopup(POPUP.REJECT, {})
+    PopupActions.openPopup(POPUP.REJECT, {postSeq:this.props.content.get('postSeq')})
+  }
+  showDeletePopup() {
+    if(window.confirm(intlStores.get('common.COMMON_MSG_DEL'))) {
+      ContentActions.deleteContent(this.props.content.get('postSeq'))
+    }
+  }
+  showCancelRequest() {
+    if(window.confirm(intlStores.get('cms.CMS_MSG_NEED_APPROVE'))) {
+      ContentActions.requestCancelRequest(this.props.content.get('postSeq'))
+    }
   }
 
-
   get getHoverButton() {
+    const content = this.props.content
+
+    let contenttype = 'video'
+
+    if(this.props.type == CONTENT.PUBLISHED ||
+      this.props.type == CONTENT.RESERVED ||
+      this.props.type == CONTENT.DELETEED) {
+      const postTypeCd = content.get('postTypeCd')
+      if(postTypeCd == 'VDO') {
+        contenttype = 'video'
+      } else {
+        contenttype = 'image'
+      }
+    } else {
+      const content_type = content.get('type')
+      if(content_type == 'VDO') {
+        contenttype = 'video'
+      } else {
+        contenttype = 'image'
+      }
+    }
+
+    let contentid = this.props.content.get('postSeq')
     switch (this.props.type) {
       case CONTENT.CREATE:
       case CONTENT.RETRUN:
         return (
           <span>
-            <a href=""><img src={ct_edit1} alt="" title="수정"/></a>
-            <a href=""><img src={ct_edit2} alt="" title="삭제"/></a>
+            <Link to={`/content/compose/${contenttype}/${contentid}`} ><img src={ct_edit1} alt="" title="수정"/></Link>
+            <a onClick={this.showDeletePopup}><img src={ct_edit2} alt="" title="삭제"/></a>
             <a onClick={this.showHistoryPopup}><img src={ct_edit3} alt="" title="히스토리"/></a>
           </span>)
       case CONTENT.WAITING:
         return (
           <span>
             <a onClick={this.showHistoryPopup}><img src={ct_edit3} alt="" title="히스토리"/></a>
-            <a href=""><img src={ct_edit7} alt="" title="취소"/></a>
+            <a onClick={this.showCancelRequest}><img src={ct_edit7} alt="" title="취소"/></a>
           </span>)
       case CONTENT.PUBLISHED:
       case CONTENT.RESERVED:
         return (
           <span>
-            <a href=""><img src={ct_edit1} alt="" title="수정"/></a>
-            <a href=""><img src={ct_edit2} alt="" title="삭제"/></a>
+            <Link to={`/content/compose/${contenttype}/${contentid}`} ><img src={ct_edit1} alt="" title="수정"/></Link>
+            <a onClick={this.showDeletePopup}><img src={ct_edit2} alt="" title="삭제"/></a>
             <a onClick={this.showHistoryPopup}><img src={ct_edit3} alt="" title="히스토리"/></a>
           </span>
         )
       case CONTENT.DELETEED:
         return (
           <span>
-            <a href=""><img src={ct_edit1} alt="" title="수정"/></a>
+            <Link to={`/content/compose/${contenttype}/${contentid}`} ><img src={ct_edit1} alt="" title="수정"/></Link>
             <a onClick={this.showHistoryPopup}><img src={ct_edit3} alt="" title="히스토리"/></a>
           </span>)
       case CONTENT.INSPECTION:
         return (
           <span>
-          <a href=""><img src={ct_edit1} alt="" title="수정"/></a>
-          <a href=""><img src={ct_edit2} alt="" title="삭제"/></a>
+            <Link to={`/content/compose/${contenttype}/${contentid}`} ><img src={ct_edit1} alt="" title="수정"/></Link>
+          <a onClick={this.showDeletePopup}><img src={ct_edit2} alt="" title="삭제"/></a>
           <a onClick={this.showHistoryPopup}><img src={ct_edit3} alt="" title="히스토리"/></a>
           <a onClick={this.showRejectPopup}><img src={ct_edit5} alt="" title="반려"/></a>
           <a onClick={this.showPublishPopup}><img src={ct_edit6} alt="" title="발행"/></a>
@@ -89,8 +122,8 @@ export default class ContentListItem extends React.Component {
       default:
         return (
           <span>
-            <a href=""><img src={ct_edit1} alt="" title="수정"/></a>
-            <a href=""><img src={ct_edit2} alt="" title="삭제"/></a>
+            <Link to={`/content/compose/${contenttype}/${contentid}`} ><img src={ct_edit1} alt="" title="수정"/></Link>
+            <a onClick={this.showDeletePopup}><img src={ct_edit2} alt="" title="삭제"/></a>
           </span>)
     }
   }
@@ -118,7 +151,17 @@ export default class ContentListItem extends React.Component {
 
   get renderTypeIcon() {
     const content = this.props.content
-    if(content.get('type') === 'VDO') {
+    let contenttype = 'VDO'
+    if(this.props.type == CONTENT.PUBLISHED ||
+      this.props.type == CONTENT.RESERVED ||
+      this.props.type == CONTENT.DELETEED) {
+      contenttype = content.get('postTypeCd')
+
+    } else {
+      contenttype= content.get('type')
+    }
+
+    if(contenttype === 'VDO') {
       return <span className="movie">{content.get('strDuration')}</span>
     } else {
       return <span className="images">{content.get('imageCnt')}</span>
@@ -137,14 +180,17 @@ export default class ContentListItem extends React.Component {
 
     let thumnail
     let author
+    let title
     if(this.props.type == CONTENT.PUBLISHED ||
       this.props.type == CONTENT.RESERVED ||
       this.props.type == CONTENT.DELETEED) {
       thumnail = content.get('thumbnailUrl')
       author = content.get('postAuthor')
+      title = content.get('postTitle')
     } else {
       thumnail = content.get('thumbnail')
       author = content.get('author')
+      title = content.get('title')
     }
 
     return (
@@ -161,7 +207,7 @@ export default class ContentListItem extends React.Component {
         </div>
         {this.publishInfo}
         <dl>
-          <dt>다비치 이해리가 아이유의 노래를 불렀다니 이해리가 아이유</dt>
+          <dt>{title}</dt>
           <dd>임시저장 : 2015-08-08 PM 12:25</dd>
           <dd>{'작성자 : ' + author}</dd>
         </dl>

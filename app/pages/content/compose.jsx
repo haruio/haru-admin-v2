@@ -40,6 +40,7 @@ class Compose extends React.Component {
   componentDidMount() {
 
   }
+
   render() {
     const router = this.context.router
     const isimage = router.isActive('/content/compose/image')

@@ -30,16 +30,18 @@ class BannerList extends React.Component {
 
   static calculateState(prevState, props) {
     // TODO 날짜를 바꾸고싶을땐 어떻게 하지???
-    let searchDate = moment().format('YYYY-MM-DD')
+    let searchDate = BannerStore.getBannerSearchDate()
     if (props.query != undefined && props.query.searchDate != undefined) {
       searchDate = this.props.query.searchDate
     }
 
     return {
       banners: BannerStore.getBanners(),
-      searchDate:searchDate
+      searchDate:searchDate,
+      platform:BannerStore.getBannerSearchPlatform()
     }
   }
+
 
   componentDidMount() {
     this.setInitCalendar()
@@ -60,12 +62,13 @@ class BannerList extends React.Component {
     $('#bannerDate').datepicker({
       dateFormat: 'yy-mm-dd',
       onClose: function (dateText) {
-        _self.setState({searchDate: dateText})
+        //_self.setState({searchDate: dateText})
+        AppActions.ChangeSearchDate(dateText)
+
         _self.getBannerList(1, dateText) //???
       }
     })
   }
-
 
   getBannerList(page, initdate, platform) {
     const startDate = moment(initdate + ' 00:00:00', 'YYYYMMDD HH:mm:ss').utc().format('YYYY-MM-DD HH:mm:ss')
@@ -98,14 +101,17 @@ class BannerList extends React.Component {
       </thead>
     )
   }
+  changePlatform(platform) {
+    AppActions.ChangePlatform(platform)
+  }
 
   get platformTab() {
     return (
       <ul id="tab_btns">
-        <li><button className="on">Android</button></li>
-        <li><button>IOS</button></li>
-        <li><button>PC Web</button></li>
-        <li><button>Mobile Web</button></li>
+        <li><button onClick={this.changePlatform.bind(this, 'AND')} className={cn({'on': this.state.platform == 'AND'})}>Android</button></li>
+        <li><button onClick={this.changePlatform.bind(this, 'IOS')} className={cn({'on': this.state.platform == 'IOS'})}>IOS</button></li>
+        <li><button onClick={this.changePlatform.bind(this, 'PC')}  className={cn({'on': this.state.platform == 'PC'})}>PC Web</button></li>
+        <li><button onClick={this.changePlatform.bind(this, 'MW')}  className={cn({'on': this.state.platform == 'MW'})}>Mobile Web</button></li>
       </ul>)
   }
 

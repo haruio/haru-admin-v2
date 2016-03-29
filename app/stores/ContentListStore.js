@@ -17,26 +17,32 @@ const log = debug('application:ContentListStore.jsx')
  */
 class ContentListStore extends ReduceStore {
   getInitialState() {
-    return Immutable.List()
+    return Immutable.Map({
+      contents:Immutable.List(),
+      searchType:'ALL'
+    })
   }
 
   getContentList() {
-    return this.getState()
+    return this.getState().get('contents')
+  }
+
+  getSearchType() {
+    return this.getState().get('searchType')
   }
 
   reduce(state, action) {
     switch (action.type) {
       case AppConstants.GET_VIEWED_CONTENT : //GET_PUBLISH_CONTENT:
-        return Immutable.fromJS(action.contents)
+        return state.set('contents', Immutable.fromJS(action.contents || []))
       case AppConstants.GET_RESERVED_CONTENT:
-        if(action.contents === undefined) {
-          action.contents = []
-        }
-        return Immutable.fromJS(action.contents)
+        return state.set('contents', Immutable.fromJS(action.contents || []))
       case AppConstants.GET_DELETE_CONTENT:
-        return Immutable.fromJS(action.contents)
+        return state.set('contents', Immutable.fromJS(action.contents || []))
       case AppConstants.GET_INSPECTION_CONTENT:
-        return Immutable.fromJS(action.contents)
+        return state.set('contents', Immutable.fromJS(action.contents || []))
+      case AppConstants.CHANGE_SEARCHTYPE:
+        return state.set('searchType', action.searchType)
       default:
         return state
     }

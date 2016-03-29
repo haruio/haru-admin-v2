@@ -27,7 +27,8 @@ class Reserved extends React.Component {
   static calculateState() {
     return {
       reserved: ContentListStore.getContentList(),
-      pagination: PaginationStore.getPagination()
+      pagination: PaginationStore.getPagination(),
+      searchType : ContentListStore.getSearchType()
     }
   }
 
@@ -36,15 +37,24 @@ class Reserved extends React.Component {
     ContentActions.getReservedContents()
   }
 
-  movePage() {
-
+  movePage = (page) => {
+    let searchType = this.state.searchType
+    if (searchType == 'ALL') {
+      searchType = ''
+    }
+    ContentActions.getReservedContents(page, 30, '', '',
+      '',
+      '',
+      '',
+      '',
+      searchType)
   }
 
   render() {
     return (
       <article id="contents_list">
-        <TabMenu />
-        <SearchBar />
+        <TabMenu onSearch={ContentActions.getReservedContents} searchType={this.state.searchType} />
+        <SearchBar onSearch={ContentActions.getReservedContents} searchType={this.state.searchType}/>
         <ContentList listTitle={intlStores.get('cms.MENU_TXT_SCHEDULED_CONTENTS')} content={this.state.reserved} type={CONTENT.RESERVED}/>
         <PageList pageObj={this.state.pagination} clickAction={this.movePage} />
       </article>

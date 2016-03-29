@@ -28,22 +28,32 @@ class Deleted extends React.Component {
   static calculateState() {
     return {
       deleted: ContentListStore.getContentList(),
-      pagination: PaginationStore.getPagination()
+      pagination: PaginationStore.getPagination(),
+      searchType : ContentListStore.getSearchType()
     }
   }
 
   componentWillMount() {
     ContentActions.getDeleteContents()
   }
-  movePage() {
-
+  movePage = (page) => {
+    let searchType = this.state.searchType
+    if (searchType == 'ALL') {
+      searchType = ''
+    }
+    ContentActions.getViewedContents(page, 30, '', '',
+      '',
+      '',
+      '',
+      '',
+      searchType)
   }
 
   render() {
     return (
       <article id="contents_list">
-        <TabMenu />
-        <SearchBar />
+        <TabMenu onSearch={ContentActions.getDeleteContents} searchType={this.state.searchType} />
+        <SearchBar onSearch={ContentActions.getDeleteContents} searchType={this.state.searchType}/>
         <ContentList listTitle={intlStores.get('cms.MENU_TXT_DELETED_CONTENTS')} content={this.state.deleted} type={CONTENT.DELETEED}/>
         <PageList pageObj={this.state.pagination} clickAction={this.movePage} />
       </article>

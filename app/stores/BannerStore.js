@@ -2,7 +2,7 @@
  * Created by jungenpark on 2/15/16.
  */
 import Immutable from 'immutable'
-import {ReduceStore} from 'flux/utils'
+import {MapStore} from 'flux/utils'
 
 import AppConstants from '../constants/AppConstants'
 import AppDispatcher from '../dispatcher/AppDispatcher'
@@ -10,19 +10,31 @@ import AppDispatcher from '../dispatcher/AppDispatcher'
 import debug from 'debug'
 const log = debug('application:BannerStore.jsx')
 
-class BannerStore extends ReduceStore {
+import moment from 'moment'
+
+class BannerStore extends MapStore {
   getInitialState() {
-    return Immutable.List()
+    return Immutable.Map({banners:Immutable.List(), searchDate:moment().format('YYYY-MM-DD'), platform:'AND'})
   }
 
   getBanners() {
-    return this.getState()
+    return this.getState().get('banners')
+  }
+  getBannerSearchDate() {
+    return this.getState().get('searchDate')
+  }
+  getBannerSearchPlatform() {
+    return this.getState().get('platform')
   }
 
   reduce(state, action) {
     switch (action.type) {
       case AppConstants.GET_BANNER_LIST:
-        return Immutable.fromJS(action.contents || {})
+        return state.set('banners', Immutable.fromJS(action.contents || {}))
+      case AppConstants.CHANGE_PLATFORM:
+        return state.set('platform', action.platform)
+      case AppConstants.CHANGE_SEACHDATE:
+        return state.set('searchDate', action.searchDate)
       default:
         return state
     }

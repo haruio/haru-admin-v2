@@ -12,7 +12,11 @@ const log = debug('application:MyContentListStore.jsx')
 
 class MyContentListStore extends ReduceStore {
   getInitialState() {
-    return Immutable.Map({writing:Immutable.List(), ready:Immutable.List(), reject:Immutable.List()})
+    return Immutable.Map({writing:Immutable.List(),
+      ready:Immutable.List(),
+      reject:Immutable.List(),
+      searchType:'ALL' // ALL, VDO, IMS
+    })
   }
 
   getContentsInWriting() {
@@ -24,7 +28,9 @@ class MyContentListStore extends ReduceStore {
   getContentsInReject() {
     return this.getState().get('reject')
   }
-
+  getSearchType() {
+    return this.getState().get('searchType')
+  }
 
   reduce(state, action) {
     let writing = []
@@ -47,7 +53,11 @@ class MyContentListStore extends ReduceStore {
               break
           }
         })
-        return state.set('writing', Immutable.fromJS(writing)).set('ready', Immutable.fromJS(ready)).set('reject', Immutable.fromJS(reject))
+        return state.set('writing', Immutable.fromJS(writing))
+                    .set('ready', Immutable.fromJS(ready))
+                    .set('reject', Immutable.fromJS(reject))
+      case AppConstants.CHANGE_SEARCHTYPE:
+        return state.set('searchType', action.searchType)
       default:
         return state
     }

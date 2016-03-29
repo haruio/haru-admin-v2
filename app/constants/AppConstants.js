@@ -50,7 +50,7 @@ export default keyMirror({
   GET_RESERVED_CONTENT: null,
   GET_DELETE_CONTENT: null,
   GET_INSPECTION_CONTENT: null,
-
+  CHANGE_SEARCHTYPE:null,
   /**
    * History 관련
    */
@@ -81,6 +81,9 @@ export default keyMirror({
   CLEAR_BANNER: null,
   GET_POST_DETAIL_BYURL: null,
   SELECT_BANNER_POST_DETAIL: null,
+  CHANGE_PLATFORM:null,
+  CHANGE_SEACHDATE:null,
+
   /**
    * Post
    */

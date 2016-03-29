@@ -66,7 +66,7 @@ const ContentActions = {
         if(utility.errorHandler(err, res)) {
           return
         }
-        
+
         AppDispatcher.handleViewAction({
           type: AppConstants.GET_IMAGE_POST_OBJ,
           responseImagePostObj: res.body
@@ -90,7 +90,12 @@ const ContentActions = {
         })
       })
   },
-
+  changeSearchType(searchType) {
+    AppDispatcher.handleViewAction({
+      type: AppConstants.CHANGE_SEARCHTYPE,
+      searchType: searchType
+    })
+  },
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////          Content List 관련 메소드              //////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -219,7 +224,7 @@ const ContentActions = {
                       channel='',
                       categories='',
                       type='') {
-    request.get(`${URL}/contents/reserved?pageNum=${pageNo}&pageSize=${pageSize}`)
+    request.get(`${URL}/contents/reserved`)
       .use(middleware_accesstoken)
       .query({ pageNum: pageNo, pageSize: pageSize })
       .query({ orderField: orderField, orderMethod: orderMethod })

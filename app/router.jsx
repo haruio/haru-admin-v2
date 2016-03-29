@@ -92,8 +92,12 @@ export default class extends React.Component {
             </Route>
             <Route path="compose">
               <IndexRedirect to="video" />
-              <Route path="video" component={ Compose }/>
-              <Route path="image" component={ Compose }/>
+              <Route path="video" component={ Compose }>
+                <Route path=":id" component={ Compose }/>
+              </Route>
+              <Route path="image" component={ Compose }>
+                <Route path=":id" component={ Compose }/>
+              </Route>
             </Route>
           </Route>
 

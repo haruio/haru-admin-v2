@@ -28,7 +28,8 @@ class Publish extends React.Component {
   static calculateState() {
     return {
       publish: ContentListStore.getContentList(),
-      pagination: PaginationStore.getPagination()
+      pagination: PaginationStore.getPagination(),
+      searchType : ContentListStore.getSearchType()
     }
   }
 
@@ -36,16 +37,25 @@ class Publish extends React.Component {
     ContentActions.getViewedContents()
   }
 
-  movePage() {
-
+  movePage = (page) => {
+    let searchType = this.state.searchType
+    if (searchType == 'ALL') {
+      searchType = ''
+    }
+    ContentActions.getViewedContents(page, 30, '', '',
+      '',
+      '',
+      '',
+      '',
+      searchType)
   }
 
   render() {
     log(this.state)
     return (
       <article id="contents_list">
-        <TabMenu />
-        <SearchBar />
+        <TabMenu onSearch={ContentActions.getViewedContents} searchType={this.state.searchType} />
+        <SearchBar onSearch={ContentActions.getViewedContents} searchType={this.state.searchType}/>
         <ContentList listTitle={intlStores.get('cms.MENU_TXT_SUBMITTED_CONTENTS')}  content={this.state.publish} type={CONTENT.PUBLISHED}/>
         <PageList pageObj={this.state.pagination} clickAction={this.movePage} />
       </article>
