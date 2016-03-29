@@ -18,7 +18,6 @@ import intlStores from '../../../utils/IntlStore'
  * service > mgmt > keyword
  */
 class RecommendKeyword extends React.Component {
-
   static getStores() {
     return [KeywordStore]
   }
@@ -35,6 +34,7 @@ class RecommendKeyword extends React.Component {
 
   componentDidMount() {
     $('#keyword_list').sortable({ placeholder: 'placeholder' })
+    this.refs.keyword.focus()
   }
 
   addKeyword = (style) => {

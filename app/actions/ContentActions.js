@@ -54,12 +54,7 @@ const ContentActions = {
         this.getContents()
       })
   },
-
-  // TODO : 확인 후 두개를 합치자!
-  /**
-   * 이미지 post 선택 시, 해당 post의 detail을 불러옴
-   */
-  getImageContent(contentId) {
+  getContent(contentId) {
     request.get(URL + '/contents/pending/' + contentId)
       .use(middleware_accesstoken)
       .end(function (err, res) {
@@ -68,28 +63,21 @@ const ContentActions = {
         }
 
         AppDispatcher.handleViewAction({
-          type: AppConstants.GET_IMAGE_POST_OBJ,
-          responseImagePostObj: res.body
+          type: AppConstants.GET_POST_OBJ,
+          content: res.body
         })
       })
   },
-  /**
-   * 비디오 post 선택 시, 해당 post의 detail을 불러옴
-   */
-  getVideoContent(contentId) {
-    request.get(URL + '/contents/pending/' + contentId)
-      .use(middleware_accesstoken)
-      .end(function (err, res) {
-        if(utility.errorHandler(err, res)) {
-          return
-        }
+  clearContent() {
+    AppDispatcher.handleViewAction({
+      type: AppConstants.CLEAR_POST_OBJ
+    })
+  },
 
-        AppDispatcher.handleViewAction({
-          type: AppConstants.GET_VIDEO_POST_OBJ,
-          responseVideoPostObj: res.body
-        })
-      })
-  },
+  /***
+   * change searchtype
+   * @param searchType {String} - SearchType (ALL, VDO, IMS)
+     */
   changeSearchType(searchType) {
     AppDispatcher.handleViewAction({
       type: AppConstants.CHANGE_SEARCHTYPE,

@@ -11,7 +11,8 @@ import debug from 'debug'
 const log = debug('application:ContentDetailStore.jsx')
 
 /***
- * 컨텐츠를 저장하는 store
+ * (발행된) 컨텐츠를 저장하는 store
+ * -> 작성중인 컨텐츠를 저장하는건 ComposeContentDetailStore
  */
 class ContentDetailStore extends MapStore {
   getContent() {
@@ -20,6 +21,11 @@ class ContentDetailStore extends MapStore {
 
   reduce(state, action) {
     switch (action.type) {
+      case AppConstants.GET_POST_OBJ:
+        return Immutable.Map(action.content)
+      case AppConstants.CLEAR_POST_OBJ:
+        return state.clear()
+
       case AppConstants.GET_POST_DETAIL:
         return Immutable.Map(action.contents)
       case AppConstants.CLEAR_POST_DETAIL:

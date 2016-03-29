@@ -37,9 +37,13 @@ export default class ImageUploader extends React.Component {
   }
   render() {
     const value = this.props.value.get(this.props.id) ? this.props.value.get(this.props.id) : ''
+
+    const placeholder = 'Width*Height : ' + IMAGE_VALIDATION[this.props.type][this.props.id].width + '*'
+      +  IMAGE_VALIDATION[this.props.type][this.props.id].height
+      + ',  File Size : ' + IMAGE_VALIDATION[this.props.type][this.props.id].size + 'KB'
     return (
       <td>
-        <input type="text" className="txt t6" id={'input-' + this.props.id} value={value} readOnly/>
+        <input type="text" className="txt t6" id={'input-' + this.props.id} value={value} readOnly placeholder={placeholder}/>
         <span className="btn_file">Choose file<input type="file" id={'file-input-' + this.props.id} onChange={this.onChange}/></span>
         {this.previewImage}
         <a id={'btn-del-' + this.props.id} className={cn('btn_del', {'hide': value == ''})} ></a>

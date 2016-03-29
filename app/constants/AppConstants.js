@@ -21,6 +21,8 @@ export default keyMirror({
   DELETE_IMAGE: null,
   CHANGE_IMAGE_LIST: null,
   CLEAR_IMAGE: null,
+  GET_POST_OBJ: null,
+  CLEAR_POST_OBJ: null,
   UPDATE_IMAGE_POST_OBJ: null,
   GET_IMAGE_POST_OBJ: null,
   GET_IMAGE_COMPOSE_CATEGORIES_CHANNELS: null,

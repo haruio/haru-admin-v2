@@ -16,6 +16,8 @@ import ContentDetailStore from '../../stores/ContentDetailStore'
 import CategoryStore from '../../stores/CategoryStore'
 import ChannelStore from '../../stores/ChannelStore'
 
+import ContentActions from '../../actions/ContentActions'
+
 /**
  * A page to Compose
  * 컨텐츠를 작성하는 페이지 (video type, image type)
@@ -39,6 +41,14 @@ class Compose extends React.Component {
 
   componentDidMount() {
 
+    // param이 있고 postdetail이 없는 경우 서버에 요청함
+    if (this.props.params.id !== undefined) {
+      ContentActions.getContent(this.props.params.id)
+    } else {
+      setTimeout(() => {
+        ContentActions.clearContent()
+      })
+    }
   }
 
   render() {
@@ -49,7 +59,6 @@ class Compose extends React.Component {
     if(isimage) {
       type = 'image'
     }
-
     return (
         <article id="contents_add" className="add">
           <ul id="tab_menu">

@@ -56,7 +56,6 @@ export default class ImageMetaPanel extends React.Component {
   }
 
   render() {
-    log(this.props)
     return (
       <div id="add_info">
         <table className="writeTable">

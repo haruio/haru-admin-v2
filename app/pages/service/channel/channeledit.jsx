@@ -113,18 +113,18 @@ class ChannelEdit extends React.Component {
               <tbody>
               <tr>
                 <th>{intlStores.get('sm.SM_FLD_CHANNEL_NAME')}</th>
-                <td><input type="text" className="txt t1" id="name" ref="name" value={channel.get('name') ? channel.get('name') : ''} onChange={this.handleChange.bind(this, 'name')} /></td>
+                <td><input type="text" className="txt t1" id="name" ref="name" value={channel.get('name')|| ''} onChange={this.handleChange.bind(this, 'name')} /></td>
               </tr>
               <tr>
                 <th>{intlStores.get('sm.SM_FLD_SHORT_NAME')}</th>
-                <td><input type="text" className="txt t1" id="shortNm" ref="shortNm" value={channel.get('shortNm') ? channel.get('shortNm') : ''} onChange={this.handleChange.bind(this, 'shortNm')}/></td>
+                <td><input type="text" className="txt t1" id="shortNm" ref="shortNm" value={channel.get('shortNm') || ''} onChange={this.handleChange.bind(this, 'shortNm')}/></td>
               </tr>
               <tr>
                 <th>{intlStores.get('sm.SM_FLD_CHANNEL_URL')}</th>
                 <td>
                   <p className="input_txt">
                     <label htmlFor="text">http://dingo.tv/channel/</label>
-                    <input type="text" className="txt t5" id="urlNm" ref="urlNm" value={channel.get('urlNm') ? channel.get('urlNm') : ''} onChange={this.handleChange.bind(this, 'urlNm')}/>
+                    <input type="text" className="txt t5" id="urlNm" ref="urlNm" value={channel.get('urlNm') || ''} onChange={this.handleChange.bind(this, 'urlNm')}/>
                   </p>
                 </td>
               </tr>
@@ -152,7 +152,7 @@ class ChannelEdit extends React.Component {
               <tr>
                 <th>{intlStores.get('sm.SM_FLD_CHANNEL_DESC')}</th>
                 <td>
-                  <textarea id="description" ref="description" value={channel.get('description') ? channel.get('description') : ''} onChange={this.handleChange.bind(this, 'description')}></textarea>
+                  <textarea id="description" ref="description" value={channel.get('description') || ''} onChange={this.handleChange.bind(this, 'description')}></textarea>
                 </td>
               </tr>
               </tbody>

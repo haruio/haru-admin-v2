@@ -120,13 +120,13 @@ class CategoryEdit extends React.Component {
               <tr>
                 <th>{intlStores.get('sm.SM_FLD_CATEGORY_NAME')}</th>
                 <td>
-                  <input type="text" className="txt t1" id="name" ref="name" value={category.get('name') ? category.get('name') : ''} onChange={this.handleChange.bind(this, 'name')}/>
+                  <input type="text" className="txt t1" id="name" ref="name" value={category.get('name') || ''} onChange={this.handleChange.bind(this, 'name')}/>
                 </td>
               </tr>
               <tr>
                 <th>{intlStores.get('sm.SM_FLD_SHORT_NAME')}</th>
                 <td>
-                  <input type="text" className="txt t1" id="shortNm" ref="shortNm" value={category.get('shortNm') ? category.get('shortNm') : ''} onChange={this.handleChange.bind(this, 'shortNm')}/>
+                  <input type="text" className="txt t1" id="shortNm" ref="shortNm" value={category.get('shortNm')|| ''} onChange={this.handleChange.bind(this, 'shortNm')}/>
                 </td>
               </tr>
               <tr>
@@ -134,7 +134,7 @@ class CategoryEdit extends React.Component {
                 <td>
                   <p className="input_txt">
                     <label htmlFor="text">http://dingo.tv/category/</label>
-                    <input type="text" className="txt t5" id="urlNm" ref="urlNm" value={category.get('urlNm') ? category.get('urlNm') : ''} onChange={this.handleChange.bind(this, 'urlNm')} />
+                    <input type="text" className="txt t5" id="urlNm" ref="urlNm" value={category.get('urlNm')||''} onChange={this.handleChange.bind(this, 'urlNm')} />
                   </p>
                 </td>
               </tr>
@@ -158,7 +158,7 @@ class CategoryEdit extends React.Component {
               <tr>
                 <th>{intlStores.get('sm.SM_FLD_CHANNEL_DESC')}</th>
                 <td>
-                  <textarea id="description" ref="description" value={category.get('description') ? category.get('description') : ''} onChange={this.handleChange.bind(this, 'description')}></textarea>
+                  <textarea id="description" ref="description" value={category.get('description') || ''} onChange={this.handleChange.bind(this, 'description')}></textarea>
                 </td>
               </tr>
               </tbody>
