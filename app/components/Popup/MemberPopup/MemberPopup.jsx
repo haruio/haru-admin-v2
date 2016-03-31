@@ -20,12 +20,10 @@ export default class MemberPopup extends React.Component {
   static defaultProps = {
     tab: 1
   }
-
-
+  
   state = {tab: this.props.tab}
 
   get Body() {
-
     if (this.state.tab == USERPROFILE) {
       return <UserProfile userId={this.props.userId} />
     } else {

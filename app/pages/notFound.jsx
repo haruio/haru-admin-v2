@@ -19,8 +19,6 @@ export default class NotFound extends React.Component {
             <img src={logo2} alt="logo"/>
             <strong>잘못된 접근</strong>
           </h1>
-
-
         </div>
       </div>
     )

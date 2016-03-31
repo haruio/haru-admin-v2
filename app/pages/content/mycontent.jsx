@@ -92,7 +92,7 @@ export default class MyContent extends React.Component {
   render() {
     return (
       <article id="my_contents" ref="mycontent">
-        <TabMenu searchType={this.state.searchType} />
+        <TabMenu onSearch={ContentActions.getMyContents}  searchType={this.state.searchType} />
         <MyContentHead ref="mycontenthead" moveSection={this.moveSection} />
         <ContentList ref="create"  listId="create"  listTitle={intlStores.get('cms.CMS_FLD_CREATING')} content={this.state.writing} type={CONTENT.CREATE}/>
         <ContentList ref="waiting" listId="waiting" listTitle={intlStores.get('cms.CMS_FLD_WAITING')}  content={this.state.ready} type={CONTENT.WAITING}/>

@@ -35,8 +35,7 @@ class UserProfile extends React.Component {
   onImageError(e) {
     e.target.src = userDefault
   }
-
-
+  
   render() {
     let gender
     switch (this.state.profile.get('genderCd')) {

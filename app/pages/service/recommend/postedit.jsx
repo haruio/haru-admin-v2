@@ -91,6 +91,7 @@ class RecommendPostEdit extends React.Component {
   mouseOut = () => {
     $(this.refs.item).find('div p').stop().fadeOut(300)
   }
+  
   // 발행 이벤트
   handleSubmit = ()=> {
 
@@ -173,8 +174,7 @@ class RecommendPostEdit extends React.Component {
       this.endDate = moment(this.state.postdetail.get('recommendEndDt')).format('YYYY-MM-DD')
       log(this.startDate)
     }
-
-
+    
     return (
       <article>
         <hgroup>

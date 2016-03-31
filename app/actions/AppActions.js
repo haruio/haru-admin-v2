@@ -49,9 +49,32 @@ const AppActions = {
             image: res.body,
             target: target
           })
+        } else if (type === 'IMAGE' || type === 'VIDEO') {
+          AppDispatcher.handleViewAction({
+            type: AppConstants.UPLOAD_CONTENT_IMAGE,
+            image: res.body,
+            target: target
+          })
         }
-
       })
+  },
+  clearImage(type, target) {
+    if (type === 'CATEGORY') {
+      AppDispatcher.handleViewAction({
+        type: AppConstants.CLEAR_CATEGORY_IMAGE,
+        target: target
+      })
+    } else if (type === 'CHANNEL') {
+      AppDispatcher.handleViewAction({
+        type: AppConstants.CLEAR_CHANNEL_IMAGE,
+        target: target
+      })
+    } else if (type === 'IMAGE' || type === 'VIDEO') {
+      AppDispatcher.handleViewAction({
+        type: AppConstants.CLEAR_CONTENT_IMAGE,
+        target: target
+      })
+    }
   },
   /**
    * Banner by Keigun

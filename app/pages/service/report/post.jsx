@@ -30,7 +30,7 @@ class ReportPost extends React.Component {
 
 
   componentDidMount() {
-
+    //TODO
   }
 
 
@@ -39,11 +39,11 @@ class ReportPost extends React.Component {
    * @param page {number} - 이동할 페이지
    */
   movePage(page) {
-
+    //TODO
   }
 
   searchContents() {
-
+    //TODO
   }
 
 

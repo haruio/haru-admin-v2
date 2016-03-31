@@ -19,7 +19,6 @@ class CategoryStore extends ReduceStore {
   }
 
   reduce(state, action) {
-
     switch (action.type) {
       case AppConstants.GET_CATEGORIES:
         return Immutable.fromJS(action.contents)

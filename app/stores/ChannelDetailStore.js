@@ -12,8 +12,6 @@ const log = debug('application:ChannelStore.jsx')
 
 class ChannelDetailStore extends MapStore {
   getChannel() {
-    log('get')
-    log(this.getState().toJS())
     return this.getState()
   }
 
@@ -25,6 +23,8 @@ class ChannelDetailStore extends MapStore {
         return state.clear()
       case AppConstants.UPLOAD_CHANNEL_IMAGE:
         return state.set(action.target, action.image.resourceUrl)
+      case AppConstants.CLEAR_CHANNEL_IMAGE:
+        return state.set(action.target, '')
       default:
         return state
     }

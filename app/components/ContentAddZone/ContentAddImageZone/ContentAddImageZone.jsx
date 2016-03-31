@@ -64,40 +64,51 @@ export default class ContentAddImageZone extends React.Component {
     </div>)
   }
 
+  replaceAll(str, target, replacement) {
+    if(str) {
+      return str.split(target).join(replacement)
+    } else {
+      return str
+    }
+  }
+
+  get renderContents() {
+    // content가 empty일때
+    if(this.props.content.get('contents') == undefined || this.props.content.get('contents').size == 0) {
+      return this.EmptyDescriptionDropImageZone
+    } else {
+      let contentlist = this.props.content.get('contents').map((content) => {
+        let getHtmlBody = () => {return {__html: this.replaceAll(content.get('body'), '\n', '<br />')}}
+
+        return (
+          <li key={content.get('contentSeq')}>
+            <p style={{backgroundImage:'url('+content.get('contentUrl')+')'}}><em dangerouslySetInnerHTML={getHtmlBody()}></em></p>
+            <a href="" className="btn_close"></a>
+          </li>
+        )
+      })
+
+      contentlist.push(<li key="empty">
+        <dl>
+          <dt><img src={txt1} alt="Drag & Drop"/></dt>
+          <dd><b>※ 이곳에 이미지를 끌어다 넣으세요!</b></dd>
+          <dd>(이미지 파일을 <u>최대 10개</u>까지 <br />한꺼번에 등록할 수 있습니다.)</dd>
+        </dl>
+      </li>)
+
+      return (
+        <ul id="drag_list">
+          {contentlist}
+        </ul>
+      )
+    }
+  }
   render() {
     return (
       <div id="add_images">
         <h3>컨텐츠 내용</h3>
-        {this.EmptyDescriptionDropImageZone}
-        <ul id="drag_list">
-          <li>
-            <p style={{"backgroundImage":"url(http://assets2.moncast.com/thumb/ed073321aeae200c.jpeg)"}}><em></em>
-            </p>
-            <a href="" className="btn_close"></a>
-          </li>
-          <li>
-            <p style={{"backgroundImage":"url(http://assets2.moncast.com/image/0ac19364b6e7057c.jpeg)"}}><em>애교섞인
-              말투와, 나를 바라보며 미소짓는 모습을 봤을때 애교섞인 말투와, 나를 바라보며 미소짓는 모습을 봤을때</em></p>
-            <a href="" className="btn_close"></a>
-          </li>
-          <li>
-            <p style={{"backgroundImage":"url(http://assets2.moncast.com/image/8ab535fd27d7b6bb.jpeg)"}}><em>애교섞인
-              말투와, 나를 바라보며 미소짓는 모습을 봤을때</em></p>
-            <a href="" className="btn_close"></a>
-          </li>
-          <li>
-            <p style={{"backgroundImage":"url(http://assets2.moncast.com/image/0ac19364b6e7057c.jpeg)"}}><em></em>
-            </p>
-            <a href="" className="btn_close"></a>
-          </li>
-          <li>
-            <dl>
-              <dt><img src={txt1} alt="Drag & Drop"/></dt>
-              <dd><b>※ 이곳에 이미지를 끌어다 넣으세요!</b></dd>
-              <dd>(이미지 파일을 <u>최대 10개</u>까지 <br />한꺼번에 등록할 수 있습니다.)</dd>
-            </dl>
-          </li>
-        </ul>
+
+        {this.renderContents}
         <p className="btn_r">
           <a href="" className="gray">목록으로</a>
           <a href="" className="purple">승인요청</a>

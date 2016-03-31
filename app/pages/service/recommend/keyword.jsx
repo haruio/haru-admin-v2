@@ -53,7 +53,7 @@ class RecommendKeyword extends React.Component {
 
   arrangeKeyword = () => {
     let idLists = []
-    $('#keyword_list > li').filter(function(index, el) {
+    $('#keyword_list > li').filter(function (index, el) {
       // data-id 가 없으면 안됨
       return $(el).attr('data-id') != undefined
     }).each(function(idx, el) {

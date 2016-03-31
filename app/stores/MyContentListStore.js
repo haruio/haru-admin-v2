@@ -32,30 +32,35 @@ class MyContentListStore extends ReduceStore {
     return this.getState().get('searchType')
   }
 
-  reduce(state, action) {
+  _getMyContent(state, action) {
     let writing = []
     let ready = []
     let reject = []
 
+    // W (작성중), N (승인대기), R (리젝)
+    action.contents.forEach((content) => {
+      switch(content.status) {
+        case 'W' :
+          writing.push(content)
+          break
+        case 'N' :
+          ready.push(content)
+          break
+        case 'R' :
+          reject.push(content)
+          break
+      }
+    })
+    
+    return state.set('writing', Immutable.fromJS(writing))
+                .set('ready', Immutable.fromJS(ready))
+                .set('reject', Immutable.fromJS(reject))
+  }
+
+  reduce(state, action) {
     switch (action.type) {
       case AppConstants.GET_MYCONTENT:
-        // W (작성중), N (승인대기), R (리젝)
-        action.contents.forEach((content) => {
-          switch(content.status) {
-            case 'W' :
-              writing.push(content)
-              break
-            case 'N' :
-              ready.push(content)
-              break
-            case 'R' :
-              reject.push(content)
-              break
-          }
-        })
-        return state.set('writing', Immutable.fromJS(writing))
-                    .set('ready', Immutable.fromJS(ready))
-                    .set('reject', Immutable.fromJS(reject))
+        return this._getMyContent(state, action)
       case AppConstants.CHANGE_SEARCHTYPE:
         return state.set('searchType', action.searchType)
       default:

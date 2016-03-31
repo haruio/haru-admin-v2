@@ -36,21 +36,21 @@ export default class ContentListItem extends React.Component {
     }
   }
 
-  showHistoryPopup() {
+  showHistoryPopup=()=> {
     PopupActions.openPopup(POPUP.HISTORY, {postSeq:this.props.content.get('postSeq')})
   }
-  showPublishPopup() {
+  showPublishPopup=()=> {
     PopupActions.openPopup(POPUP.PUBLISH, {postSeq:this.props.content.get('postSeq')})
   }
-  showRejectPopup() {
+  showRejectPopup=()=> {
     PopupActions.openPopup(POPUP.REJECT, {postSeq:this.props.content.get('postSeq')})
   }
-  showDeletePopup() {
+  showDeletePopup=()=> {
     if(window.confirm(intlStores.get('common.COMMON_MSG_DEL'))) {
       ContentActions.deleteContent(this.props.content.get('postSeq'))
     }
   }
-  showCancelRequest() {
+  showCancelRequest=()=> {
     if(window.confirm(intlStores.get('cms.CMS_MSG_NEED_APPROVE'))) {
       ContentActions.requestCancelRequest(this.props.content.get('postSeq'))
     }

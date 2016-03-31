@@ -21,7 +21,8 @@ const ContentActions = {
   /**
    * My Content 관련 메소드
    */
-  getMyContents(searchField='', searchText='', channel='', categories='', type='') {
+
+  getMyContents(pageNo=1, pageSize=30, orderField='', orderMethod='', searchField='', searchText='',  channel='', categories='', type='') {
     request.get(URL + '/contents/pending/my')
       .use(middleware_accesstoken)
       .query({ searchField: searchField, searchText: searchText })
@@ -82,6 +83,49 @@ const ContentActions = {
     AppDispatcher.handleViewAction({
       type: AppConstants.CHANGE_SEARCHTYPE,
       searchType: searchType
+    })
+  },
+
+
+  /***
+   * subcontent 작성 관련 함수들
+   */
+  addSubContent(subcontent) {
+    AppDispatcher.handleViewAction({
+      type: AppConstants.CREATE_SUBCONTENT,
+      subcontent: subcontent
+    })
+  },
+  updateSubContent(subcontent) {
+    AppDispatcher.handleViewAction({
+      type: AppConstants.UPDATE_SUBCONTENT,
+      subcontent: subcontent
+    })
+  },
+  deleteSubContent(contentSeq) {
+    AppDispatcher.handleViewAction({
+      type: AppConstants.DELETE_SUBCONTENT,
+      contentSeq: contentSeq
+    })
+  },
+  updateContentMeta(meta) {
+    AppDispatcher.handleViewAction({
+      type: AppConstants.UPDATE_CONTENTMETA,
+      meta: meta
+    })
+  },
+  updateContentAddCategory(cate) {
+    AppDispatcher.handleViewAction({
+      type: AppConstants.UPDATE_CONTENT_ADDCATEGORY,
+      categorySeq: cate.categorySeq,
+      category: cate.category
+    })
+  },
+  updateContentRemoveCategory(cate) {
+    AppDispatcher.handleViewAction({
+      type: AppConstants.UPDATE_CONTENT_REMOVECATEGORY,
+      categorySeq: cate.categorySeq,
+      category: cate.category
     })
   },
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

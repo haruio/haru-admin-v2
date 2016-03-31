@@ -25,7 +25,7 @@ export default class TabMenu extends React.Component {
 
     ContentActions.changeSearchType(searchType)
   }
-  
+
   render() {
     return (
       <ul id="tab_menu">

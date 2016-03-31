@@ -11,6 +11,18 @@ export default keyMirror({
   GET_MYCONTENT: null,
   DELETE_CONTENT: null,
 
+  UPDATE_CONTENTMETA: null,
+  UPDATE_CONTENT_ADDCATEGORY: null,
+  UPDATE_CONTENT_REMOVECATEGORY: null,
+  UPLOAD_CONTENT_IMAGE: null,
+  CLEAR_CONTENT_IMAGE: null,
+  /**
+   * Compose COMMON
+   */
+  CREATE_SUBCONTENT: null,
+  UPDATE_SUBCONTENT: null,
+  DELETE_SUBCONTENT: null,
+
   /**
    * Compose Image
    */
@@ -31,10 +43,7 @@ export default keyMirror({
   /**
    * Compose Video
    */
-  CREATE_VIDEO: null,
   CHANGE_VIDEO_LIST: null,
-  UPDATE_VIDEO: null,
-  DELETE_VIDEO: null,
   CLEAR_VIDEO: null,
   UPDATE_VIDEO_POST_OBJ: null,
   GET_VIDEO_POST_OBJ: null,
@@ -52,7 +61,7 @@ export default keyMirror({
   GET_RESERVED_CONTENT: null,
   GET_DELETE_CONTENT: null,
   GET_INSPECTION_CONTENT: null,
-  CHANGE_SEARCHTYPE:null,
+  CHANGE_SEARCHTYPE: null,
   /**
    * History 관련
    */
@@ -65,12 +74,13 @@ export default keyMirror({
   USER_LOGIN: null,
   USER_LOGOUT: null,
   USER_LOGINFAIL: null,
-  INVALID_SESSION_TOKEN:null,
+  INVALID_SESSION_TOKEN: null,
 
   UPLOAD_IMAGE: null,
   UPLOAD_CATEGORY_IMAGE: null,
+  CLEAR_CATEGORY_IMAGE: null,
   UPLOAD_CHANNEL_IMAGE: null,
-
+  CLEAR_CHANNEL_IMAGE: null,
 
   DELETE_BANNER_IMAGE: null,
 
@@ -83,8 +93,8 @@ export default keyMirror({
   CLEAR_BANNER: null,
   GET_POST_DETAIL_BYURL: null,
   SELECT_BANNER_POST_DETAIL: null,
-  CHANGE_PLATFORM:null,
-  CHANGE_SEACHDATE:null,
+  CHANGE_PLATFORM: null,
+  CHANGE_SEACHDATE: null,
 
   /**
    * Post
@@ -132,7 +142,7 @@ export default keyMirror({
   GET_USER_STAT_ACT: null,
   GET_USER_STAT_BAN: null,
   GET_USER_STAT_DEL: null,
-  GET_BAN_USERS : null,
+  GET_BAN_USERS: null,
   /**
    * Comment Management
    */
@@ -168,8 +178,8 @@ export default keyMirror({
   PUSH_POST_CONTENTS: null,
   PUSH_DETAIL: null,
 
-  OPEN_POPUP : null,
-  CLOSE_POPUP : null,
+  OPEN_POPUP: null,
+  CLOSE_POPUP: null,
   CLOSE_ALL_POPUP: null
 })
 
@@ -181,16 +191,16 @@ export const CONTENT = keyMirror({
   /**
    * page name
    */
-  MYCONTENT:null,
-  PUBLISHED:null,
-  RESERVED:null,
+  MYCONTENT: null,
+  PUBLISHED: null,
+  RESERVED: null,
   DELETEED: null,
   INSPECTION: null
 })
 
 
 export const IMAGE_VALIDATION = {
-  CHANNEL : {
+  CHANNEL: {
     iconImageUrl: {
       width: 180,
       height: 180,
@@ -207,7 +217,7 @@ export const IMAGE_VALIDATION = {
       size: 100
     }
   },
-  CATEGORY : {
+  CATEGORY: {
     iconImageUrl: {
       width: 40,
       height: 40,
@@ -285,7 +295,7 @@ export const POPUP = keyMirror({
   PUBLISH: null,
   HISTORY: null,
   PUBLISHEDCONTENT: null,
-  MAINFEED:null,
+  MAINFEED: null,
 
 
   DATE_SELECTOR: null,

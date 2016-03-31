@@ -5,6 +5,7 @@ import React from 'react'
 import {Container} from 'flux/utils'
 import {Link} from 'react-router'
 import debug from 'debug'
+import cn from 'classnames'
 const log = debug('application:Compose.jsx')
 
 import MetaPanel from '../../components/MetaPanel'
@@ -52,18 +53,17 @@ class Compose extends React.Component {
   }
 
   render() {
-    const router = this.context.router
-    const isimage = router.isActive('/content/compose/image')
-
     let type = 'video'
-    if(isimage) {
+    if(this.context.router.isActive('/content/compose/image')) {
       type = 'image'
     }
+
+    // edit로 들어오면 탭이동이 불가능함 disabled-link css를 통해서 처리 
     return (
         <article id="contents_add" className="add">
           <ul id="tab_menu">
-            <li><Link to="/content/compose/video" activeClassName="on">Video Type</Link></li>
-            <li><Link to="/content/compose/image" activeClassName="on">Image Type</Link></li>
+            <li><Link to="/content/compose/video" activeClassName="on" className={cn({'disabled-link' : this.props.params.id !== undefined})}>Video Type</Link></li>
+            <li><Link to="/content/compose/image" activeClassName="on" className={cn({'disabled-link' : this.props.params.id !== undefined})}>Image Type</Link></li>
           </ul>
           <MetaPanel type={type}
                      categories={this.state.categories}

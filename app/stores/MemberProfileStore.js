@@ -18,6 +18,7 @@ class MemberProfileStore extends ReduceStore {
   getMemberProfile() {
     return this.getState()
   }
+  
   reduce(state, action) {
     switch (action.type) {
       case AppConstants.GET_USER_PROFILE:

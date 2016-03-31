@@ -2,7 +2,7 @@
  * Created by jungenpark on 2/15/16.
  */
 import Immutable from 'immutable'
-import { ReduceStore } from 'flux/utils'
+import {ReduceStore} from 'flux/utils'
 
 import AppConstants from '../constants/AppConstants'
 import AppDispatcher from '../dispatcher/AppDispatcher'
@@ -13,7 +13,11 @@ const log = debug('application:RecommendPostStore.jsx')
 
 class RecommendPostStore extends ReduceStore {
   getInitialState() {
-    return Immutable.Map({contents : Immutable.List(), post : Immutable.Map(), recommendpost:Immutable.Map()})
+    return Immutable.Map({
+      contents: Immutable.List(),
+      post: Immutable.Map(),
+      recommendpost: Immutable.Map()
+    })
   }
 
   getRecommendPosts() {

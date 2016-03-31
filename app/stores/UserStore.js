@@ -2,8 +2,8 @@
  * Created by jungenpark on 2/15/16.
  */
 import Immutable from 'immutable'
-import { ReduceStore } from 'flux/utils'
-import { browserHistory } from 'react-router'
+import {ReduceStore} from 'flux/utils'
+import {browserHistory} from 'react-router'
 import AppConstants from '../constants/AppConstants'
 import AppDispatcher from '../dispatcher/AppDispatcher'
 
@@ -43,16 +43,18 @@ class UserStore extends ReduceStore {
     browserHistory.replace('/login')
   }
 
+  _userLogin(state, action) {
+    // TODO : 관련 로직 추가적으로 생각해보자 아직은 답이 없어서 ㅠㅠ
+    setTimeout(function () {
+      browserHistory.replace('/content/mycontent')
+    })
+    return state.set('user', action.user).set('token', action.accessToken)
+  }
+
   reduce(state, action) {
     switch (action.type) {
       case AppConstants.USER_LOGIN:
-        {
-          // TODO : 관련 로직 추가적으로 생각해보자 아직은 답이 없어서 ㅠㅠ 
-          setTimeout(function () {
-            browserHistory.replace('/content/mycontent')
-          })
-          return state.set('user', action.user).set('token', action.accessToken)
-        }
+        return this._userLogin(state, action)
       case AppConstants.USER_LOGINFAIL:
         return state.clear().set('error', {code: 4, msg: action.message})
       case AppConstants.USER_LOGOUT:

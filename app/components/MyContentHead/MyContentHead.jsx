@@ -27,7 +27,7 @@ export default class MyContentHead extends React.Component {
 
   render() {
     const selectSection = this.state.selectSection
-
+    // TODO : 다국어 처리
     return (
       <div id="contents_head">
         <dl>

@@ -23,6 +23,8 @@ class CategoryDetailStore extends MapStore {
         return state.clear()
       case AppConstants.UPLOAD_CATEGORY_IMAGE:
         return state.set(action.target, action.image.resourceUrl)
+      case AppConstants.CLEAR_CATEGORY_IMAGE:
+        return state.set(action.target, '')
       default:
         return state
     }
