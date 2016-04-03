@@ -110,8 +110,9 @@ export default class ContentAddImageZone extends React.Component {
 
         {this.renderContents}
         <p className="btn_r">
-          <a href="" className="gray">목록으로</a>
-          <a href="" className="purple">승인요청</a>
+          <a className="gray">{intlStores.get('cms.CMS_BTN_LIST')}</a>
+          <a className="tinyGreen">{intlStores.get('cms.CMS_BTN_TEMP_SAVE')}</a>
+          <a className="purple btn_w340">{intlStores.get('cms.CMS_BTN_REQUEST')}</a>
         </p>
       </div>
     )

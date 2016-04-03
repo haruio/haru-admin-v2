@@ -58,7 +58,7 @@ class Compose extends React.Component {
       type = 'image'
     }
 
-    // edit로 들어오면 탭이동이 불가능함 disabled-link css를 통해서 처리 
+    // edit로 들어오면 탭이동이 불가능함 disabled-link css를 통해서 처리
     return (
         <article id="contents_add" className="add">
           <ul id="tab_menu">

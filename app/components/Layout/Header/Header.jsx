@@ -7,8 +7,8 @@ const log = debug('application:Header.jsx')
 import LangSelector from '../LangSelector'
 
 
-const logo = require("image!../../../assets/img/logo.png")
-const defaultimg = require("image!../../../assets/img/default.png")
+const logo = require('image!../../../assets/img/login_logo.png')
+const defaultimg = require('image!../../../assets/img/default.png')
 
 
 /**
@@ -21,7 +21,7 @@ class Header extends React.Component {
     // TODO : 유저 정보
     return (
       <header>
-        <h1><Link to="/content/mycontent"><img src={logo} alt="MAKE US" /></Link></h1>
+        <h1><Link to="/content/mycontent"><img src={logo} alt="MAKE US" style={{width:'194px'}}/></Link></h1>
         <ul>
           <li><Link to="/content" activeClassName="on">Contents Management</Link></li>
           <li><Link to="/service" activeClassName="on">Service Management</Link></li>

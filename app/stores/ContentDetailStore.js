@@ -145,7 +145,7 @@ class ContentDetailStore extends MapStore {
       case AppConstants.UPDATE_CONTENT_REMOVECATEGORY:
         return this._updateContentDeleteCategory(state, action)
       case AppConstants.UPLOAD_CONTENT_IMAGE:
-        return this.__uploadContentAction(state, action)
+        return this._uploadContentAction(state, action)
       case AppConstants.CLEAR_CONTENT_IMAGE:
         return this._clearContentAction(state, action)
       case AppConstants.GET_POST_DETAIL:
