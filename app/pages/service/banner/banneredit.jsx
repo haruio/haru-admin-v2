@@ -42,7 +42,7 @@ class BannerEdit extends React.Component {
       })
     }
   }
-  
+
   render() {
     const banner = this.state.banner
     return (
@@ -125,7 +125,7 @@ class BannerEdit extends React.Component {
                     <option>12시</option>
                   </select>
                   <select style={{width:'70px'}}>
-                    <option>00분</option>
+                    <option>59분</option>
                   </select>
                 </td>
               </tr>

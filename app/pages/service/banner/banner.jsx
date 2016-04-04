@@ -46,7 +46,6 @@ class BannerList extends React.Component {
     }
   }
 
-
   componentDidMount() {
     this.setInitCalendar()
 
@@ -81,15 +80,86 @@ class BannerList extends React.Component {
     AppActions.getBannerList(page, 10, startDate, endDate, platform)
   }
 
-  toggleCheckBox = () => {
-    $("input[name='postBox']").prop('checked', $(this.refs.checkAll).prop('checked'))
+  render() {
+    return (
+      <article>
+        <hgroup>
+          <h2>배너 관리</h2>
+        </hgroup>
+        <div id="contents">
+          {this.renderPlatformTab}
+          {this.renderCalendarHead}
+          <div id="calendar_area">
+            <table>
+              <colgroup>
+                <col width="130px"/>
+                <col width="*"/>
+              </colgroup>
+              {this.renderTableHeader}
+              <tbody>
+              {this.ScheduleBar}
+              </tbody>
+            </table>
+          </div>
+          <div className="table_wrap">
+            <table className="listTable">
+              <colgroup>
+                <col width="5%"/>
+                <col width="11%"/>
+                <col width="*"/>
+                <col width="13%"/>
+                <col width="12%"/>
+                <col width="17%"/>
+                <col width="17%"/>
+              </colgroup>
+              <thead>
+              <tr>
+                <th><input type="checkbox" ref="checkAll" onClick={this.toggleCheckBox}/></th>
+                <th>순서</th>
+                <th>배너</th>
+                <th>타입</th>
+                <th>노출 플랫폼</th>
+                <th>노출 시작</th>
+                <th>노출 종료</th>
+              </tr>
+              </thead>
+              <tbody>
+                {this.renderBannerList}
+              </tbody>
+            </table>
+          </div>
+          <p className="btn_r">
+            <Link to="/service/mgmt/banner/new"
+                  className="purple btn_w140">{intlStores.get('common.COMMON_BTN_REGISTER')}</Link>&nbsp;
+            <a href="">{intlStores.get('common.COMMON_BTN_DELETE')}</a>
+          </p>
+        </div>
+      </article>
+    )
   }
 
-  onShowCalendar() {
-    $('#bannerDate').show().focus().hide()
+  get renderPlatformTab() {
+    return (
+      <ul id="tab_btns">
+        <li><button onClick={this.changePlatform.bind(this, 'AND')} className={cn({'on': this.state.platform == 'AND'})}>Android</button></li>
+        <li><button onClick={this.changePlatform.bind(this, 'IOS')} className={cn({'on': this.state.platform == 'IOS'})}>IOS</button></li>
+        <li><button onClick={this.changePlatform.bind(this, 'PC')}  className={cn({'on': this.state.platform == 'PC'})}>PC Web</button></li>
+        <li><button onClick={this.changePlatform.bind(this, 'MW')}  className={cn({'on': this.state.platform == 'MW'})}>Mobile Web</button></li>
+      </ul>)
   }
 
-  get tableHeader() {
+  get renderCalendarHead() {
+    return (
+      <div id="calendar_head">
+        <time id="bannertime" onClick={this.onShowCalendar} style={{cursor:'pointer'}}><input type="text" id="bannerDate" style={{display:'none'}}/>{this.state.searchDate} (금)</time>
+        <input type="image" src={btn_prev2} alt="prev" className="prev"/>
+        <input type="image" src={btn_next2} alt="next" className="next"/>
+        <a onClick={this.onShowCalendar}><img src={bg_calendar} alt="달력"/></a>
+      </div>
+    )
+  }
+
+  get renderTableHeader() {
     const header = [1,2,3,4,5,6,7,8,9,10,11].map((i) => {
       return <th key={i}>{i}</th>
     })
@@ -105,34 +175,13 @@ class BannerList extends React.Component {
       </thead>
     )
   }
-  changePlatform(platform) {
-    AppActions.ChangePlatform(platform)
-  }
-
-  get platformTab() {
-    return (
-      <ul id="tab_btns">
-        <li><button onClick={this.changePlatform.bind(this, 'AND')} className={cn({'on': this.state.platform == 'AND'})}>Android</button></li>
-        <li><button onClick={this.changePlatform.bind(this, 'IOS')} className={cn({'on': this.state.platform == 'IOS'})}>IOS</button></li>
-        <li><button onClick={this.changePlatform.bind(this, 'PC')}  className={cn({'on': this.state.platform == 'PC'})}>PC Web</button></li>
-        <li><button onClick={this.changePlatform.bind(this, 'MW')}  className={cn({'on': this.state.platform == 'MW'})}>Mobile Web</button></li>
-      </ul>)
-  }
-
-  get calendarHead() {
-    return (
-      <div id="calendar_head">
-        <time id="bannertime" onClick={this.onShowCalendar} style={{cursor:'pointer'}}><input type="text" id="bannerDate" style={{display:'none'}}/>{this.state.searchDate} (금)</time>
-        <input type="image" src={btn_prev2} alt="prev" className="prev"/>
-        <input type="image" src={btn_next2} alt="next" className="next"/>
-        <a onClick={this.onShowCalendar}><img src={bg_calendar} alt="달력"/></a>
-      </div>
-    )
-  }
 
   // TODO : 나중에 리팩토링 하자!!
   get ScheduleBar() {
+    log('ScheduleBar')
+    log(this.state.banners.toJS())
     return this.state.banners.map((content, i) => {
+      log(content)
       let StartHour = (moment(this.state.searchDate + ' 00:00:00', 'YYYYMMDD HH:mm:ss') >= moment(content.get('bannerStartDt')) ? 0 : moment(content.get('bannerStartDt')).hour())
       let EndHour = (moment(this.state.searchDate + ' 23:59:59', 'YYYYMMDD HH:mm:ss') <= moment(content.get('bannerEndDt')) ? 24 : moment(content.get('bannerEndDt')).hour())
       let StartMin = (moment(this.state.searchDate + ' 00:00:00', 'YYYYMMDD HH:mm:ss') >= moment(content.get('bannerStartDt')) ? 0 : moment(content.get('bannerStartDt')).minute())
@@ -179,7 +228,8 @@ class BannerList extends React.Component {
     this.context.router.push('/service/mgmt/banner/' + bannerSeq)
   }
 
-  get BannerList() {
+
+  get renderBannerList() {
     if(this.state.banners.size == 0) {
       return (
         <tr>
@@ -243,65 +293,21 @@ class BannerList extends React.Component {
     })
   }
 
+  // Event
 
-  render() {
-    log(this.state)
-    return (
-      <article>
-        <hgroup>
-          <h2>배너 관리</h2>
-        </hgroup>
-        <div id="contents">
-          {this.platformTab}
-          {this.calendarHead}
-          <div id="calendar_area">
-            <table>
-              <colgroup>
-                <col width="130px"/>
-                <col width="*"/>
-              </colgroup>
-              {this.tableHeader}
-              <tbody>
-              {this.ScheduleBar}
-              </tbody>
-            </table>
-          </div>
-          <div className="table_wrap">
-            <table className="listTable">
-              <colgroup>
-                <col width="5%"/>
-                <col width="11%"/>
-                <col width="*"/>
-                <col width="13%"/>
-                <col width="12%"/>
-                <col width="17%"/>
-                <col width="17%"/>
-              </colgroup>
-              <thead>
-              <tr>
-                <th><input type="checkbox" ref="checkAll" onClick={this.toggleCheckBox}/></th>
-                <th>순서</th>
-                <th>배너</th>
-                <th>타입</th>
-                <th>노출 플랫폼</th>
-                <th>노출 시작</th>
-                <th>노출 종료</th>
-              </tr>
-              </thead>
-              <tbody>
-                {this.BannerList}
-              </tbody>
-            </table>
-          </div>
-          <p className="btn_r">
-            <Link to="/service/mgmt/banner/new"
-                  className="purple btn_w140">{intlStores.get('common.COMMON_BTN_REGISTER')}</Link>&nbsp;
-            <a href="">{intlStores.get('common.COMMON_BTN_DELETE')}</a>
-          </p>
-        </div>
-      </article>
-    )
+  toggleCheckBox = () => {
+    $("input[name='postBox']").prop('checked', $(this.refs.checkAll).prop('checked'))
   }
+
+  onShowCalendar() {
+    $('#bannerDate').show().focus().hide()
+  }
+
+
+  changePlatform(platform) {
+    AppActions.ChangePlatform(platform)
+  }
+
 }
 
 const BannerListContainer = Container.create(BannerList, {withProps:true})
