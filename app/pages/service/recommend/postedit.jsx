@@ -73,7 +73,96 @@ class RecommendPostEdit extends React.Component {
       $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'))
     })
   }
-  
+
+  render() {
+    // 기존에 값이 있다면 초기값 셋팅
+    if(this.props.params.id !== undefined) {
+      this.startDate = moment(this.state.postdetail.get('recommendEndDt')).format('YYYY-MM-DD')
+      this.endDate = moment(this.state.postdetail.get('recommendEndDt')).format('YYYY-MM-DD')
+    }
+
+    return (
+      <article>
+        <hgroup>
+          <h2>{intlStores.get('sm.SM_FLD_FEATURED_CONTENT_REG')}</h2>
+        </hgroup>
+        <div id="contents">
+          <div id="service_add">
+            <table className="writeTable">
+              <colgroup>
+                <col width="154px"/>
+                <col width="*"/>
+              </colgroup>
+              <tbody>
+              <tr>
+                <th>{intlStores.get('sm.SM_FLD_FEATURED_CONTENT')}</th>
+                <td>
+                  {this.renderRecommendPost}
+                </td>
+              </tr>
+              <tr>
+                <th>추천 시간</th>
+                <td>
+                  <input type="text" className="txt daterange"/><a href="" className="btn_calendar"></a>
+                </td>
+              </tr>
+              <tr>
+                <th>{intlStores.get('sm.SM_FLD_PROBABLE')}</th>
+                <td>
+                  <p className="btn_w340">
+                    <input type="range" min="0" max="100" value={this.state.persent} step="5"
+                           className="txt btn_w300" onChange={this.onChangePercent}/>
+                    <span style={{float:'right'}}>{this.state.persent + '%'}</span>
+                  </p>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+          <p className="btn_r btnbox_w960">
+            <a onClick={this.handleSubmit}
+               className="purple btn_w140">{this.props.params.id ? intlStores.get('cms.CMS_BTN_EDIT') : intlStores.get('common.COMMON_BTN_REGISTER')}</a>
+            <Link to="/service/mgmt/post" className="gray">{intlStores.get('common.COMMON_BTN_CANCEL')}</Link>
+          </p>
+        </div>
+      </article>
+    )
+  }
+
+  /***
+   * Recommend Post Render
+   */
+  get renderRecommendPost() {
+    // new 상태일때
+    if (this.props.params.id == undefined && this.state.post.size === 0) {
+      return (
+        <ul className="list">
+          <li ref="item" onMouseOver={this.movseOver} onMouseOut={this.mouseOut}>
+            <div id="recommend_empty" onClick={this.SeachPublishedPost}>
+              <img src={icon_plus}/>
+            </div>
+          </li>
+        </ul>)
+    } else {
+      const post = this.state.post
+      return (
+        <ul className="list">
+          <li ref="item" onMouseOver={this.movseOver} onMouseOut={this.mouseOut}>
+            <div>
+              <span><img src={post.getIn(['channel', 'iconImageUrl'], null)} alt="channel icon"/></span>
+              <b><span>{post.getIn(['channel', 'name'], null)}</span></b>
+              <em style={{ backgroundImage:'url('+ post.get('thumbnailUrl') +')' }}></em>
+              <p>
+                <span><a onClick={this.SeachPublishedPost}><img src={edit1} alt="" title="수정"/></a></span>
+              </p>
+            </div>
+            <dl>
+              <dt>{post.get('postTitle')}</dt>
+            </dl>
+          </li>
+        </ul>)
+    }
+  }
   /***
    * Event Handlers
    */
@@ -91,7 +180,7 @@ class RecommendPostEdit extends React.Component {
   mouseOut = () => {
     $(this.refs.item).find('div p').stop().fadeOut(300)
   }
-  
+
   // 발행 이벤트
   handleSubmit = ()=> {
 
@@ -132,96 +221,7 @@ class RecommendPostEdit extends React.Component {
 
   }
 
-  /***
-   * Recommend Post Render
-   */
-  get RecommendPost() {
-    // new 상태일때
-    if (this.props.params.id == undefined && this.state.post.size === 0) {
-      return (
-        <ul className="list">
-          <li ref="item" onMouseOver={this.movseOver} onMouseOut={this.mouseOut}>
-            <div id="recommend_empty" onClick={this.SeachPublishedPost}>
-              <img src={icon_plus}/>
-            </div>
-          </li>
-        </ul>)
-    } else {
-      const post = this.state.post
-      return (
-        <ul className="list">
-          <li ref="item" onMouseOver={this.movseOver} onMouseOut={this.mouseOut}>
-            <div>
-              <span><img src={post.getIn(['channel', 'iconImageUrl'], null)} alt="channel icon"/></span>
-              <b><span>{post.getIn(['channel', 'name'], null)}</span></b>
-              <em style={{ backgroundImage:'url('+ post.get('thumbnailUrl') +')' }}></em>
-              <p>
-                <span><a onClick={this.SeachPublishedPost}><img src={edit1} alt="" title="수정"/></a></span>
-              </p>
-            </div>
-            <dl>
-              <dt>{post.get('postTitle')}</dt>
-            </dl>
-          </li>
-        </ul>)
-    }
-  }
 
-  render() {
-    // 기존에 값이 있다면 초기값 셋팅
-    if(this.props.params.id !== undefined) {
-      this.startDate = moment(this.state.postdetail.get('recommendEndDt')).format('YYYY-MM-DD')
-      this.endDate = moment(this.state.postdetail.get('recommendEndDt')).format('YYYY-MM-DD')
-      log(this.startDate)
-    }
-    
-    return (
-      <article>
-        <hgroup>
-          <h2>{intlStores.get('sm.SM_FLD_FEATURED_CONTENT_REG')}</h2>
-        </hgroup>
-        <div id="contents">
-          <div id="service_add">
-            <table className="writeTable">
-              <colgroup>
-                <col width="154px"/>
-                <col width="*"/>
-              </colgroup>
-              <tbody>
-              <tr>
-                <th>{intlStores.get('sm.SM_FLD_FEATURED_CONTENT')}</th>
-                <td>
-                  {this.RecommendPost}
-                </td>
-              </tr>
-              <tr>
-                <th>추천 시간</th>
-                <td>
-                  <input type="text" className="txt daterange"/><a href="" className="btn_calendar"></a>
-                </td>
-              </tr>
-              <tr>
-                <th>{intlStores.get('sm.SM_FLD_PROBABLE')}</th>
-                <td>
-                  <p className="btn_w340">
-                    <input type="range" min="0" max="100" value={this.state.persent} step="5"
-                           className="txt btn_w300" onChange={this.onChangePercent}/>
-                    <span style={{float:'right'}}>{this.state.persent + '%'}</span>
-                  </p>
-                </td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
-          <p className="btn_r btnbox_w960">
-            <a onClick={this.handleSubmit}
-               className="purple btn_w140">{this.props.params.id ? intlStores.get('cms.CMS_BTN_EDIT') : intlStores.get('common.COMMON_BTN_REGISTER')}</a>
-            <Link to="/service/mgmt/post" className="gray">{intlStores.get('common.COMMON_BTN_CANCEL')}</Link>
-          </p>
-        </div>
-      </article>
-    )
-  }
 }
 const RecommendPostEditContainer = Container.create(RecommendPostEdit) // , {withProps:true}
 export default RecommendPostEditContainer

@@ -16,16 +16,6 @@ export default class TabMenu extends React.Component {
     onSearch: () => {}
   }
 
-  changeSearchType(searchType) {
-    if(searchType == 'ALL') {
-      this.props.onSearch(1, 30)
-    } else {
-      this.props.onSearch(1, 30, '', '', '', '', '', '', searchType)
-    }
-
-    ContentActions.changeSearchType(searchType)
-  }
-
   render() {
     return (
       <ul id="tab_menu">
@@ -34,5 +24,19 @@ export default class TabMenu extends React.Component {
         <li><a onClick={this.changeSearchType.bind(this, 'IMS')} className={cn({'on': this.props.searchType=='IMS'})}>Image Type</a></li>
       </ul>
     )
+  }
+
+  /***
+   * SeachType에 따라 검색분리
+   * @param searchType {String} - 타입은 VDO, IMS을 말하며 ALL의 경우는 ''로 변환해야함
+   */
+  changeSearchType(searchType) {
+    if(searchType == 'ALL') {
+      this.props.onSearch(1, 30)
+    } else {
+      this.props.onSearch(1, 30, '', '', '', '', '', '', searchType)
+    }
+
+    ContentActions.changeSearchType(searchType)
   }
 }

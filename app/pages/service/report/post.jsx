@@ -33,24 +33,6 @@ class ReportPost extends React.Component {
     //TODO
   }
 
-
-  /***
-   * Move Page
-   * @param page {number} - 이동할 페이지
-   */
-  movePage(page) {
-    //TODO
-  }
-
-  searchContents() {
-    //TODO
-  }
-
-
-  toggleCheckBox = () => {
-    $("input[name='postBox']").prop('checked', $(this.refs.checkAll).prop('checked'))
-  }
-
   render() {
     return (
       <article>
@@ -93,7 +75,23 @@ class ReportPost extends React.Component {
       </article>
     )
   }
+  
+  /***
+   * Move Page
+   * @param page {number} - 이동할 페이지
+   */
+  movePage(page) {
+    //TODO
+  }
+
+  searchContents() {
+    //TODO
+  }
+
+
+  toggleCheckBox = () => {
+    $("input[name='postBox']").prop('checked', $(this.refs.checkAll).prop('checked'))
+  }
 }
-//        <UserProfilePopup ref="userProfile" userId={this.state.userId} />
 const ReportPostContainer = Container.create(ReportPost)
 export default ReportPostContainer

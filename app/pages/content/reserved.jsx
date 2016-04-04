@@ -31,23 +31,9 @@ class Reserved extends React.Component {
       searchType : ContentListStore.getSearchType()
     }
   }
-
-
+  
   componentWillMount() {
     ContentActions.getReservedContents()
-  }
-
-  movePage = (page) => {
-    let searchType = this.state.searchType
-    if (searchType == 'ALL') {
-      searchType = ''
-    }
-    ContentActions.getReservedContents(page, 30, '', '',
-      '',
-      '',
-      '',
-      '',
-      searchType)
   }
 
   render() {
@@ -60,6 +46,19 @@ class Reserved extends React.Component {
       </article>
     )
   }
+
+  /***
+   * PageList click event
+   * @param page {String} - move page number
+   */
+  movePage = (page) => {
+    let searchType = this.state.searchType
+    if (searchType == 'ALL') {
+      searchType = ''
+    }
+    ContentActions.getReservedContents(page, 30, '', '', '', '', '', '', searchType)
+  }
+
 }
 
 const ReservedContainer = Container.create(Reserved)

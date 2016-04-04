@@ -46,60 +46,67 @@ class BanMember extends React.Component {
     AppActions.banUserList(searchObj)
   }
 
-  /***
-   * Move Page
-   * @param pageNo {number} - 이동할 페이지
-   */
-  movePage(pageNo) {
-    this._searchUserList(pageNo)
+  render() {
+    return (
+      <article>
+        <hgroup>
+          <h2>정지된 유저리스트</h2>
+          <fieldset id="search_box">
+            <p>
+              <label>검색조건</label>
+              <select id="searchField" ref="searchField">
+                <option value="NICKNAME">닉네임</option>
+                <option value="EMAIL">이메일</option>
+              </select>
+            </p>
+            <input type="text" placeholder="Search" id="searchText" ref="searchText" onKeyPress={this._handleKeyPress}/>
+            <a onClick={this._searchUserList} className="btn_search"></a>
+          </fieldset>
+        </hgroup>
+        <div id="contents">
+          <p className="table_info">{intlStores.get('common.COMMON_FLD_TOTAL') + ' ' + this.state.pagination.get('totalCount') + ' ' + intlStores.get('common.COMMON_FLD_COUNT')}</p>
+          <div className="table_wrap">
+            <table className="listTable">
+              <colgroup>
+                <col width="5%"/>
+                <col width="10%"/>
+                <col width="*"/>
+                <col width="14%"/>
+                <col width="14%"/>
+                <col width="15%"/>
+                <col width="15%"/>
+              </colgroup>
+              <thead>
+              <tr>
+                <th><input type="checkbox" id="checkAll" value="-1" ref="checkAll" onClick={this.toggleCheckBox}/></th>
+                <th>프로필</th>
+                <th>닉네임(아이디)</th>
+                <th>나이(성별)</th>
+                <th>가입경로</th>
+                <th>가입일</th>
+                <th>푸쉬</th>
+              </tr>
+              </thead>
+              <tbody>
+              {this.renderBanedList}
+              </tbody>
+            </table>
+          </div>
+          <PageList pageObj={this.state.pagination} clickAction={this.movePage}/>
+          <p className="btn_r">
+            <a className="purple btn_w140">준비중</a>
+            <a onClick={this.deleteSelectedItem}>{intlStores.get('common.COMMON_BTN_DELETE')}</a>
+          </p>
+        </div>
+      </article>
+    )
   }
 
-  _handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      this._searchUserList()
-    }
-  }
-
-  _searchUserList=(pageNo = 1)=> {
-    log(this.refs)
-    const searchField = this.refs.searchField.value
-    const searchText = this.refs.searchText.value
-
-    this.listUsers({pageNo: pageNo, searchField: searchField,  searchText:searchText})
-  }
-
-  deleteSelectedItem() {
-    let userList = []
-    userList = $('input:checked').toArray().map((row)=> {
-      return {userId: row.value}
-    })
-
-    if (userList.length > 0) {
-      userList.forEach(function (user, index) {
-        //UserActions.banUser(user)
-      })
-    } else {
-      alert('유저를 선택하세요.')
-    }
-  }
-
-  onPopupUserProfile(user) {
-    PopupActions.openPopup(POPUP.MEMBER, user)
-  }
-
-  onImageError(e) {
-    e.target.src = userDefault
-  }
-
-  toggleCheckBox = () => {
-    $("input[name='postBox']").prop('checked', $(this.refs.checkAll).prop('checked'))
-  }
-
-  get banList() {
+  get renderBanedList() {
     if(this.state.members.size == 0) {
-      return <tr>
+      return (<tr>
         <td colSpan="7">{intlStores.get('sm.SM_MSG_NO_CONTENTS')}</td>
-    </tr>
+      </tr>)
     } else {
       return this.state.members.map((user, i) => {
         let gender
@@ -131,13 +138,14 @@ class BanMember extends React.Component {
         return (
           <tr key={i} >
             <td><input type="checkbox" name="postBox" data-value={user.get('userId')}/></td>
-            <td onClick={this.onPopupUserProfile.bind(null, {userId:user.get('userId')})}><img src={user.get('profileImageUrl') || ''} onError={this.onImageError} className="porfile"
-                                                                                               alt="userProfile"/></td>
-            <td onClick={this.onPopupUserProfile.bind(null, {userId:user.get('userId')})}><a
-            >{user.get('nickNm')}({user.get('userId')})</a>
+            <td onClick={this.onPopupUserProfile.bind(null, {userId:user.get('userId')})}>
+              <img src={user.get('profileImageUrl') || ''} onError={(e) => {e.target.src = userDefault}} className="porfile" alt="userProfile"/>
             </td>
-            <td onClick={this.onPopupUserProfile.bind(null, {userId:user.get('userId')})}>{moment().diff(moment(user.get('birthdayDt')).subtract(1, 'YEAR') || moment().year(), 'YEAR')}
-              ({gender})
+            <td onClick={this.onPopupUserProfile.bind(null, {userId:user.get('userId')})}>
+              <a>{user.get('nickNm')}({user.get('userId')})</a>
+            </td>
+            <td onClick={this.onPopupUserProfile.bind(null, {userId:user.get('userId')})}>
+              {moment().diff(moment(user.get('birthdayDt')).subtract(1, 'YEAR') || moment().year(), 'YEAR')}({gender})
             </td>
             <td onClick={this.onPopupUserProfile.bind(null, {userId:user.get('userId')})}>{authTypeCd}</td>
             <td onClick={this.onPopupUserProfile.bind(null, {userId:user.get('userId')})}>{moment(user.get('createDt')).format('YYYY-MM-DD')}</td>
@@ -147,60 +155,52 @@ class BanMember extends React.Component {
       })
     }
   }
-  render() {
-    return (
-      <article>
-        <hgroup>
-          <h2>정지된 유저리스트</h2>
-          <fieldset id="search_box">
-            <p>
-              <label>검색조건</label>
-              <select id="searchField" ref="searchField">
-                <option value="NICKNAME">닉네임</option>
-                <option value="EMAIL">이메일</option>
-              </select>
-            </p>
-            <input type="text" placeholder="Search" id="searchText" ref="searchText" onKeyPress={this._handleKeyPress}/><a onClick={this._searchUserList} className="btn_search"></a>
-          </fieldset>
-        </hgroup>
-        <div id="contents">
-          <p className="table_info">{intlStores.get('common.COMMON_FLD_TOTAL') + ' ' + this.state.pagination.get('totalCount') + ' ' + intlStores.get('common.COMMON_FLD_COUNT')}</p>
-          <div className="table_wrap">
-            <table className="listTable">
-              <colgroup>
-                <col width="5%"/>
-                <col width="10%"/>
-                <col width="*"/>
-                <col width="14%"/>
-                <col width="14%"/>
-                <col width="15%"/>
-                <col width="15%"/>
-              </colgroup>
-              <thead>
-              <tr>
-                <th><input type="checkbox" id="checkAll" value="-1" ref="checkAll" onClick={this.toggleCheckBox}/></th>
-                <th>프로필</th>
-                <th>닉네임(아이디)</th>
-                <th>나이(성별)</th>
-                <th>가입경로</th>
-                <th>가입일</th>
-                <th>푸쉬</th>
-              </tr>
-              </thead>
-              <tbody>
-              {this.banList}
-              </tbody>
-            </table>
-          </div>
-          <PageList pageObj={this.state.pagination} clickAction={this.movePage}/>
-          <p className="btn_r">
-            <a className="purple btn_w140">준비중</a>
-            <a onClick={this.deleteSelectedItem}>{intlStores.get('common.COMMON_BTN_DELETE')}</a>
-          </p>
-        </div>
-      </article>
-    )
+
+  /***
+   * Move Page
+   * @param pageNo {number} - 이동할 페이지
+   */
+  movePage(pageNo) {
+    this._searchUserList(pageNo)
   }
+
+  _handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      this._searchUserList()
+    }
+  }
+
+  _searchUserList=(pageNo = 1)=> {
+    log(this.refs)
+    const searchField = this.refs.searchField.value
+    const searchText = this.refs.searchText.value
+
+    this.listUsers({pageNo: pageNo, searchField: searchField,  searchText:searchText})
+  }
+
+  deleteSelectedItem() {
+    let userList = []
+    userList = $('input:checked').toArray().map((row)=> {
+      return {userId: row.value}
+    })
+
+    if (userList.length > 0) {
+      userList.forEach(function (user) {
+        UserActions.banUser(user)
+      })
+    } else {
+      alert('유저를 선택하세요.')
+    }
+  }
+
+  onPopupUserProfile(user) {
+    PopupActions.openPopup(POPUP.MEMBER, user)
+  }
+
+  toggleCheckBox = () => {
+    $("input[name='postBox']").prop('checked', $(this.refs.checkAll).prop('checked'))
+  }
+
 }
 const MemberContainer = Container.create(BanMember)
 export default MemberContainer

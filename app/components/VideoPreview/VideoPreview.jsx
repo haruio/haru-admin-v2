@@ -48,6 +48,14 @@ export default class VideoPreview extends React.Component {
       this.setState({type:'youtube', video: videoid[1]})
     }
   }
+  
+  render() {
+    return (
+      <div className="moive">
+        {this.renderVideo}
+      </div>
+    )
+  }
 
   get renderVideo() {
     if(this.state.video == '') {
@@ -71,13 +79,5 @@ export default class VideoPreview extends React.Component {
         )
       }
     }
-  }
-
-  render() {
-    return (
-      <div className="moive">
-        {this.renderVideo}
-      </div>
-    )
   }
 }

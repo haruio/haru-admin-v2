@@ -26,6 +26,8 @@ let suggestKeyword = ['music']
  *
  * history
  * 처음에는 비디오와 이미지를 분리했다가 공유되는 메소드가 많아서 다시 합치게 됨
+ *
+ * this.props.type == video or image 로 타입을 구분함
  * author : jungun.park
  */
 
@@ -95,10 +97,11 @@ export default class MetaPanel extends React.Component {
   }
 
   _makeSuggestKeywordList = (nextProps) => {
-    // tagsinput 에 suggest keyword 만들기
+    // tagsinput 에 suggest keyword 만들기. channels, categories를 통해서 만든다
     nextProps.channels.forEach((channel) => {
       suggestKeyword.push(channel.get('name'))
     })
+
     nextProps.categories.forEach((category) => {
       suggestKeyword.push(category.get('name'))
     })
@@ -339,6 +342,7 @@ export default class MetaPanel extends React.Component {
   }
 
   /**
+   * 비디오에서만 활용함
    * 비디오 url 입력 시, 비디오 미리보기 변경
    */
   onBlurVideoURL = () => {

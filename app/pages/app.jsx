@@ -19,7 +19,7 @@ import RejectPopup from '../components/Popup/RejectPopup'
 import PublishPopup from '../components/Popup/PublishPopup'
 import MainFeedPopup from '../components/Popup/MainFeedPopup'
 import PublishedContentPopup from '../components/Popup/PublishedContentPopup'
-
+import ContentDetailPopup from '../components/ContentDetailPopUp'
 /*
 import ga from 'react-google-analytics'
 var GAInitiailizer = ga.Initializer
@@ -54,6 +54,7 @@ export default class App extends React.Component {
           <PublishPopup key={POPUP.PUBLISH}/>
           <MainFeedPopup key={POPUP.MAINFEED}/>
           <PublishedContentPopup key={POPUP.PUBLISHEDCONTENT}/>
+          <ContentDetailPopup key={POPUP.CONTENTDETAIL}/>
         </Popup>
       </section>
     )
@@ -61,4 +62,5 @@ export default class App extends React.Component {
   //<GAInitiailizer />
 }
 
+//import ContentDetailPopup from '../../components/ContentDetailPopUp'
 

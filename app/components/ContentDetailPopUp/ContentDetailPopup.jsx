@@ -25,24 +25,19 @@ export default class ContentDetailPopup extends React.Component {
       after: onAfter,
       prev: '#prev_list',
       next: '#next_list'
-    });
+    })
     function onAfter(curr, next, opts) {
       var index = opts.currSlide;
-      $('#prev_list')[index == 0 ? 'hide' : 'show']();
-      $('#next_list')[index == opts.slideCount - 1 ? 'hide' : 'show']();
+      $('#prev_list')[index == 0 ? 'hide' : 'show']()
+      $('#next_list')[index == opts.slideCount - 1 ? 'hide' : 'show']()
     }
-  }
-
-  popClose = (e) => {
-    log(e)
-    $("#contents_detail").animate({'margin-top': '-100%', opacity: 0}, 200);
   }
 
   render() {
     return (
       <div id="contents_detail">
         <div id="detail_info">
-          <p style={{"backgroundImage":"url(http://assets2.moncast.com/image/0ac19364b6e7057c.jpeg)"}}><em>애교섞인 말투와, 나를 바라보며 미소짓는 모습을 봤을때 애교섞인 말투와, </em></p>
+          <p style={{backgroundImage:'url(http://assets2.moncast.com/image/0ac19364b6e7057c.jpeg)'}}><em>애교섞인 말투와, 나를 바라보며 미소짓는 모습을 봤을때 애교섞인 말투와, </em></p>
           <table className="writeTable">
             <colgroup><col width="200px" /><col width="*" /></colgroup>
             <tbody>
@@ -113,4 +108,9 @@ export default class ContentDetailPopup extends React.Component {
       </div>
     )
   }
+
+  popClose = (e) => {
+    $("#contents_detail").animate({'margin-top': '-100%', opacity: 0}, 200)
+  }
+
 }

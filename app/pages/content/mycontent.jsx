@@ -43,16 +43,6 @@ export default class MyContent extends React.Component {
     window.removeEventListener('scroll', this.scrollListener)
   }
 
-  /***
-   * Get Current ScrollPosition
-   * return {number} - current scroll position value.
-   */
-  get currentScrollPosition() {
-    return (window.pageYOffset !== undefined) ?
-      window.pageYOffset :
-      (document.documentElement || document.body.parentNode || document.body).scrollTop
-  }
-
   scrollListener = () => {
     // get current scroll position
     const waitingpos = ReactDOM.findDOMNode(this.refs.waiting).offsetTop - 300
@@ -74,19 +64,14 @@ export default class MyContent extends React.Component {
     }
   }
 
-  moveSection=(index) =>{
-    let scrollPosition = 0
-
-    if(index == 2) {
-      const waitingel = ReactDOM.findDOMNode(this.refs.waiting)
-      scrollPosition = waitingel.offsetTop - 300
-
-    } else if (index == 3) {
-      const returnel = ReactDOM.findDOMNode(this.refs.return)
-      scrollPosition = returnel.offsetTop - 300
-    }
-
-    $('html, body').animate({ scrollTop: scrollPosition }, 400)
+  /***
+   * Get Current ScrollPosition
+   * return {number} - current scroll position value.
+   */
+  get currentScrollPosition() {
+    return (window.pageYOffset !== undefined) ?
+      window.pageYOffset :
+      (document.documentElement || document.body.parentNode || document.body).scrollTop
   }
 
   render() {
@@ -101,6 +86,26 @@ export default class MyContent extends React.Component {
         <div style={{ height:'600px' }}></div>
       </article>
     )
+  }
+
+
+  /***
+   * PageList click event
+   * @param page {String} - move page number
+   */
+  moveSection = (index) => {
+    let scrollPosition = 0
+
+    if (index == 2) {
+      const waitingel = ReactDOM.findDOMNode(this.refs.waiting)
+      scrollPosition = waitingel.offsetTop - 300
+
+    } else if (index == 3) {
+      const returnel = ReactDOM.findDOMNode(this.refs.return)
+      scrollPosition = returnel.offsetTop - 300
+    }
+
+    $('html, body').animate({scrollTop: scrollPosition}, 400)
   }
 }
 

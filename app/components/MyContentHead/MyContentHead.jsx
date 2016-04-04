@@ -17,14 +17,6 @@ export default class MyContentHead extends React.Component {
     this.state = { selectSection: 1 }
   }
 
-  changeSection = (index)=> {
-    this.setState({ selectSection: index })
-  }
-
-  MoveSection(index) {
-    this.props.moveSection(index)
-  }
-
   render() {
     const selectSection = this.state.selectSection
     // TODO : 다국어 처리
@@ -51,5 +43,13 @@ export default class MyContentHead extends React.Component {
         </fieldset>
       </div>
     )
+  }
+
+  changeSection = (index)=> {
+    this.setState({ selectSection: index })
+  }
+
+  MoveSection(index) {
+    this.props.moveSection(index)
   }
 }

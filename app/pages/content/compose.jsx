@@ -10,8 +10,6 @@ const log = debug('application:Compose.jsx')
 
 import MetaPanel from '../../components/MetaPanel'
 import ContentAddZone from '../../components/ContentAddZone'
-// 이미지 에서만 사용됨
-//import ContentDetailPopup from '../../components/ContentDetailPopUp'
 
 import ContentDetailStore from '../../stores/ContentDetailStore'
 import CategoryStore from '../../stores/CategoryStore'
@@ -28,6 +26,7 @@ class Compose extends React.Component {
   static contextTypes = {
     router: React.PropTypes.object.isRequired
   }
+  
   static getStores() {
     return [ContentDetailStore, CategoryStore, ChannelStore]
   }
@@ -41,7 +40,6 @@ class Compose extends React.Component {
   }
 
   componentDidMount() {
-
     // param이 있고 postdetail이 없는 경우 서버에 요청함
     if (this.props.params.id !== undefined) {
       ContentActions.getContent(this.props.params.id)
@@ -75,6 +73,5 @@ class Compose extends React.Component {
     )
   }
 }
-//        <ContentDetailPopup />
 const ComposeContainer = Container.create(Compose)
 export default ComposeContainer

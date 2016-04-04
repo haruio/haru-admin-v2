@@ -33,43 +33,6 @@ class PublishedContentPopup extends React.Component {
     ContentActions.getPublishContents()
   }
 
-  /***
-   * Move Page
-   * @param page {number} - 이동할 페이지
-   */
-  movePage(page) {
-    ContentActions.getPublishContents(page)
-  }
-
-  selectItem(id) {
-    if(this.props.view == 'banner') {
-
-      AppActions.getBannerPost(PublishedListStore.getContentListById(id))
-    } else {
-      AppActions.getPostDetail(PublishedListStore.getContentListById(id))
-    }
-    this.props.close()
-  }
-  /***
-   * 상위 이벤트가 하위에 내려오는 것을 맊는 기능
-   * 팝업 밖을 클릭할때 팝업을 닫는 기능이 있는데 팝업을 누를때도 먹을 수 있어서 기능이 내려가지 않도록 stopPropagation함
-   * @param e {MoveEvent} - click event clear
-   */
-  clearEvent(e) {
-    e.stopPropagation()
-  }
-
-  get PublishedList() {
-    return this.state.publish.map((item, i) => {
-      return (<tr key={i} onClick={this.selectItem.bind(this, item.get('postSeq'))} style={{cursor:'pointer'}}>
-        <td><img src={item.get('thumbnailUrl')} alt="thumbnail" /></td>
-        <td className="al">{item.get('postTitle')}</td>
-        <td>{moment(item.get('publishStartDt')).format('YYYY-MM-DD')}<br/>{moment(item.get('publishStartDt')).format('hh:mm')}</td>
-        <td><a href="" className="btn_select">선택</a></td>
-      </tr>)
-    })
-  }
-
   render() {
     return (
       <div className="pop_wrap">
@@ -103,6 +66,45 @@ class PublishedContentPopup extends React.Component {
       </div>
     )
   }
+
+  get PublishedList() {
+    return this.state.publish.map((item, i) => {
+      return (<tr key={i} onClick={this.selectItem.bind(this, item.get('postSeq'))} style={{cursor:'pointer'}}>
+        <td><img src={item.get('thumbnailUrl')} alt="thumbnail" /></td>
+        <td className="al">{item.get('postTitle')}</td>
+        <td>{moment(item.get('publishStartDt')).format('YYYY-MM-DD')}<br/>{moment(item.get('publishStartDt')).format('hh:mm')}</td>
+        <td><a href="" className="btn_select">선택</a></td>
+      </tr>)
+    })
+  }
+
+  /***
+   * Move Page
+   * @param page {number} - 이동할 페이지
+   */
+  movePage(page) {
+    ContentActions.getPublishContents(page)
+  }
+
+  selectItem(id) {
+    if(this.props.view == 'banner') {
+
+      AppActions.getBannerPost(PublishedListStore.getContentListById(id))
+    } else {
+      AppActions.getPostDetail(PublishedListStore.getContentListById(id))
+    }
+    this.props.close()
+  }
+  
+  /***
+   * 상위 이벤트가 하위에 내려오는 것을 맊는 기능
+   * 팝업 밖을 클릭할때 팝업을 닫는 기능이 있는데 팝업을 누를때도 먹을 수 있어서 기능이 내려가지 않도록 stopPropagation함
+   * @param e {MoveEvent} - click event clear
+   */
+  clearEvent(e) {
+    e.stopPropagation()
+  }
+
 }
 const PublishedContentPopupContainer = Container.create(PublishedContentPopup)
 export default PublishedContentPopupContainer

@@ -30,48 +30,6 @@ class SearchBar extends React.Component {
     }
   }
 
-  get categoriesList() {
-    return this.state.categories.map((category) => {
-      return <option key={category.get('categorySeq')}  value={category.get('categorySeq')}>{category.get('name')}</option>
-    })
-  }
-
-  get channelList() {
-    return this.state.channels.map((channel) => {
-      return <option key={channel.get('channelSeq')} value={channel.get('channelSeq')}>{channel.get('name')}</option>
-    })
-  }
-
-
-  _handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      this.searchContents()
-    }
-  }
-
-  searchContents = () => {
-    //(pageNo=1, pageSize=30, orderField='', orderMethod='', searchField='', searchText='') {
-    let searchChannel = this.refs.searchChannel.value
-    if(searchChannel === intlStores.get('cms.CMS_FLD_CHANNEL')) {
-      searchChannel = ''
-    }
-    let searchCategory = this.refs.searchCategory.value
-    if(searchCategory === intlStores.get('cms.CMS_FLD_CATEGORY')) {
-      searchCategory = ''
-    }
-    let searchType = this.props.searchType
-    if(searchType === 'ALL') {
-      searchType = ''
-    }
-
-    this.props.onSearch(1, 30, '', '',
-      this.refs.searchField.value,
-      this.refs.searchText.value,
-      searchChannel,
-      searchCategory,
-      searchType)
-  }
-
   render() {
     return (
       <fieldset id="search_box">
@@ -100,6 +58,54 @@ class SearchBar extends React.Component {
         <a onClick={this.searchContents} className="btn_search"></a>
       </fieldset>
     )
+  }
+
+  get categoriesList() {
+    return this.state.categories.map((category) => {
+      return <option key={category.get('categorySeq')}  value={category.get('categorySeq')}>{category.get('name')}</option>
+    })
+  }
+
+  get channelList() {
+    return this.state.channels.map((channel) => {
+      return <option key={channel.get('channelSeq')} value={channel.get('channelSeq')}>{channel.get('name')}</option>
+    })
+  }
+
+  /***
+   * searchText에서 엔터 입력시 searchContents를 호출함
+   * @param e {KeyboardEvent} - key press event
+   */
+  _handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      this.searchContents()
+    }
+  }
+
+  /***
+   * search contents 검색을 하는 함수
+   * 
+   */
+  searchContents = () => {
+    let searchChannel = this.refs.searchChannel.value
+    if(searchChannel === intlStores.get('cms.CMS_FLD_CHANNEL')) {
+      searchChannel = ''
+    }
+    let searchCategory = this.refs.searchCategory.value
+    if(searchCategory === intlStores.get('cms.CMS_FLD_CATEGORY')) {
+      searchCategory = ''
+    }
+    let searchType = this.props.searchType
+    if(searchType === 'ALL') {
+      searchType = ''
+    }
+
+    this.props.onSearch(1, 30, '', '',
+      this.refs.searchField.value,
+      this.refs.searchText.value,
+      searchChannel,
+      searchCategory,
+      searchType)
   }
 }
 const SearchBarContainer = Container.create(SearchBar)

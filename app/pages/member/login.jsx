@@ -37,6 +37,52 @@ class Login extends React.Component {
     }
   }
 
+  render() {
+    // Error className 지정
+    const iserror = this.state.error.code == NO_INPUT_EMAIL
+      || this.state.error.code == INVALID_EMAIL
+      || this.state.error.code == LOGINFAIL
+
+    let emailError = cx('txt', {error: iserror})
+    let emailAlert = cx('account_alert', {hide: !(iserror)})
+
+    let passwordError = cx('txt', {error: this.state.error.code == NO_INPUT_PW})
+    let passwordAlert = cx('account_alert', {hide: this.state.error.code != NO_INPUT_PW})
+
+    return (
+      <div id="login" className="account_form login_box">
+        <header>
+          <LangSelector lang="ko_KR"/>
+        </header>
+        <div>
+          <h1>
+            <img src={logo2} alt="logo"/>
+            <strong>{intlStores.get('user.LOGIN_TXT_WELCOME')}</strong>
+            {intlStores.get('user.LOGIN_TXT_DISPLAY')}
+          </h1>
+          <ul>
+            <li>
+              <input type="text" className={emailError} ref="email" placeholder={intlStores.get('user.LOGIN_FLD_EMAIL')}
+                     onKeyDown={this.handlekeydown}/>
+              <div className={emailAlert}>{this.state.error.msg}</div>
+            </li>
+            <li>
+              <input type="password" className={passwordError} ref="pwd"
+                     placeholder={intlStores.get('user.LOGIN_FLD_PWD')} onKeyDown={this.handlekeydown}/>
+              <div className={passwordAlert}>{intlStores.get('user.LOGIN_MSG_ERROR_PWD')}</div>
+            </li>
+          </ul>
+          <a onClick={this.handleSubmit}
+             className="btn_account btn_account_blue">{intlStores.get('user.LOGIN_BTN_LOGIN')}</a>
+          <Link to="/join" className="btn_account btn_account_purple">{intlStores.get('user.LOGIN_TXT_SIGNUP')}</Link>
+          <p
+            className="txt_gray">{intlStores.get('user.LOGIN_TXT_CONTACT1')}<br />{intlStores.get('user.LOGIN_TXT_CONTACT2')}
+          </p>
+        </div>
+      </div>
+    )
+  }
+  
   /***
    * handle 'enter key'
    * @param e {KeyboardEvent} - keyboard event listener object
@@ -82,52 +128,6 @@ class Login extends React.Component {
     userData.email = emailval
     userData.password = utility.getEncryptionData(emailval, pwdval)
     AuthActions.LoginWithEmail(userData)
-  }
-
-  render() {
-    // Error className 지정
-    const iserror = this.state.error.code == NO_INPUT_EMAIL
-      || this.state.error.code == INVALID_EMAIL
-      || this.state.error.code == LOGINFAIL
-
-    let emailError = cx('txt', {error: iserror})
-    let emailAlert = cx('account_alert', {hide: !(iserror)})
-
-    let passwordError = cx('txt', {error: this.state.error.code == NO_INPUT_PW})
-    let passwordAlert = cx('account_alert', {hide: this.state.error.code != NO_INPUT_PW})
-
-    return (
-      <div id="login" className="account_form login_box">
-        <header>
-          <LangSelector lang="ko_KR"/>
-        </header>
-        <div>
-          <h1>
-            <img src={logo2} alt="logo"/>
-            <strong>{intlStores.get('user.LOGIN_TXT_WELCOME')}</strong>
-            {intlStores.get('user.LOGIN_TXT_DISPLAY')}
-          </h1>
-          <ul>
-            <li>
-              <input type="text" className={emailError} ref="email" placeholder={intlStores.get('user.LOGIN_FLD_EMAIL')}
-                     onKeyDown={this.handlekeydown}/>
-              <div className={emailAlert}>{this.state.error.msg}</div>
-            </li>
-            <li>
-              <input type="password" className={passwordError} ref="pwd"
-                     placeholder={intlStores.get('user.LOGIN_FLD_PWD')} onKeyDown={this.handlekeydown}/>
-              <div className={passwordAlert}>{intlStores.get('user.LOGIN_MSG_ERROR_PWD')}</div>
-            </li>
-          </ul>
-          <a onClick={this.handleSubmit}
-             className="btn_account btn_account_blue">{intlStores.get('user.LOGIN_BTN_LOGIN')}</a>
-          <Link to="/join" className="btn_account btn_account_purple">{intlStores.get('user.LOGIN_TXT_SIGNUP')}</Link>
-          <p
-            className="txt_gray">{intlStores.get('user.LOGIN_TXT_CONTACT1')}<br />{intlStores.get('user.LOGIN_TXT_CONTACT2')}
-          </p>
-        </div>
-      </div>
-    )
   }
 }
 

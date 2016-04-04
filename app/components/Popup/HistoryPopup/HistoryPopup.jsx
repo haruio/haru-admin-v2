@@ -8,10 +8,6 @@ import debug from 'debug'
 const log = debug('application:HistoryPopup.jsx')
 
 export default class HistoryPopup extends React.Component {
-  clearEvent(e) {
-    e.stopPropagation()
-  }
-
   render() {
     return (
       <div className="pop_wrap">
@@ -99,5 +95,9 @@ export default class HistoryPopup extends React.Component {
         </div>
       </div>
     )
+  }
+
+  clearEvent(e) {
+    e.stopPropagation()
   }
 }

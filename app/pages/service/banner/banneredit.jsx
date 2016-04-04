@@ -42,51 +42,7 @@ class BannerEdit extends React.Component {
       })
     }
   }
-
-  /***
-   * Event Handlers
-   */
-  SeachPublishedPost() {
-    PopupActions.openPopup(POPUP.PUBLISHEDCONTENT, {view: 'banner', title: '추천 컨텐츠 검색'})
-  }
-
-  /***
-   * Recommend Post Render
-   */
-  get RecommendPost() {
-    // new 상태일때
-    if ((this.props.params.id == undefined && this.state.banner.size === 0)
-      || this.state.banner.get('post') == undefined) {
-      return (
-        <ul className="list">
-          <li ref="item" onMouseOver={this.movseOver} onMouseOut={this.mouseOut}>
-            <div id="recommend_empty" onClick={this.SeachPublishedPost}>
-              <img src={icon_plus}/>
-            </div>
-          </li>
-        </ul>)
-    } else {
-      const banner = this.state.banner
-      // TODO : channel 이 여러개일땐 어떻게 하지?
-      return (
-        <ul className="list">
-          <li ref="item" onMouseOver={this.movseOver} onMouseOut={this.mouseOut}>
-            <div>
-              <span><img src={banner.getIn(['post', 'channel', 'iconImageUrl'], '')} alt="channel icon"/></span>
-              <b><span>{banner.getIn(['post', 'channel', 'name'], '')}</span></b>
-              <em style={{ backgroundImage:'url('+ banner.getIn(['post','thumbnailUrl'], '') +')' }}></em>
-              <p>
-                <span><a onClick={this.SeachPublishedPost}><img src={edit1} alt="" title="수정"/></a></span>
-              </p>
-            </div>
-            <dl>
-              <dt>{banner.getIn(['post', 'postTitle'], '')}</dt>
-            </dl>
-          </li>
-        </ul>)
-    }
-  }
-
+  
   render() {
     const banner = this.state.banner
     return (
@@ -183,6 +139,50 @@ class BannerEdit extends React.Component {
         </div>
       </article>
     )
+  }
+
+  /***
+   * Recommend Post Render
+   */
+  get RecommendPost() {
+    // new 상태일때
+    if ((this.props.params.id == undefined && this.state.banner.size === 0)
+      || this.state.banner.get('post') == undefined) {
+      return (
+        <ul className="list">
+          <li ref="item" onMouseOver={this.movseOver} onMouseOut={this.mouseOut}>
+            <div id="recommend_empty" onClick={this.SeachPublishedPost}>
+              <img src={icon_plus}/>
+            </div>
+          </li>
+        </ul>)
+    } else {
+      const banner = this.state.banner
+      // TODO : channel 이 여러개일땐 어떻게 하지?
+      return (
+        <ul className="list">
+          <li ref="item" onMouseOver={this.movseOver} onMouseOut={this.mouseOut}>
+            <div>
+              <span><img src={banner.getIn(['post', 'channel', 'iconImageUrl'], '')} alt="channel icon"/></span>
+              <b><span>{banner.getIn(['post', 'channel', 'name'], '')}</span></b>
+              <em style={{ backgroundImage:'url('+ banner.getIn(['post','thumbnailUrl'], '') +')' }}></em>
+              <p>
+                <span><a onClick={this.SeachPublishedPost}><img src={edit1} alt="" title="수정"/></a></span>
+              </p>
+            </div>
+            <dl>
+              <dt>{banner.getIn(['post', 'postTitle'], '')}</dt>
+            </dl>
+          </li>
+        </ul>)
+    }
+  }
+
+  /***
+   * Event Handlers
+   */
+  SeachPublishedPost() {
+    PopupActions.openPopup(POPUP.PUBLISHEDCONTENT, {view: 'banner', title: '추천 컨텐츠 검색'})
   }
 }
 const BannerEditContainer = Container.create(BannerEdit)

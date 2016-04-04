@@ -19,6 +19,10 @@ const bg_calendar = require('image!../../../assets/img/bg_calendar.png')
 
 import BannerStore from '../../../stores/BannerStore'
 
+/***
+ * Banner List
+ * author : jungun.park
+ */
 class BannerList extends React.Component {
   static contextTypes = {
     router: React.PropTypes.object.isRequired

@@ -41,20 +41,6 @@ class Inspection extends React.Component {
     ContentActions.getInspectionContent()
   }
 
-
-  movePage = (page) => {
-    let searchType = this.state.searchType
-    if (searchType == 'ALL') {
-      searchType = ''
-    }
-    ContentActions.getViewedContents(page, 30, '', '',
-      '',
-      '',
-      '',
-      '',
-      searchType)
-  }
-
   render() {
     return (
       <article id="contents_list" className="publish">
@@ -64,6 +50,19 @@ class Inspection extends React.Component {
         <PageList pageObj={this.state.pagination} clickAction={this.movePage} />
       </article>
     )
+  }
+
+
+  /***
+   * PageList click event
+   * @param page {String} - move page number
+   */
+  movePage = (page) => {
+    let searchType = this.state.searchType
+    if (searchType == 'ALL') {
+      searchType = ''
+    }
+    ContentActions.getViewedContents(page, 30, '', '', '', '', '', '', searchType)
   }
 }
 

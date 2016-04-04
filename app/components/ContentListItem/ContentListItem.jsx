@@ -36,27 +36,66 @@ export default class ContentListItem extends React.Component {
     }
   }
 
-  showHistoryPopup=()=> {
-    PopupActions.openPopup(POPUP.HISTORY, {postSeq:this.props.content.get('postSeq')})
-  }
-  showPublishPopup=()=> {
-    PopupActions.openPopup(POPUP.PUBLISH, {postSeq:this.props.content.get('postSeq')})
-  }
-  showRejectPopup=()=> {
-    PopupActions.openPopup(POPUP.REJECT, {postSeq:this.props.content.get('postSeq')})
-  }
-  showDeletePopup=()=> {
-    if(window.confirm(intlStores.get('common.COMMON_MSG_DEL'))) {
-      ContentActions.deleteContent(this.props.content.get('postSeq'))
+  render() {
+    const content = this.props.content
+
+    let thumnail
+    let author
+    let title
+    if(this.props.type == CONTENT.PUBLISHED ||
+      this.props.type == CONTENT.RESERVED ||
+      this.props.type == CONTENT.DELETEED) {
+      thumnail = content.get('thumbnailUrl')
+      author = content.get('postAuthor')
+      title = content.get('postTitle')
+    } else {
+      thumnail = content.get('thumbnail')
+      author = content.get('author')
+      title = content.get('title')
     }
+
+    return (
+      <li ref="item" onMouseOver={this.movseOver} onMouseOut={this.mouseOut}>
+        <div>
+          <span><img src={content.getIn(['channel', 'iconImageUrl'], null)} alt=""/></span>
+          <b></b>
+          <em style={{ backgroundImage:'url('+thumnail+')' }}>
+            {this.renderTypeIcon}
+          </em>
+          <p>
+            {this.renderHoverButton}
+          </p>
+        </div>
+        {this.renderPublishInfo}
+        <dl>
+          <dt>{title}</dt>
+          <dd>임시저장 : 2015-08-08 PM 12:25</dd>
+          <dd>{'작성자 : ' + author}</dd>
+        </dl>
+      </li>
+    )
   }
-  showCancelRequest=()=> {
-    if(window.confirm(intlStores.get('cms.CMS_MSG_NEED_APPROVE'))) {
-      ContentActions.requestCancelRequest(this.props.content.get('postSeq'))
+
+  get renderTypeIcon() {
+    const content = this.props.content
+    let contenttype = 'VDO'
+    if(this.props.type == CONTENT.PUBLISHED ||
+      this.props.type == CONTENT.RESERVED ||
+      this.props.type == CONTENT.DELETEED) {
+      contenttype = content.get('postTypeCd')
+
+    } else {
+      contenttype= content.get('type')
+    }
+
+    if(contenttype === 'VDO') {
+      return <span className="movie">{content.get('strDuration')}</span>
+    } else {
+      return <span className="images">{content.get('imageCnt')}</span>
     }
   }
 
-  get getHoverButton() {
+  get renderHoverButton() {
     const content = this.props.content
 
     let contenttype = 'video'
@@ -128,8 +167,7 @@ export default class ContentListItem extends React.Component {
     }
   }
 
-
-  get publishInfo() {
+  get renderPublishInfo() {
     // Mycontent 화면과 inspection 화면에는 publish 된적이 없기 때문에 해당 정보를 띄우지 않는다.
     if (this.props.type == CONTENT.INSPECTION
       || this.props.type == CONTENT.CREATE
@@ -149,22 +187,28 @@ export default class ContentListItem extends React.Component {
       </p>)
   }
 
-  get renderTypeIcon() {
-    const content = this.props.content
-    let contenttype = 'VDO'
-    if(this.props.type == CONTENT.PUBLISHED ||
-      this.props.type == CONTENT.RESERVED ||
-      this.props.type == CONTENT.DELETEED) {
-      contenttype = content.get('postTypeCd')
 
-    } else {
-      contenttype= content.get('type')
+  showHistoryPopup=()=> {
+    PopupActions.openPopup(POPUP.HISTORY, {postSeq:this.props.content.get('postSeq')})
+  }
+  
+  showPublishPopup=()=> {
+    PopupActions.openPopup(POPUP.PUBLISH, {postSeq:this.props.content.get('postSeq')})
+  }
+
+  showRejectPopup=()=> {
+    PopupActions.openPopup(POPUP.REJECT, {postSeq:this.props.content.get('postSeq')})
+  }
+
+  showDeletePopup=()=> {
+    if(window.confirm(intlStores.get('common.COMMON_MSG_DEL'))) {
+      ContentActions.deleteContent(this.props.content.get('postSeq'))
     }
+  }
 
-    if(contenttype === 'VDO') {
-      return <span className="movie">{content.get('strDuration')}</span>
-    } else {
-      return <span className="images">{content.get('imageCnt')}</span>
+  showCancelRequest=()=> {
+    if(window.confirm(intlStores.get('cms.CMS_MSG_NEED_APPROVE'))) {
+      ContentActions.requestCancelRequest(this.props.content.get('postSeq'))
     }
   }
 
@@ -175,43 +219,4 @@ export default class ContentListItem extends React.Component {
     $(this.refs.item).find('div p').stop().fadeOut(300)
   }
 
-  render() {
-    const content = this.props.content
-
-    let thumnail
-    let author
-    let title
-    if(this.props.type == CONTENT.PUBLISHED ||
-      this.props.type == CONTENT.RESERVED ||
-      this.props.type == CONTENT.DELETEED) {
-      thumnail = content.get('thumbnailUrl')
-      author = content.get('postAuthor')
-      title = content.get('postTitle')
-    } else {
-      thumnail = content.get('thumbnail')
-      author = content.get('author')
-      title = content.get('title')
-    }
-
-    return (
-      <li ref="item" onMouseOver={this.movseOver} onMouseOut={this.mouseOut}>
-        <div>
-          <span><img src={content.getIn(['channel', 'iconImageUrl'], null)} alt=""/></span>
-          <b></b>
-          <em style={{ backgroundImage:'url('+thumnail+')' }}>
-            {this.renderTypeIcon}
-          </em>
-          <p>
-            {this.getHoverButton}
-          </p>
-        </div>
-        {this.publishInfo}
-        <dl>
-          <dt>{title}</dt>
-          <dd>임시저장 : 2015-08-08 PM 12:25</dd>
-          <dd>{'작성자 : ' + author}</dd>
-        </dl>
-      </li>
-    )
-  }
 }

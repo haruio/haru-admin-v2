@@ -37,19 +37,6 @@ class Publish extends React.Component {
     ContentActions.getViewedContents()
   }
 
-  movePage = (page) => {
-    let searchType = this.state.searchType
-    if (searchType == 'ALL') {
-      searchType = ''
-    }
-    ContentActions.getViewedContents(page, 30, '', '',
-      '',
-      '',
-      '',
-      '',
-      searchType)
-  }
-
   render() {
     log(this.state)
     return (
@@ -61,6 +48,19 @@ class Publish extends React.Component {
       </article>
     )
   }
+
+  /***
+   * PageList click event
+   * @param page {String} - move page number
+   */
+  movePage = (page) => {
+    let searchType = this.state.searchType
+    if (searchType == 'ALL') {
+      searchType = ''
+    }
+    ContentActions.getViewedContents(page, 30, '', '', '', '', '', '', searchType)
+  }
+
 }
 
 const PublishContainer = Container.create(Publish)

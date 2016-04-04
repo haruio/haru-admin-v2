@@ -17,8 +17,9 @@ export default class MainFeed extends React.Component {
   }
 
   componentDidMount() {
+    // TODO event 변경 필요
     //메인피트 리스트
-    $(".main_list>li").hover(function() {
+    $(".main_list>li").hover(function () {
       $(this).find('.modifi').stop().fadeIn(300).stop().animate({opacity:1}, 100)
     }, function() {
       $(this).find('.modifi').stop().fadeOut(300)

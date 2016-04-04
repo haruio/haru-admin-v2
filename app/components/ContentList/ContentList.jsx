@@ -23,10 +23,15 @@ export default class ContentList extends React.Component {
     content: ImmutablePropTypes.list
   }
 
-  get EmptyElement() {
-    return <div className="empty">
-      <p>{this.props.listTitle} 컨텐츠가 없습니다.</p>
-    </div>
+  render() {
+    return (
+      <div id={this.props.listId}>
+        <h2>{this.props.listTitle + ' Contents'}</h2>
+        <ul className="list">
+          {this.listItem}
+        </ul>
+      </div>
+    )
   }
 
   get listItem() {
@@ -41,14 +46,9 @@ export default class ContentList extends React.Component {
     }
   }
 
-  render() {
-    return (
-      <div id={this.props.listId}>
-        <h2>{this.props.listTitle + ' Contents'}</h2>
-        <ul className="list">
-          {this.listItem}
-        </ul>
-      </div>
-    )
+  get EmptyElement() {
+    return <div className="empty">
+      <p>{this.props.listTitle} 컨텐츠가 없습니다.</p>
+    </div>
   }
 }

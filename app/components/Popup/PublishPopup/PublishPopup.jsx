@@ -8,10 +8,6 @@ import debug from 'debug'
 const log = debug('application:PublishPopup.jsx')
 
 export default class PublishPopup extends React.Component {
-  clearEvent(e) {
-    e.stopPropagation()
-  }
-
   render() {
     return (
       <div className="pop_wrap">
@@ -39,5 +35,9 @@ export default class PublishPopup extends React.Component {
         </div>
       </div>
     )
+  }
+
+  clearEvent(e) {
+    e.stopPropagation()
   }
 }

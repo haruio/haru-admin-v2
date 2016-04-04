@@ -3,6 +3,8 @@
  */
 import keyMirror from 'fbjs/lib/keyMirror'
 
+
+// TODO : 안쓰는 상수 제거 필요
 export default keyMirror({
   /**
    * My Content
@@ -295,6 +297,7 @@ export const POPUP = keyMirror({
   PUBLISH: null,
   HISTORY: null,
   PUBLISHEDCONTENT: null,
+  CONTENTDETAIL: null,
   MAINFEED: null,
 
 

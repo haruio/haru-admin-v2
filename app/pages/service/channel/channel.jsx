@@ -31,10 +31,49 @@ class Channel extends React.Component {
     $('#channel_list').sortable({})
   }
 
+  render() {
+    return (
+      <article>
+        <hgroup>
+          <h2>채널 관리</h2>
+        </hgroup>
+        <div id="service_head">
+          <ul>
+            <li className="icon_add"><Link to="/service/mgmt/channel/new">{intlStores.get('sm.SM_BTN_ADD')}</Link></li>
+            <li className="icon_apply"><a onClick={this.saveOrderChannel}>{intlStores.get('common.COMMON_BTN_ARRANGE')}</a></li>
+          </ul>
+        </div>
+        <div id="service_contents">
+          <ul className="hover_effect" id="channel_list">
+            {this.renderChannelList}
+          </ul>
+        </div>
+      </article>
+    )
+  }
+
+  get renderChannelList() {
+    return this.state.channel.map((item) => {
+      const iconlock = cn('ico_lock', {ico_unlock : item.get('channelViewCd') == 'Y'})
+      return (
+        <li key={item.get('channelSeq')} data-id={item.get('channelSeq')} className={iconlock} style={{backgroundImage:'url('+item.get('bgImageUrl')+')'}}>
+          <div className="service_title2">
+            <span className="icon_channel" style={{backgroundImage:'url('+item.get('iconImageUrl')+')'}}></span>
+            <em>{item.get('name')}</em>
+          </div>
+          <div className="e_bg">
+            <Link to={`/service/mgmt/channel/${item.get('channelSeq')}`}><img src={ct_edit1} alt="" title="수정"/></Link>
+            <a onClick={this.deleteChannel.bind(this, item.get('channelSeq'))}><img src={ct_edit2} alt="" title="삭제"/></a>
+          </div>
+        </li>
+      )
+    })
+  }
+
   /***
    * 채널 삭제
    * @param channelSeq {number} - channel sequnce number
-     */
+   */
   deleteChannel(channelSeq) {
     if (channelSeq != '' && window.confirm(intlStores.get('common.COMMON_MSG_DEL'))) {
       AppActions.deleteChannel(channelSeq)
@@ -57,44 +96,6 @@ class Channel extends React.Component {
     })
   }
 
-  get getChannelList() {
-    return this.state.channel.map((item) => {
-      const iconlock = cn('ico_lock', {ico_unlock : item.get('channelViewCd') == 'Y'})
-      return (
-        <li key={item.get('channelSeq')} data-id={item.get('channelSeq')} className={iconlock} style={{backgroundImage:'url('+item.get('bgImageUrl')+')'}}>
-          <div className="service_title2">
-            <span className="icon_channel" style={{backgroundImage:'url('+item.get('iconImageUrl')+')'}}></span>
-            <em>{item.get('name')}</em>
-          </div>
-          <div className="e_bg">
-            <Link to={`/service/mgmt/channel/${item.get('channelSeq')}`}><img src={ct_edit1} alt="" title="수정"/></Link>
-            <a onClick={this.deleteChannel.bind(this, item.get('channelSeq'))}><img src={ct_edit2} alt="" title="삭제"/></a>
-          </div>
-        </li>
-      )
-    })
-  }
-
-  render() {
-    return (
-      <article>
-        <hgroup>
-          <h2>채널 관리</h2>
-        </hgroup>
-        <div id="service_head">
-          <ul>
-            <li className="icon_add"><Link to="/service/mgmt/channel/new">{intlStores.get('sm.SM_BTN_ADD')}</Link></li>
-            <li className="icon_apply"><a onClick={this.saveOrderChannel}>{intlStores.get('common.COMMON_BTN_ARRANGE')}</a></li>
-          </ul>
-        </div>
-        <div id="service_contents">
-          <ul className="hover_effect" id="channel_list">
-            {this.getChannelList}
-          </ul>
-        </div>
-      </article>
-    )
-  }
 }
 
 const ChannelContainer = Container.create(Channel)

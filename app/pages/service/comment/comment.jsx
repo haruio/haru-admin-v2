@@ -48,62 +48,6 @@ class Comment extends React.Component {
     AppActions.getCommentList(searchObject)
   }
 
-  /***
-   * Move Page
-   * @param page {number} - 이동할 페이지
-   */
-  movePage = (pageNo) => {
-    this.requetsCommentList({userId: '', pageNo: pageNo})
-  }
-
-  /***
-   * Search Content
-   * searchField : Author, BODY
-   * searchText {String} - 검색할 단어
-   */
-  searchContents = () => {
-    this.requetsCommentList({
-      searchField: this.refs.searchField.value,
-      searchText: this.refs.searchText.value
-    })
-  }
-
-  /***
-   * 전체 체크 / 해지 하는 이벤트 핸들러
-   * @param event {MouseEvent} - mouse event object
-     */
-  _checkAllHandler(event) {
-    $('tbody input:checkbox').attr('checked', $(event.target).is(':checked'))
-  }
-
-  onPopupUserProfile(userId) {
-    PopupActions.openPopup(POPUP.MEMBER, userId)
-  }
-
-  /***
-   * 검색시에 엔터키를 누르면 searchContent 함수를 호출
-   * @param e
-   * @private
-     */
-  _handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      this.searchContents()
-    }
-  }
-
-  get getCommentList() {
-    return this.state.comments.map((comment) => {
-      return (<tr key={comment.get('commentSeq')}>
-        <td><input type="checkbox" value={comment.get('commentSeq')} onClick={this.checkBoxHandler}/></td>
-        <td onClick={this.onPopupUserProfile.bind(null, {userId:comment.get('userId'), tab:2})}><img src={comment.get('postThumbnailUrl') || ''} onError={(e) => {e.target.src = defaultImage}} className="thumbnail"/></td>
-        <td onClick={this.onPopupUserProfile.bind(null, {userId:comment.get('userId'), tab:2})} className="al">{comment.get('postTitle')}</td>
-        <td onClick={this.onPopupUserProfile.bind(null, {userId:comment.get('userId'), tab:2})} className="al">{comment.get('commentTxt')}</td>
-        <td onClick={this.onPopupUserProfile.bind(null, {userId:comment.get('userId'), tab:2})}>{comment.get('commentAuthor')}</td>
-        <td onClick={this.onPopupUserProfile.bind(null, {userId:comment.get('userId'), tab:2})}>{moment(comment.createDt).format('YYYY-MM-DD')}</td>
-      </tr>)
-    })
-  }
-
   render() {
     return (
       <article>
@@ -157,6 +101,68 @@ class Comment extends React.Component {
       </article>
     )
   }
+
+  get getCommentList() {
+    return this.state.comments.map((comment) => {
+      return (<tr key={comment.get('commentSeq')}>
+        <td><input type="checkbox" value={comment.get('commentSeq')} onClick={this.checkBoxHandler}/></td>
+        <td onClick={this.onPopupUserProfile.bind(null, {userId:comment.get('userId'), tab:2})}><img src={comment.get('postThumbnailUrl') || ''} onError={(e) => {e.target.src = defaultImage}} className="thumbnail"/></td>
+        <td onClick={this.onPopupUserProfile.bind(null, {userId:comment.get('userId'), tab:2})} className="al">{comment.get('postTitle')}</td>
+        <td onClick={this.onPopupUserProfile.bind(null, {userId:comment.get('userId'), tab:2})} className="al">{comment.get('commentTxt')}</td>
+        <td onClick={this.onPopupUserProfile.bind(null, {userId:comment.get('userId'), tab:2})}>{comment.get('commentAuthor')}</td>
+        <td onClick={this.onPopupUserProfile.bind(null, {userId:comment.get('userId'), tab:2})}>{moment(comment.createDt).format('YYYY-MM-DD')}</td>
+      </tr>)
+    })
+  }
+
+  /***
+   * Move Page
+   * @param page {number} - 이동할 페이지
+   */
+  movePage = (pageNo) => {
+    this.requetsCommentList({userId: '', pageNo: pageNo})
+  }
+
+  /***
+   * Search Content
+   * searchField : Author, BODY
+   * searchText {String} - 검색할 단어
+   */
+  searchContents = () => {
+    this.requetsCommentList({
+      searchField: this.refs.searchField.value,
+      searchText: this.refs.searchText.value
+    })
+  }
+
+  /***
+   * 전체 체크 / 해지 하는 이벤트 핸들러
+   * @param event {MouseEvent} - mouse event object
+   */
+  _checkAllHandler(event) {
+    $('tbody input:checkbox').attr('checked', $(event.target).is(':checked'))
+  }
+
+  /***
+   * 유저 프로필을 띄우는 함수
+   * @param userId {String} - user id, 유저 플로필에서 검색하는 목적으로 보냄
+   */
+  onPopupUserProfile(userId) {
+    PopupActions.openPopup(POPUP.MEMBER, userId)
+  }
+
+  /***
+   * 검색시에 엔터키를 누르면 searchContent 함수를 호출
+   * @param e
+   * @private
+   */
+  _handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      this.searchContents()
+    }
+  }
+
+
 }
 
 const CommentContainer = Container.create(Comment)

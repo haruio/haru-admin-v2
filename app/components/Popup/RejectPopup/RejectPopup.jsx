@@ -8,10 +8,6 @@ import debug from 'debug'
 const log = debug('application:RejectPopup.jsx')
 
 export default class RejectPopup extends React.Component {
-  clearEvent(e) {
-    e.stopPropagation()
-  }
-
   render() {
     return (
       <div className="pop_wrap">
@@ -27,5 +23,9 @@ export default class RejectPopup extends React.Component {
         </div>
       </div>
     )
+  }
+
+  clearEvent(e) {
+    e.stopPropagation()
   }
 }

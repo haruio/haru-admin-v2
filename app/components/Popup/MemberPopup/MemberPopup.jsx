@@ -17,11 +17,30 @@ export default class MemberPopup extends React.Component {
     userId: React.PropTypes.string,
     tab: React.PropTypes.number
   }
+
   static defaultProps = {
     tab: 1
   }
-  
+
   state = {tab: this.props.tab}
+
+  render() {
+    return (
+      <div className="pop_wrap">
+        <div className="pop pop_ct" id="user_info" onClick={this.clearEvent}>
+          <h2>유저 정보</h2>
+          <ul id="tab_menu">
+            <li><a onClick={this.onTabClick.bind(this, USERPROFILE)}
+                   className={cn({'on' : this.state.tab == USERPROFILE})}>유저 프로필</a></li>
+            <li><a onClick={this.onTabClick.bind(this, COMMENT)}
+                   className={cn({'on' : this.state.tab == COMMENT})}>작성 댓글</a></li>
+          </ul>
+          {this.Body}
+          {this.Footer}
+        </div>
+      </div>
+    )
+  }
 
   get Body() {
     if (this.state.tab == USERPROFILE) {
@@ -50,33 +69,16 @@ export default class MemberPopup extends React.Component {
     }
   }
 
+
   /***
    * 선택된 tab index
    * @param index {Integer} - selected tab index
-     */
+   */
   onTabClick(index) {
     this.setState({tab: index})
   }
 
   clearEvent(e) {
     e.stopPropagation()
-  }
-
-  render() {
-    return (
-      <div className="pop_wrap">
-        <div className="pop pop_ct" id="user_info" onClick={this.clearEvent}>
-          <h2>유저 정보</h2>
-          <ul id="tab_menu">
-            <li><a onClick={this.onTabClick.bind(this, USERPROFILE)}
-                   className={cn({'on' : this.state.tab == USERPROFILE})}>유저 프로필</a></li>
-            <li><a onClick={this.onTabClick.bind(this, COMMENT)}
-                   className={cn({'on' : this.state.tab == COMMENT})}>작성 댓글</a></li>
-          </ul>
-          {this.Body}
-          {this.Footer}
-        </div>
-      </div>
-    )
   }
 }

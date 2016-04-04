@@ -12,6 +12,10 @@ import ContentAddMovieZone from './ContentAddMovieZone'
  */
 
 export default class ContentAddZone extends React.Component {
+  render() {
+    return React.createElement(this.InfoPanelComponent, this.props)
+  }
+
   get InfoPanelComponent() {
     switch (this.props.type) {
       case 'image' :
@@ -19,9 +23,5 @@ export default class ContentAddZone extends React.Component {
       case 'video' :
         return ContentAddMovieZone
     }
-  }
-
-  render() {
-    return React.createElement(this.InfoPanelComponent, this.props)
   }
 }

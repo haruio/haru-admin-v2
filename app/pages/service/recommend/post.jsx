@@ -33,72 +33,8 @@ class RecommendPost extends React.Component {
     }
   }
 
-
   componentDidMount() {
     AppActions.getRecommendPostList(1, 10)
-  }
-
-  /***
-   * Move Page
-   * @param page {number} - 이동할 페이지
-   */
-  movePage(page) {
-    AppActions.getRecommendPostList(page, 10)
-  }
-
-  toggleCheckBox = () => {
-    $("input[name='postBox']").prop('checked', $(this.refs.checkAll).prop('checked'))
-  }
-
-  deleteSelectedItem() {
-    let checkedList = []
-    $("input[name='postBox']:checked").each(function () {
-      checkedList.push($(this).val())
-    })
-
-    if (checkedList.length > 0 && window.confirm(intlStores.get('common.COMMON_MSG_DEL'))) {
-      AppActions.deleteRecommendPostList(checkedList)
-      $("input[name='postBox']").prop('checked', false)
-    }
-  }
-  searchContents = () => {
-    const searchfield = $('#searchField option:selected').val()
-    const searchtext = this.refs.searchText.value
-    AppActions.getRecommendPostList(1, 10, '', '', searchfield, searchtext)
-  }
-
-  _handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      this.searchContents()
-    }
-  }
-
-  _moveBannerDetail=(bannerSeq)=>{
-    this.context.router.push('/service/mgmt/post/' + bannerSeq)
-  }
-
-  get getRecommendPostList() {
-    // empty content
-    if(this.state.contents.size == 0) {
-      return <tr>
-        <td colSpan="8">{intlStores.get('sm.SM_MSG_NO_CONTENTS')}</td>
-      </tr>
-    } else {
-      return this.state.contents.map((content) => {
-        return (
-          <tr key={content.get('recommendSeq')}>
-            <td><input type="checkbox" name="postBox" value={content.get('recommendSeq')}/></td>
-            <td onClick={this._moveBannerDetail.bind(this, content.get('recommendSeq'))}>{content.get('recommendSeq')}</td>
-            <td onClick={this._moveBannerDetail.bind(this, content.get('recommendSeq'))}><img src={content.get('thumbnailUrl')} alt="" className="thumbnail"/></td>
-            <td onClick={this._moveBannerDetail.bind(this, content.get('recommendSeq'))}className="al">{content.get('postTitle')}</td>
-            <td onClick={this._moveBannerDetail.bind(this, content.get('recommendSeq'))}></td>
-            <td onClick={this._moveBannerDetail.bind(this, content.get('recommendSeq'))}>{moment(content.get('recommendStartDt')).format('YYYY-MM-DD')}</td>
-            <td onClick={this._moveBannerDetail.bind(this, content.get('recommendSeq'))}>{moment(content.get('recommendEndD')).format('YYYY-MM-DD')}</td>
-            <td onClick={this._moveBannerDetail.bind(this, content.get('recommendSeq'))}>{content.get('recommendPct')}%</td>
-          </tr>
-        )
-      })
-    }
   }
 
   render() {
@@ -158,6 +94,77 @@ class RecommendPost extends React.Component {
 
       </article>
     )
+  }
+
+  get getRecommendPostList() {
+    // empty content
+    if(this.state.contents.size == 0) {
+      return (<tr>
+        <td colSpan="8">{intlStores.get('sm.SM_MSG_NO_CONTENTS')}</td>
+      </tr>)
+    } else {
+      return this.state.contents.map((content) => {
+        return (
+          <tr key={content.get('recommendSeq')}>
+            <td><input type="checkbox" name="postBox" value={content.get('recommendSeq')}/></td>
+            <td onClick={this._moveRecommendPostDetail.bind(this, content.get('recommendSeq'))}>{content.get('recommendSeq')}</td>
+            <td onClick={this._moveRecommendPostDetail.bind(this, content.get('recommendSeq'))}><img src={content.get('thumbnailUrl')} alt="" className="thumbnail"/></td>
+            <td onClick={this._moveRecommendPostDetail.bind(this, content.get('recommendSeq'))}className="al">{content.get('postTitle')}</td>
+            <td onClick={this._moveRecommendPostDetail.bind(this, content.get('recommendSeq'))}></td>
+            <td onClick={this._moveRecommendPostDetail.bind(this, content.get('recommendSeq'))}>{moment(content.get('recommendStartDt')).format('YYYY-MM-DD')}</td>
+            <td onClick={this._moveRecommendPostDetail.bind(this, content.get('recommendSeq'))}>{moment(content.get('recommendEndD')).format('YYYY-MM-DD')}</td>
+            <td onClick={this._moveRecommendPostDetail.bind(this, content.get('recommendSeq'))}>{content.get('recommendPct')}%</td>
+          </tr>
+        )
+      })
+    }
+  }
+
+  /***
+   * Move Recommed Post Detail
+   * @param bannerSeq {String} - recommendSeq
+   * @private
+     */
+  _moveRecommendPostDetail=(bannerSeq)=>{
+    this.context.router.push('/service/mgmt/post/' + bannerSeq)
+  }
+
+  toggleCheckBox = () => {
+    $("input[name='postBox']").prop('checked', $(this.refs.checkAll).prop('checked'))
+  }
+
+  deleteSelectedItem() {
+    let checkedList = []
+    $("input[name='postBox']:checked").each(function () {
+      checkedList.push($(this).val())
+    })
+
+    if (checkedList.length > 0 && window.confirm(intlStores.get('common.COMMON_MSG_DEL'))) {
+      AppActions.deleteRecommendPostList(checkedList)
+      $("input[name='postBox']").prop('checked', false)
+    }
+  }
+
+  /***
+   * 검색 관련 함수
+   */
+  searchContents = () => {
+    const searchfield = $('#searchField option:selected').val()
+    const searchtext = this.refs.searchText.value
+    AppActions.getRecommendPostList(1, 10, '', '', searchfield, searchtext)
+  }
+
+  _handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      this.searchContents()
+    }
+  }
+  /***
+   * Move Page
+   * @param page {number} - 이동할 페이지
+   */
+  movePage(page) {
+    AppActions.getRecommendPostList(page, 10)
   }
 }
 

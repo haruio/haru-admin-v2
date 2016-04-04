@@ -23,7 +23,6 @@ const ct_edit2 = require('image!../../../assets/img/ct_edit2.png')
  * author : jungun.park
  */
 class Category extends React.Component {
-
   static getStores() {
     return [CategoryStore]
   }
@@ -39,6 +38,43 @@ class Category extends React.Component {
     $('#category_list').sortable({})
   }
 
+  render() {
+    return (
+      <article>
+        <hgroup>
+          <h2>카테고리 관리</h2>
+        </hgroup>
+        <div id="service_head">
+          <ul>
+            <li className="icon_add"><Link to="/service/mgmt/category/new">{intlStores.get('sm.SM_BTN_ADD')}</Link></li>
+            <li className="icon_apply"><a onClick={this.saveOrderCategory}>{intlStores.get('common.COMMON_BTN_ARRANGE')}</a></li>
+          </ul>
+        </div>
+        <div id="service_contents">
+          <ul className="hover_effect" id="category_list">
+            {this.getChannelList}
+          </ul>
+        </div>
+      </article>
+    )
+  }
+
+  get getChannelList() {
+    return this.state.category.map((item) => {
+      return (
+        <li key={item.get('categorySeq')} data-id={item.get('categorySeq')} style={{backgroundImage:'url('+item.get('bgImageUrl')+')'}}>
+          <div className="service_title">
+            <span className="icon_category" style={{ backgroundImage:'url('+item.get('iconImageUrl')+')' }}></span>
+            <em>{item.get('name')}</em>
+          </div>
+          <div className="e_bg">
+            <Link to={`/service/mgmt/category/${item.get('categorySeq')}`}><img src={ct_edit1} alt="" title="수정"/></Link>
+            <a onClick={this.deleteCategory.bind(this, item.get('categorySeq'))}><img src={ct_edit2} alt="" title="삭제"/></a>
+          </div>
+        </li>
+      )
+    })
+  }
 
   /***
    * 카테고리 삭제
@@ -64,44 +100,6 @@ class Category extends React.Component {
         AppActions.changeCategoryOrder(categoryOrder)
       }
     })
-  }
-
-  get getChannelList() {
-    return this.state.category.map((item) => {
-      return (
-        <li key={item.get('categorySeq')} data-id={item.get('categorySeq')} style={{backgroundImage:'url('+item.get('bgImageUrl')+')'}}>
-          <div className="service_title">
-            <span className="icon_category" style={{ backgroundImage:'url('+item.get('iconImageUrl')+')' }}></span>
-            <em>{item.get('name')}</em>
-          </div>
-          <div className="e_bg">
-            <Link to={`/service/mgmt/category/${item.get('categorySeq')}`}><img src={ct_edit1} alt="" title="수정"/></Link>
-            <a onClick={this.deleteCategory.bind(this, item.get('categorySeq'))}><img src={ct_edit2} alt="" title="삭제"/></a>
-          </div>
-        </li>
-      )
-    })
-  }
-  render() {
-
-    return (
-      <article>
-        <hgroup>
-          <h2>카테고리 관리</h2>
-        </hgroup>
-        <div id="service_head">
-          <ul>
-            <li className="icon_add"><Link to="/service/mgmt/category/new">{intlStores.get('sm.SM_BTN_ADD')}</Link></li>
-            <li className="icon_apply"><a onClick={this.saveOrderCategory}>{intlStores.get('common.COMMON_BTN_ARRANGE')}</a></li>
-          </ul>
-        </div>
-        <div id="service_contents">
-          <ul className="hover_effect" id="category_list">
-            {this.getChannelList}
-          </ul>
-        </div>
-      </article>
-    )
   }
 }
 const CategoryContainer = Container.create(Category)

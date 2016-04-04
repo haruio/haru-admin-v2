@@ -64,28 +64,6 @@ export default class ContentAddMovieZone extends React.Component {
     )
   }
 
-  subcontentimg(content) {
-    if (content.get('contentUrl') === '') {
-      return <b className="info">{intlStores.get('cms.CMS_TXT_DRAG_IMAGE')}</b>
-    } else {
-      return <img src={content.get('contentUrl')} alt="image"/>
-    }
-  }
-
-  onSubContentUpdate(contentSeq, e) {
-    ContentActions.updateSubContent({
-      contentSeq: contentSeq,
-      type: 'IMG',
-      contentUrl: '',
-      body: e.target.value,
-      contentResourceSeq: ''
-    })
-  }
-  clickRemoveBtn(contentSeq) {
-    ContentActions.deleteSubContent(contentSeq)
-  }
-
-
   get renderContent() {
     // 컨텐츠가 없을때 첫 렌더링때는 contents가 없음
     if (this.props.content.get('contents') == undefined)
@@ -114,4 +92,27 @@ export default class ContentAddMovieZone extends React.Component {
       }
     })
   }
+
+  subcontentimg(content) {
+    if (content.get('contentUrl') === '') {
+      return <b className="info">{intlStores.get('cms.CMS_TXT_DRAG_IMAGE')}</b>
+    } else {
+      return <img src={content.get('contentUrl')} alt="image"/>
+    }
+  }
+
+  onSubContentUpdate(contentSeq, e) {
+    ContentActions.updateSubContent({
+      contentSeq: contentSeq,
+      type: 'IMG',
+      contentUrl: '',
+      body: e.target.value,
+      contentResourceSeq: ''
+    })
+  }
+  
+  clickRemoveBtn(contentSeq) {
+    ContentActions.deleteSubContent(contentSeq)
+  }
+
 }
