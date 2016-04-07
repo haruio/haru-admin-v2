@@ -17,7 +17,7 @@ import debug from 'debug'
 const log = debug('application:UserProfile.jsx')
 
 
-class UserProfile extends React.Component {
+class UserProfileTab extends React.Component {
   static getStores() {
     return [MemberProfileStore]
   }
@@ -35,7 +35,7 @@ class UserProfile extends React.Component {
   onImageError(e) {
     e.target.src = userDefault
   }
-  
+
   render() {
     let gender
     switch (this.state.profile.get('genderCd')) {
@@ -133,5 +133,5 @@ class UserProfile extends React.Component {
   }
 }
 
-const UserProfileContainer = Container.create(UserProfile)
+const UserProfileContainer = Container.create(UserProfileTab)
 export default UserProfileContainer

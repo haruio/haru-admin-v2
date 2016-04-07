@@ -7,22 +7,32 @@ import cn from 'classnames'
 import debug from 'debug'
 const log = debug('application:RejectPopup.jsx')
 
+import intlStores from '../../../utils/IntlStore'
+import ContentActions from '../../../actions/ContentActions'
+
 export default class RejectPopup extends React.Component {
   render() {
     return (
       <div className="pop_wrap">
         <div className="pop" id="pop_return" onClick={this.clearEvent}>
-          <h2>contents 반려</h2>
+          <h2>{intlStores.get('cms.MENU_TXT_CONTENTS_REJECTION')}</h2>
           <fieldset>
-            <textarea placeholder="반려사유를 적어주세요"></textarea>
+            <textarea placeholder={intlStores.get('cms.CMS_TXT_REASON_REJECTION')} ref="rejectReason"></textarea>
           </fieldset>
           <p className="btn_c">
-            <a href="" className="purple">확인</a>
-            <a onClick={this.props.close} className="gray">취소</a>
+            <a onClick={this.onRejectContent} className="purple">{intlStores.get('cms.CMS_BTN_CONFIRM')}</a>
+            <a onClick={this.props.close} className="gray">{intlStores.get('cms.CMS_BTN_CANCEL')}</a>
           </p>
         </div>
       </div>
     )
+  }
+
+  onRejectContent = () => {
+    ContentActions.requestContentReject(this.props.postSeq, this.refs.rejectReason.value)
+
+    // 팝업 닫기
+    this.props.close()
   }
 
   clearEvent(e) {

@@ -47,30 +47,20 @@ class BannerList extends React.Component {
   }
 
   componentDidMount() {
-    this.setInitCalendar()
-
-    let initdate = moment().format('YYYY-MM-DD')
-    $('#bannerDate').datepicker('setDate', initdate)
-
-    let platform = 'AND'
-    if (this.props.query != undefined && this.props.query.searchPlatform != undefined) {
-      this.state.platform = this.props.query.searchPlatform
-    }
-
-    this.getBannerList(1, initdate, platform)
+    this._initCalendar()
+    this.getBannerList(1, this.state.searchDate, this.state.platform )
   }
 
-  setInitCalendar() {
+  _initCalendar() {
     const _self = this
     $('#bannerDate').datepicker({
       dateFormat: 'yy-mm-dd',
       onClose: function (dateText) {
-        //_self.setState({searchDate: dateText})
         AppActions.ChangeSearchDate(dateText)
 
-        _self.getBannerList(1, dateText) //???
+        _self.getBannerList(1, dateText, _self.state.platform) //???
       }
-    })
+    }).datepicker('setDate', this.state.searchDate)
   }
 
   getBannerList(page, initdate, platform) {
@@ -152,8 +142,8 @@ class BannerList extends React.Component {
     return (
       <div id="calendar_head">
         <time id="bannertime" onClick={this.onShowCalendar} style={{cursor:'pointer'}}><input type="text" id="bannerDate" style={{display:'none'}}/>{this.state.searchDate} (금)</time>
-        <input type="image" src={btn_prev2} alt="prev" className="prev"/>
-        <input type="image" src={btn_next2} alt="next" className="next"/>
+        <input type="image" src={btn_prev2} alt="prev" className="prev" onClick={this.changeSearchDate.bind(null, 'prev')}/>
+        <input type="image" src={btn_next2} alt="next" className="next" onClick={this.changeSearchDate.bind(null, 'next')}/>
         <a onClick={this.onShowCalendar}><img src={bg_calendar} alt="달력"/></a>
       </div>
     )
@@ -178,10 +168,7 @@ class BannerList extends React.Component {
 
   // TODO : 나중에 리팩토링 하자!!
   get ScheduleBar() {
-    log('ScheduleBar')
-    log(this.state.banners.toJS())
     return this.state.banners.map((content, i) => {
-      log(content)
       let StartHour = (moment(this.state.searchDate + ' 00:00:00', 'YYYYMMDD HH:mm:ss') >= moment(content.get('bannerStartDt')) ? 0 : moment(content.get('bannerStartDt')).hour())
       let EndHour = (moment(this.state.searchDate + ' 23:59:59', 'YYYYMMDD HH:mm:ss') <= moment(content.get('bannerEndDt')) ? 24 : moment(content.get('bannerEndDt')).hour())
       let StartMin = (moment(this.state.searchDate + ' 00:00:00', 'YYYYMMDD HH:mm:ss') >= moment(content.get('bannerStartDt')) ? 0 : moment(content.get('bannerStartDt')).minute())
@@ -223,11 +210,6 @@ class BannerList extends React.Component {
       )
     })
   }
-
-  _moveBannerDetail=(bannerSeq)=>{
-    this.context.router.push('/service/mgmt/banner/' + bannerSeq)
-  }
-
 
   get renderBannerList() {
     if(this.state.banners.size == 0) {
@@ -294,6 +276,25 @@ class BannerList extends React.Component {
   }
 
   // Event
+  changePlatform(platform) {
+    AppActions.ChangePlatform(platform)
+  }
+
+  changeSearchDate = (action) => {
+    let searchDate = moment(this.state.searchDate)
+    if (action === 'prev') {
+      searchDate = searchDate.subtract(1, 'day').format('YYYY-MM-DD')
+    } else if (action === 'next') {
+      searchDate = searchDate.add(1, 'day').format('YYYY-MM-DD')
+    }
+    this.setState({searchDate:searchDate})
+    $('#bannerDate').datepicker('setDate', searchDate)
+    this.getBannerList(1, searchDate, this.state.platform)
+  }
+
+  _moveBannerDetail = (bannerSeq) => {
+    this.context.router.push('/service/mgmt/banner/' + bannerSeq)
+  }
 
   toggleCheckBox = () => {
     $("input[name='postBox']").prop('checked', $(this.refs.checkAll).prop('checked'))
@@ -302,12 +303,6 @@ class BannerList extends React.Component {
   onShowCalendar() {
     $('#bannerDate').show().focus().hide()
   }
-
-
-  changePlatform(platform) {
-    AppActions.ChangePlatform(platform)
-  }
-
 }
 
 const BannerListContainer = Container.create(BannerList, {withProps:true})

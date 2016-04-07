@@ -22,7 +22,6 @@ class ReportPostsStore extends ReduceStore {
   reduce(state, action) {
     switch (action.type) {
       case AppConstants.GET_REPORT_POST_LIST:
-        log(action.data)
         return Immutable.fromJS(action.data || [])
       default:
         return state

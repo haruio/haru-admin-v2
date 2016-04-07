@@ -15,7 +15,11 @@ const log = debug('application:PaginationStore.jsx')
  */
 class PopupPaginationStore extends MapStore {
   getInitialState() {
-    return Immutable.Map({
+    return Immutable.Map(this._initData())
+  }
+
+  _initData() {
+    return {
       endPageNo: 1,
       finalPageNo: 1,
       firstPageNo: 1,
@@ -25,9 +29,8 @@ class PopupPaginationStore extends MapStore {
       prevPageNo: 1,
       startPageNo: 1,
       totalCount: 0
-    })
+    }
   }
-
   getPagination() {
     return this.getState()
   }
@@ -35,9 +38,11 @@ class PopupPaginationStore extends MapStore {
   reduce(state, action) {
     switch (action.type) {
       case AppConstants.GET_PUBLISH_CONTENT:
-        return Immutable.fromJS(action.pagination)
+        return Immutable.fromJS(action.pagination || this._initData())
       case AppConstants.GET_USER_COMMENT:
-        return Immutable.fromJS(action.pagination)
+        return Immutable.fromJS(action.pagination || this._initData())
+      case AppConstants.GET_HISTORY_CONTENT:
+        return Immutable.fromJS(action.pagination || this._initData())
       default:
         return state
     }

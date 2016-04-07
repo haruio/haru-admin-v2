@@ -7,8 +7,8 @@ import cn from 'classnames'
 const USERPROFILE = 1
 const COMMENT = 2
 
-import UserProfile from './subPopup/UserProfile'
-import Comment from './subPopup/Comment'
+import UserProfile from './tab/UserProfileTab'
+import Comment from './tab/CommentTab'
 import debug from 'debug'
 const log = debug('application:MemberPopup.jsx')
 
@@ -19,7 +19,7 @@ export default class MemberPopup extends React.Component {
   }
 
   static defaultProps = {
-    tab: 1
+    tab: USERPROFILE
   }
 
   state = {tab: this.props.tab}
@@ -62,14 +62,14 @@ export default class MemberPopup extends React.Component {
     } else {
       return (
         <p className="btn_c">
-          <a href="" className="purple">삭제하기</a>
+          <a href="" className="gray">삭제하기</a>
+          <a href="" className="purple">블라인드</a>&nbsp;&nbsp;&nbsp;
           <a onClick={this.props.close}>닫기</a>
         </p>
       )
     }
   }
-
-
+  
   /***
    * 선택된 tab index
    * @param index {Integer} - selected tab index

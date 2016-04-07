@@ -57,7 +57,7 @@ export default {
       }
     }
 
-    return false;
+    return false
   },
 
   /***
@@ -89,15 +89,15 @@ export default {
    * @returns {*}
      */
   getDecryptionData(key, encValue) {
-    var values = encValue.split(':')
-    var iv_hex = values[0];
-    var encData = values[1];
-    var salt_hex = values[2];
-    var salt = CryptoJS.enc.Hex.parse(salt_hex);
-    var key_hex = CryptoJS.PBKDF2(key, salt, { keySize: 256/32, iterations: 10 });
-    var iv = CryptoJS.enc.Hex.parse(iv_hex);
+    let values = encValue.split(':')
+    let iv_hex = values[0];
+    let encData = values[1];
+    let salt_hex = values[2];
+    let salt = CryptoJS.enc.Hex.parse(salt_hex);
+    let key_hex = CryptoJS.PBKDF2(key, salt, { keySize: 256/32, iterations: 10 });
+    let iv = CryptoJS.enc.Hex.parse(iv_hex);
 
-    var decrypted = CryptoJS.AES.decrypt(encData, key_hex,{iv: iv});
+    let decrypted = CryptoJS.AES.decrypt(encData, key_hex,{iv: iv});
 
     return decrypted.toString(CryptoJS.enc.Utf8);
 
@@ -107,10 +107,10 @@ export default {
    * localStorage clear
    */
   localStorageClear() {
-    localStorage.removeItem("ls.AccessToken")
-    localStorage.removeItem("ls.UserModel")
-    localStorage.removeItem("ls.Protocol")
-    localStorage.removeItem("ls.Host")
+    localStorage.removeItem('ls.AccessToken')
+    localStorage.removeItem('ls.UserModel')
+    localStorage.removeItem('ls.Protocol')
+    localStorage.removeItem('ls.Host')
   },
   /**
    * ADMIN 접속 시, 해당 접속 페이지의 sub domain 및 url schema parse
@@ -124,7 +124,7 @@ export default {
        * dev env
        * @type {string}
        */
-      host = 'dev-admin.dingo.tv';
+      host = 'dev-admin.dingo.tv'
     }
 
     localStorage.setItem('ls.Protocol', protocol)
@@ -140,19 +140,21 @@ export default {
   },
 
   getUrl(type) {
-    var host = this._getRequestServiceType(type)
+    let host = this._getRequestServiceType(type)
     return (localStorage.getItem('ls.Protocol') + host)
   },
 
   getUserUrl(type) {
-    var host = this._getRequestServiceType(type)
+    let host = this._getRequestServiceType(type)
     return ('https://' + host)
   },
 
   getServiceUrl() {
     let prelocale = /\w*([\-])/g.exec(this.getHost())
     let predomain = prelocale != null ? prelocale[0].replace('-', '.') : ''
-
+    if(predomain == 'dev.') {
+      predomain = 'dev-id.'
+    }
     return `http://${predomain}dingo.tv/v/`
   },
 

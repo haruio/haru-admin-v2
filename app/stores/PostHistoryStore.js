@@ -8,21 +8,21 @@ import AppConstants from '../constants/AppConstants'
 import AppDispatcher from '../dispatcher/AppDispatcher'
 
 import debug from 'debug'
-const log = debug('application:ReportCommentsStore.jsx')
+const log = debug('application:PostHistoryStore.jsx')
 
-class ReportCommentsStore extends ReduceStore {
+class PostHistoryStore extends ReduceStore {
   getInitialState() {
     return Immutable.List()
   }
 
-  getReportComments() {
+  getPostHistory() {
     return this.getState()
   }
 
   reduce(state, action) {
     switch (action.type) {
-      case AppConstants.GET_REPORT_COMMENT_LIST:
-        return Immutable.fromJS(action.data || [])
+      case AppConstants.GET_HISTORY_CONTENT:
+        return Immutable.fromJS(action.contents || [])
       default:
         return state
     }
@@ -30,5 +30,5 @@ class ReportCommentsStore extends ReduceStore {
 }
 
 // Export a singleton instance of the store
-const instance = new ReportCommentsStore(AppDispatcher)
+const instance = new PostHistoryStore(AppDispatcher)
 export default instance

@@ -30,76 +30,14 @@ class Push extends React.Component {
   }
 
   componentWillMount() {
-    this.getPushList({pageNo:1})
-
+    this._getPushList({pageNo:1})
   }
 
-  getPushList = (searchObj) => {
+  _getPushList = (searchObj) => {
     this.state.searchObj = (searchObj != null) ? $.extend(this.state.searchObj, searchObj) : {searchStartDate:'', searchEndDate:'', searchField:'', searchText:''}
     AppActions.getPushList(this.state.searchObj)
   }
 
-  setComma(number) {
-    return String(number).replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,')
-  }
-
-  onPopupPushDetail(pushId) {
-    /*
-    if(pushId != null) {
-      this.refs.pushPopup.readPushDetail(pushId)
-      $('#detail_info').toggleClass('hide');
-    }*/
-  }
-
-  movePage(pageNo) {
-    //this.getPushList({pushId:"", pageNo:pageNo})
-  }
-
-  get pushList() {
-    const pushes = this.state.pushes
-
-    let pushList = null
-    if(pushes.size != 0) {
-      pushList = pushes.map((push, i) => {
-        let pushStatus
-        switch(push.get('pushStatus')) {
-          case 'PUING' :
-            pushStatus = 'sm.SM_FLD_PUSH_STAT_PUING'
-            break
-          case 'PUED' :
-            pushStatus = 'sm.SM_FLD_PUSH_STAT_PUED'
-            break
-          case 'CAED' :
-            pushStatus = 'sm.SM_FLD_PUSH_STAT_CAED'
-            break
-          case 'RVED' :
-            pushStatus = 'SM_FLD_PUSH_STAT_RVED'
-            break
-          case 'APR' :
-            pushStatus = 'sm.SM_FLD_PUSH_STAT_APR'
-            break
-        }
-        return (
-          <tr key={i}>
-            <td>{this.state.pagination.get('totalCount') - (( 10 * (this.state.pagination.get('pageNo') -1)) + i) }</td>
-            <td>{push.getIn(['message', 'type'], '')}</td>
-            <td><a onClick={this.onPopupPushDetail.bind(null, { pushId:push.get('pushId') })}>{push.getIn(['message', 'title'], '')}</a></td>
-            <td>{push.getIn(['stats', 'requested'], 0)}</td>
-            <td>{push.getIn(['stats', 'published'], 0)}</td>
-            <td>{push.getIn(['stats', 'received'], 0)}</td>
-            <td>{push.getIn(['stats', 'opened'], 0)}</td>
-            <td>{intlStores.get(pushStatus)}</td>
-            <td>{moment(push.get('createDt')).format('YYYY-MM-DD')}</td>
-          </tr>
-        )
-      })
-    }else {
-      pushList = (<tr>
-        <td colSpan="8">{intlStores.get('sm.SM_MSG_NO_CONTENTS')}</td>
-      </tr>)
-    }
-    return pushList
-  }
 
   render() {
     return (
@@ -147,7 +85,7 @@ class Push extends React.Component {
               </tr>
               </thead>
               <tbody>
-              {this.pushList}
+                {this.renderPushList}
               </tbody>
             </table>
           </div>
@@ -158,6 +96,62 @@ class Push extends React.Component {
         </div>
       </article>
     )
+  }
+
+  get renderPushList() {
+    if(this.state.pushes.size === 0) {
+      return <tr><td colSpan="9">{intlStores.get('sm.SM_MSG_NO_CONTENTS')}</td></tr>
+    }
+
+    return this.state.pushes.map((push, i) => {
+      let pushStatus
+      switch(push.get('pushStatus')) {
+        case 'PUING' :
+          pushStatus = 'sm.SM_FLD_PUSH_STAT_PUING'
+          break
+        case 'PUED' :
+          pushStatus = 'sm.SM_FLD_PUSH_STAT_PUED'
+          break
+        case 'CAED' :
+          pushStatus = 'sm.SM_FLD_PUSH_STAT_CAED'
+          break
+        case 'RVED' :
+          pushStatus = 'SM_FLD_PUSH_STAT_RVED'
+          break
+        case 'APR' :
+          pushStatus = 'sm.SM_FLD_PUSH_STAT_APR'
+          break
+      }
+      return (
+        <tr key={i}>
+          <td>{this.state.pagination.get('totalCount') - (( 10 * (this.state.pagination.get('pageNo') -1)) + i) }</td>
+          <td>{push.getIn(['message', 'type'], '')}</td>
+          <td><a onClick={this.onPopupPushDetail.bind(null, { pushId:push.get('pushId') })}>{push.getIn(['message', 'title'], '')}</a></td>
+          <td>{push.getIn(['stats', 'requested'], 0)}</td>
+          <td>{push.getIn(['stats', 'published'], 0)}</td>
+          <td>{push.getIn(['stats', 'received'], 0)}</td>
+          <td>{push.getIn(['stats', 'opened'], 0)}</td>
+          <td>{intlStores.get(pushStatus)}</td>
+          <td>{moment(push.get('createDt')).format('YYYY-MM-DD HH:mm:ss')}</td>
+        </tr>
+      )
+    })
+  }
+
+  setComma(number) {
+    return String(number).replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,')
+  }
+
+  movePage(pageNo) {
+    this._getPushList({pageNo:pageNo})
+  }
+
+  onPopupPushDetail(pushId) {
+    /*
+     if(pushId != null) {
+     this.refs.pushPopup.readPushDetail(pushId)
+     $('#detail_info').toggleClass('hide');
+     }*/
   }
 }
 const PushContainer = Container.create(Push)

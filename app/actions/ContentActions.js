@@ -254,15 +254,6 @@ const ContentActions = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   /***
    * 배너, 추천 컨텐츠에서 발행된 컨텐츠 검색시에 활용함
-   * @param pageNo
-   * @param pageSize
-   * @param orderField
-   * @param orderMethod
-   * @param searchField
-   * @param searchText
-   * @param channel
-   * @param categories
-   * @param type
    */
   getPublishContents(pageNo = 1, pageSize = 8, orderField = '', orderMethod = '', searchField = '', searchText = '', channel = '', categories = '', type = '') {
     request.get(utility.getUrl() + '/contents/published')
@@ -308,10 +299,10 @@ const ContentActions = {
       .query({channel: channel, categories: categories})
       .query({type: type})
       .end(function (err, res) {
-
         if (utility.errorHandler(err, res)) {
           return
         }
+
         AppDispatcher.handleViewAction({
           type: AppConstants.GET_VIEWED_CONTENT,
           contents: res.body.data,
@@ -527,26 +518,23 @@ const ContentActions = {
   /**
    * post 반려
    */
-  requestContentReject(requestData, requestUrl, source) {
-    request.post(requestUrl)
+  requestContentReject(postSeq, message) {
+    request.post(`${URL}/contents/pending/${postSeq}/reject`)
       .use(middleware_accesstoken)
-      .send(requestData)
+      .send({message: message})
       .end(function (err, res) {
         if (utility.errorHandler(err, res)) {
           return
         }
 
-        if (source == 'inspection') {
-          this.getInspectionContent(1, 30, '', '', '', '')
-        }
+        ContentActions.getInspectionContent()
       })
   },
-
   /**
    * post 검수 요청
    */
-  requestContentInspection(requestData, requestUrl, source) {
-    request.post(requestUrl)
+  requestContentInspection(postSeq, requestData) {
+    request.post(`${URL}/contents/pending/${postSeq}/publish`)
       .use(middleware_accesstoken)
       .send(requestData)
       .end(function (err, res) {
@@ -554,9 +542,7 @@ const ContentActions = {
           return
         }
 
-        if (source == 'inspection') {
-          this.getInspectionContent(1, 30, '', '', '', '')
-        }
+        ContentActions.getInspectionContent()
       })
   }
 }
