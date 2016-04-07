@@ -151,6 +151,12 @@ export default keyMirror({
   GET_USER_COMMENT: null,
   DELETE_COMMENTS: null,
   DELETE_USER_COMMENTS: null,
+  /***
+   * Report Management
+   */
+  GET_REPORT_POST_LIST: null,
+  GET_REPORT_COMMENT_LIST: null,
+
 
   /**
    * CHART

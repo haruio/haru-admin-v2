@@ -830,6 +830,59 @@ const AppActions = {
           }
         })
       })
+  },
+  /***
+   * Report API
+   */
+  getReportPostList(userObj) {
+    request.get(URL + '/sm/report/contents')
+      .use(middleware_accesstoken)
+      .query({searchField: userObj.searchField||''})
+      .query({searchText: userObj.searchText||''})
+      .query({pageNum: userObj.pageNo||1, pageSize: userObj.pageSize||10 })
+      .end(function (err, res) {
+
+        AppDispatcher.handleViewAction({
+          type: AppConstants.GET_REPORT_POST_LIST,
+          data: res.body.data,
+          pagination: {
+            pageSize : res.body.pageSize,
+            firstPageNo : res.body.firstPageNo,
+            startPageNo : res.body.startPageNo,
+            prevPageNo : res.body.prevPageNo,
+            pageNo : res.body.pageNo,
+            nextPageNo : res.body.nextPageNo,
+            endPageNo : res.body.endPageNo,
+            finalPageNo : res.body.finalPageNo,
+            totalCount : res.body.totalCount
+          }
+        })
+      })
+  },
+  getReportCommentList(userObj) {
+    request.get(URL + '/sm/report/comments')
+      .use(middleware_accesstoken)
+      .query({searchField: userObj.searchField||''})
+      .query({searchText: userObj.searchText||''})
+      .query({pageNum: userObj.pageNo||1, pageSize: userObj.pageSize||10 })
+      .end(function (err, res) {
+
+        AppDispatcher.handleViewAction({
+          type: AppConstants.GET_REPORT_COMMENT_LIST,
+          data: res.body.data,
+          pagination: {
+            pageSize : res.body.pageSize,
+            firstPageNo : res.body.firstPageNo,
+            startPageNo : res.body.startPageNo,
+            prevPageNo : res.body.prevPageNo,
+            pageNo : res.body.pageNo,
+            nextPageNo : res.body.nextPageNo,
+            endPageNo : res.body.endPageNo,
+            finalPageNo : res.body.finalPageNo,
+            totalCount : res.body.totalCount
+          }
+        })
+      })
   }
 }
 

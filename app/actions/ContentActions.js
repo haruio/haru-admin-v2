@@ -20,7 +20,7 @@ import Alert from 'react-s-alert'
 
 const ContentActions = {
   /**
-   * My Content 관련 메소드
+   * My Content 조회 메소드
    */
   getMyContents(pageNo = 1, pageSize = 30, orderField = '', orderMethod = '', searchField = '', searchText = '', channel = '', categories = '', type = '') {
     request.get(URL + '/contents/pending/my')
@@ -42,7 +42,7 @@ const ContentActions = {
   },
 
   /**
-   * content 삭제 메소드
+   * my content 삭제 메소드
    */
   deleteContent(contentId) {
     request.del(URL + '/contents/pending/' + contentId)
@@ -52,7 +52,7 @@ const ContentActions = {
           return
         }
 
-        this.getContents()
+        ContentActions.getMyContents()
       })
   },
   /***
@@ -252,10 +252,18 @@ const ContentActions = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////          Content List 관련 메소드              //////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  /*
-   배너, 추천 컨텐츠에서 발행된 컨텐츠 검색시에 활용함
+  /***
+   * 배너, 추천 컨텐츠에서 발행된 컨텐츠 검색시에 활용함
+   * @param pageNo
+   * @param pageSize
+   * @param orderField
+   * @param orderMethod
+   * @param searchField
+   * @param searchText
+   * @param channel
+   * @param categories
+   * @param type
    */
-
   getPublishContents(pageNo = 1, pageSize = 8, orderField = '', orderMethod = '', searchField = '', searchText = '', channel = '', categories = '', type = '') {
     request.get(utility.getUrl() + '/contents/published')
       .use(middleware_accesstoken)
@@ -321,50 +329,6 @@ const ContentActions = {
         })
       })
   },
-
-  /**
-   * 발행된 Content List 삭제
-   */
-  deletePublishContents(contentId) {
-    request.del(URL + '/contents/pending/' + contentId)
-      .use(middleware_accesstoken)
-      .end(function (err, res) {
-
-        if (utility.errorHandler(err, res)) {
-          return
-        }
-
-        request.get(URL + '/contents/viewed')
-          .use(middleware_accesstoken)
-          .query({pageNum: 1, pageSize: 30})
-          .query({orderField: '', orderMethod: ''})
-          .query({searchField: '', searchText: ''})
-          .end(function (err, res) {
-
-            if (utility.errorHandler(err, res)) {
-              return
-            }
-
-            AppDispatcher.handleViewAction({
-              type: AppConstants.GET_VIEWED_CONTENT,
-              contents: res.body.data,
-              pagination: {
-                pageSize: res.body.pageSize,
-                firstPageNo: res.body.firstPageNo,
-                startPageNo: res.body.startPageNo,
-                prevPageNo: res.body.prevPageNo,
-                pageNo: res.body.pageNo,
-                nextPageNo: res.body.nextPageNo,
-                endPageNo: res.body.endPageNo,
-                finalPageNo: res.body.finalPageNo,
-                totalCount: res.body.totalCount
-              }
-            })
-          })
-
-      })
-  },
-
   /**
    * 예약된 Content List
    */
@@ -405,21 +369,6 @@ const ContentActions = {
             totalCount: res.body.totalCount
           }
         })
-      })
-  },
-
-  /**
-   * 예약된 Content List 삭제
-   */
-  deleteReservedContents(contentId) {
-    request.del(`${URL}/contents/pending/${contentId}`)
-      .use(middleware_accesstoken)
-      .end(function (err, res) {
-        if (utility.errorHandler(err, res)) {
-          return
-        }
-
-        this.getReservedContents(1, 30, '', '', '', '', '', '', '')
       })
   },
 
@@ -479,7 +428,8 @@ const ContentActions = {
                        channel = '',
                        categories = '',
                        type = '') {
-    request.get(`${URL}/contents/pending/requested?pageNum=${pageNo}&pageSize=${pageSize}`)
+
+    request.get(URL + '/contents/pending/requested')
       .use(middleware_accesstoken)
       .query({pageNum: pageNo, pageSize: pageSize})
       .query({orderField: orderField, orderMethod: orderMethod})
@@ -487,7 +437,6 @@ const ContentActions = {
       .query({channel: channel, categories: categories})
       .query({type: type})
       .end(function (err, res) {
-
         if (utility.errorHandler(err, res)) {
           return
         }
@@ -511,48 +460,6 @@ const ContentActions = {
   },
 
   /**
-   * Content 검수 List 삭제
-   */
-  deleteInspectionContents(contentId) {
-    request.del(URL + '/contents/pending/' + contentId)
-      .use(middleware_accesstoken)
-      .query({pageNum: 1, pageSize: 30})
-      .query({orderField: '', orderMethod: ''})
-      .query({searchField: '', searchText: ''})
-      .end(function (err, res) {
-
-        if (utility.errorHandler(err, res)) {
-          return
-        }
-
-        request.get(utility.getUrl() + '/contents/pending/requested')
-          .use(middleware_accesstoken)
-          .end(function (err, res) {
-
-            if (utility.errorHandler(err, res)) {
-              return
-            }
-
-            AppDispatcher.handleViewAction({
-              type: AppConstants.GET_INSPECTION_CONTENT,
-              contents: res.body.data,
-              pagination: {
-                pageSize: res.body.pageSize,
-                firstPageNo: res.body.firstPageNo,
-                startPageNo: res.body.startPageNo,
-                prevPageNo: res.body.prevPageNo,
-                pageNo: res.body.pageNo,
-                nextPageNo: res.body.nextPageNo,
-                endPageNo: res.body.endPageNo,
-                finalPageNo: res.body.finalPageNo,
-                totalCount: res.body.totalCount
-              }
-            })
-          })
-      })
-  },
-
-  /**
    * 승인 요청 취소
    */
   requestCancelRequest(postSeq) {
@@ -563,25 +470,21 @@ const ContentActions = {
           return
         }
 
-        request.get(URL + '/contents/pending/my')
-          .use(middleware_accesstoken)
-          .end(function (err, res) {
+        ContentActions.getMyContents()
+      })
+  },
+  /**
+   * 예약된, 발행된, 검수 Content  삭제
+   */
+  deleteContents(contentId, callback) {
+    request.del(URL + '/contents/pending/' + contentId)
+      .use(middleware_accesstoken)
+      .end(function (err, res) {
+        if (utility.errorHandler(err, res)) {
+          return
+        }
 
-            if (utility.errorHandler(err, res)) {
-              return
-            }
-
-            // TODO : pagination 부분 채크 다른데와 다르다?
-            AppDispatcher.handleViewAction({
-              type: AppConstants.GET_CONTENT,
-              contents: res.body.data,
-              pageCnt: res.body.pageCnt,
-              pageNum: res.body.pageNum,
-              pageSize: res.body.pageSize,
-              totalCnt: res.body.totalCnt
-            })
-          })
-
+        callback()
       })
   },
 

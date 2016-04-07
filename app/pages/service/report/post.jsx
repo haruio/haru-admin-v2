@@ -12,18 +12,17 @@ import PageList from '../../../components/PageList'
 import intlStores from '../../../utils/IntlStore'
 
 import PaginationStore from '../../../stores/PaginationStore'
-//TODO : 임시로 같이 씀.
-import ReportCommentsStore from '../../../stores/ReportCommentsStore'
-
+import ReportPostsStore from '../../../stores/ReportPostsStore'
+import AppActions from '../../../actions/AppActions'
 
 class ReportPost extends React.Component {
   static getStores() {
-    return [ReportCommentsStore, PaginationStore]
+    return [ReportPostsStore, PaginationStore]
   }
 
   static calculateState() {
     return {
-      comments: ReportCommentsStore.getReportComments(),
+      posts: ReportPostsStore.getReportPosts(),
       pagination: PaginationStore.getPagination()
     }
   }
@@ -31,9 +30,12 @@ class ReportPost extends React.Component {
 
   componentDidMount() {
     //TODO
+    AppActions.getReportPostList({})
+
   }
 
   render() {
+    log(this.state.posts.toJS())
     return (
       <article>
         <hgroup>
@@ -52,18 +54,20 @@ class ReportPost extends React.Component {
           <p className="table_info">{intlStores.get('common.COMMON_FLD_TOTAL')+' '+this.state.pagination.get('totalCount')+' '+intlStores.get('common.COMMON_FLD_COUNT')}</p>
           <div className="table_wrap">
             <table className="listTable">
-              <colgroup><col width="6%" /><col width="13%" /><col width="27%" /><col width="27%" /><col width="*" /><col width="14%" /></colgroup>
+              <colgroup><col width="6%" /><col width="4%" /><col width="18%" /><col width="18%" /><col width="*" /><col width="10%" /><col width="14%" /></colgroup>
               <thead>
               <tr>
                 <th><input type="checkbox" id="checkAll" value="-1" ref="checkAll" onClick={this.toggleCheckBox} /></th>
-                <th>{intlStores.get('sm.SM_FLD_THUMBNAIL')}</th>
-                <th>{intlStores.get('sm.SM_FLD_TITLE')}</th>
-                <th>{intlStores.get('sm.SM_FLD_REPLY')}</th>
-                <th>{intlStores.get('sm.SM_FLD_USERNAME')}</th>
-                <th>{intlStores.get('sm.SM_FLD_DATE')}</th>
+                <th>No</th>
+                <th>포스트 섬네일</th>
+                <th>포스트 이름</th>
+                <th>신고 이유</th>
+                <th>신고 상태</th>
+                <th>신고 날짜</th>
               </tr>
               </thead>
               <tbody>
+                {this.renderContent}
               </tbody>
             </table>
           </div>
@@ -75,13 +79,36 @@ class ReportPost extends React.Component {
       </article>
     )
   }
-  
+
+  get renderContent() {
+    if (this.state.posts.size == 0) {
+      return ( <tr>
+        <td colSpan="7">{intlStores.get('sm.SM_MSG_NO_CONTENTS')}</td>
+      </tr>)
+    }
+
+    return this.state.posts.map((post, i) => {
+      return (
+        <tr key={i}>
+          <td><input type="checkbox" name="postBox"/></td>
+          <td>{post.get('reportSeq')}</td>
+          <td><img src={post.getIn(['post', 'thumbnailUrl'], '')} onError={this.onImageError} width="140px" className="thumbnailUrl" alt="userProfile"/></td>
+          <td>{post.getIn(['post', 'postTitle'], '')}</td>
+          <td>{post.get('reportReason')}</td>
+          <td>{post.get('reportStsCd')}</td>
+          <td>{moment(post.get('createDt')).format('YYYY-MM-DD')}</td>
+        </tr>
+      )
+    })
+  }
+
   /***
    * Move Page
    * @param page {number} - 이동할 페이지
    */
-  movePage(page) {
+  movePage(pageNo) {
     //TODO
+    AppActions.getReportPostList({pageNo: pageNo})
   }
 
   searchContents() {
