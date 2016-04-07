@@ -27,7 +27,6 @@ const AppActions = {
    * Image Upload
    */
   uploadImage(filePath, type, target, width, height, size) {
-
     request.post(URL + '/resources')
       .set('x-auth-token', currentuser.accesstoken)
       .attach('file', filePath, filePath.name)

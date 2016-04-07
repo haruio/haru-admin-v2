@@ -27,7 +27,6 @@ export function middleware_accesstoken(request) {
   if (currentuser.accesstoken != null) {
     request.set('x-auth-token', currentuser.accesstoken)
   }
-  //request.set('Content-Type', 'application/json')
   request.type('json')
   return request
 }
@@ -59,7 +58,6 @@ const AuthActions = {
         }
       })
   },
-
   /***
    * Email 로그인
    * @param userData {object} - email user data

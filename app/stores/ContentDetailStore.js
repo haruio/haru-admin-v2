@@ -19,11 +19,11 @@ class ContentDetailStore extends MapStore {
     return this._initialState()
   }
 
-  _initialState() {
+  _initialState(contentType) {
     return Immutable.fromJS({
       postSeq: null,
       title: '',
-      type: '',
+      type: contentType,
       thumbnail: '',
       shareImage: '',
       lastImageUrl: '',
@@ -68,6 +68,7 @@ class ContentDetailStore extends MapStore {
 
   _updateContentMeta(state, action) {
     if(action.meta.key == 'keywords') {
+      log(action.meta.value)
       log(action.meta.value.split(','))
       return state.set('keywords', Immutable.List(action.meta.value.split(',')))
     } else {
@@ -78,11 +79,11 @@ class ContentDetailStore extends MapStore {
   _updateContentAddCategory(state, action) {
     // push categoriesseq
     const categoriesSeq = state.get('categoriesSeq').push(action.categorySeq)
-    state.set('categoriesSeq', categoriesSeq)
+    state = state.set('categoriesSeq', categoriesSeq)
 
     // push categories
     const categories = state.get('categories').push(action.category)
-    state.set('categories', categories)
+    state = state.set('categories', categories)
     return state
   }
 
@@ -92,14 +93,14 @@ class ContentDetailStore extends MapStore {
       return item === action.categorySeq
     })
     const categoriesSeq = state.get('categoriesSeq').delete(index)
-    state.set('categoriesSeq', categoriesSeq)
+    state = state.set('categoriesSeq', categoriesSeq)
 
     // 삭제할 카테고리를 찾는다
     const index2 = state.get('categories').findIndex(function (item) {
       return item.get('categorySeq') === action.categorySeq
     })
     const categories = state.get('categories').delete(index2)
-    state.set('categories', categories)
+    state = state.set('categories', categories)
 
     return state
   }
@@ -128,10 +129,12 @@ class ContentDetailStore extends MapStore {
 
   reduce(state, action) {
     switch (action.type) {
+      case AppConstants.CHANGE_CONTENT_TYPE:
+        return state.set('type', action.contentType)
       case AppConstants.GET_POST_OBJ:
         return Immutable.fromJS(action.content)
       case AppConstants.CLEAR_POST_OBJ:
-        return this._initialState()
+        return this._initialState(action.contentType)
       case AppConstants.CREATE_SUBCONTENT:
         return this._createSubContent(state, action)
       case AppConstants.UPDATE_SUBCONTENT:

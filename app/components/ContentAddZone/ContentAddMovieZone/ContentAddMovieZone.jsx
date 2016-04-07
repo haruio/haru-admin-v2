@@ -11,6 +11,8 @@ const btn_close = require('image!../../../assets/img/btn_close.png')
 
 import VideoPreview from '../../VideoPreview'
 import ContentActions from '../../../actions/ContentActions'
+import SubContentItem from './SubContentItem'
+import {PUBLISH} from '../../../constants/AppConstants'
 
 /**
  * A component to ContentAddImageZone
@@ -23,7 +25,41 @@ export default class ContentAddMovieZone extends React.Component {
     $('#drag_list2').sortable({placeholder: 'placeholder'})
   }
 
-  videoContentAddImage() {
+  render() {
+    return (
+      <div id="add_images">
+        <h3>{intlStores.get('cms.CMS_FLD_CONTENTS')}</h3>
+        <VideoPreview content={this.props.content}/>
+        <ul id="drag_list2">
+          {this.renderContents}
+        </ul>
+        <p className="btn_add">
+          <a onClick={this.videoContentAddEmptyImage}><img src={icon_images2} alt={intlStores.get('cms.CMS_BTN_ADD_IMAGE')}/></a>
+          <a onClick={this.videoContentAddEmptyText}><img src={icon_images} alt={intlStores.get('cms.CMS_BTN_ADD_TXT')}/></a>
+        </p>
+        <p className="btn_r">
+          <a className="gray">{intlStores.get('cms.CMS_BTN_LIST')}</a>
+          <a className="tinyGreen" onClick={this.submitContent.bind(this, PUBLISH.TEMP)}>{intlStores.get('cms.CMS_BTN_TEMP_SAVE')}</a>
+          <a className="purple btn_w340" onClick={this.submitContent.bind(this, PUBLISH.APPROVE)}>{intlStores.get('cms.CMS_BTN_REQUEST')}</a>
+        </p>
+      </div>
+    )
+  }
+
+  get renderContents() {
+    if (this.props.content.get('contents') == undefined)
+      return null
+
+    return this.props.content.get('contents').map((content) => {
+      return <SubContentItem content={content} key={content.get('contentSeq')}/>
+    })
+  }
+
+  submitContent = (type) => {
+    this.props.onSubmit(type)
+  }
+
+  videoContentAddEmptyImage() {
     ContentActions.addSubContent({
       contentSeq: Date.now(),
       type: 'IMG',
@@ -33,7 +69,7 @@ export default class ContentAddMovieZone extends React.Component {
     })
   }
 
-  videoContentAddText() {
+  videoContentAddEmptyText() {
     ContentActions.addSubContent({
       contentSeq: Date.now(),
       type: 'TXT',
@@ -42,77 +78,4 @@ export default class ContentAddMovieZone extends React.Component {
       contentResourceSeq: ''
     })
   }
-
-  render() {
-    return (
-      <div id="add_images">
-        <h3>{intlStores.get('cms.CMS_FLD_CONTENTS')}</h3>
-        <VideoPreview content={this.props.content}/>
-        <ul id="drag_list2">
-          {this.renderContent}
-        </ul>
-        <p className="btn_add">
-          <a onClick={this.videoContentAddImage}><img src={icon_images2} alt={intlStores.get('cms.CMS_BTN_ADD_IMAGE')}/></a>
-          <a onClick={this.videoContentAddText}><img src={icon_images} alt={intlStores.get('cms.CMS_BTN_ADD_TXT')}/></a>
-        </p>
-        <p className="btn_r">
-          <a className="gray">{intlStores.get('cms.CMS_BTN_LIST')}</a>
-          <a className="tinyGreen">{intlStores.get('cms.CMS_BTN_TEMP_SAVE')}</a>
-          <a className="purple btn_w340">{intlStores.get('cms.CMS_BTN_REQUEST')}</a>
-        </p>
-      </div>
-    )
-  }
-
-  get renderContent() {
-    // 컨텐츠가 없을때 첫 렌더링때는 contents가 없음
-    if (this.props.content.get('contents') == undefined)
-      return null
-
-    return this.props.content.get('contents').map((content) => {
-      if (content.get('type') === 'IMG') {
-        return (
-          <li key={content.get('contentSeq')}>
-            <p className="img">{this.subcontentimg(content)}</p>
-            <p className="text">
-              <textarea placeholder={intlStores.get('cms.CMS_MSG_ERROR_DESC')}
-                        defaultValue={content.get('body')}
-                        onBlur={this.onSubContentUpdate.bind(this, content.get('contentSeq'))}></textarea>
-            </p>
-            <input type="image" src={btn_close} alt="닫기" onClick={this.clickRemoveBtn.bind(this, content.get('contentSeq'))} />
-          </li>
-        )
-      } else {
-        return (
-          <li key={content.get('contentSeq')}>
-            <p className="text"><textarea placeholder={intlStores.get('cms.CMS_MSG_ERROR_DESC')}></textarea></p>
-            <input type="image" src={btn_close} alt="닫기" onClick={this.clickRemoveBtn.bind(this, content.get('contentSeq'))} />
-          </li>
-        )
-      }
-    })
-  }
-
-  subcontentimg(content) {
-    if (content.get('contentUrl') === '') {
-      return <b className="info">{intlStores.get('cms.CMS_TXT_DRAG_IMAGE')}</b>
-    } else {
-      return <img src={content.get('contentUrl')} alt="image"/>
-    }
-  }
-
-  onSubContentUpdate(contentSeq, e) {
-    ContentActions.updateSubContent({
-      contentSeq: contentSeq,
-      type: 'IMG',
-      contentUrl: '',
-      body: e.target.value,
-      contentResourceSeq: ''
-    })
-  }
-  
-  clickRemoveBtn(contentSeq) {
-    ContentActions.deleteSubContent(contentSeq)
-  }
-
 }

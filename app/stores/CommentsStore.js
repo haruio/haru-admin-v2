@@ -24,7 +24,6 @@ class CommentsStore extends ReduceStore {
   }
 
   reduce(state, action) {
-
     switch (action.type) {
       case AppConstants.GET_COMMENTS:
         return Immutable.fromJS(action.contents)

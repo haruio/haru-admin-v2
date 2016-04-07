@@ -16,6 +16,10 @@ import CategoryStore from '../../stores/CategoryStore'
 import ChannelStore from '../../stores/ChannelStore'
 
 import ContentActions from '../../actions/ContentActions'
+import intlStores from '../../utils/IntlStore'
+import {PUBLISH} from '../../constants/AppConstants'
+
+import Alert from 'react-s-alert';
 
 /**
  * A page to Compose
@@ -26,7 +30,7 @@ class Compose extends React.Component {
   static contextTypes = {
     router: React.PropTypes.object.isRequired
   }
-  
+
   static getStores() {
     return [ContentDetailStore, CategoryStore, ChannelStore]
   }
@@ -39,15 +43,43 @@ class Compose extends React.Component {
     }
   }
 
+
+  componentWillReceiveProps(prevProps) {
+    if (this.props !==  prevProps.params) {
+      ContentActions.changeContentType(this._changeContentType())
+    }
+  }
+
   componentDidMount() {
     // param이 있고 postdetail이 없는 경우 서버에 요청함
     if (this.props.params.id !== undefined) {
       ContentActions.getContent(this.props.params.id)
     } else {
       setTimeout(() => {
-        ContentActions.clearContent()
+        ContentActions.clearContent(this._changeContentType())
       })
     }
+    this._documentDragEventPrevent()
+  }
+
+  _changeContentType = () => {
+    let type = 'VDO'
+    if(this.context.router.isActive('/content/compose/image')) {
+      type = 'IMS'
+    }
+    return type
+  }
+  /**
+   * drag drop 영역 외에 이미지 끌어다 놓을 경우, 브라우저에 이미지미리보기 되는 이벤트 제거
+   */
+  _documentDragEventPrevent() {
+    const eventPrevent = (e) => {
+      e.stopPropagation()
+      e.preventDefault()
+    }
+    $(document).on('dragenter', eventPrevent)
+    $(document).on('dragover', eventPrevent)
+    $(document).on('drop', eventPrevent)
   }
 
   render() {
@@ -68,9 +100,30 @@ class Compose extends React.Component {
                      channels={this.state.channels}
                      content={this.state.content} />
           <ContentAddZone type={type}
-                          content={this.state.content} />
+                          content={this.state.content}
+                          onSubmit={this.onSubmit}/>
         </article>
     )
+  }
+
+  onSubmit = (submitType) => {
+    log(this.state.content.toJS())
+
+    if(submitType == PUBLISH.TEMP) {
+      /**
+
+       */
+      if (window.confirm(intlStores.get('cms.CMS_MSG_NEED_TEMP_SAVE'))) {
+        ContentActions.saveTemporaryContent(this.state.content.toJS())
+      }
+
+    } else if(submitType == PUBLISH.APPROVE) {
+      //승인요청
+      // "/contents/pending/request";
+      if (window.confirm(intlStores.get('cms.CMS_MSG_NEED_APPROVE'))) {
+        ContentActions.appoveContent(this.state.content.toJS())
+      }
+    }
   }
 }
 const ComposeContainer = Container.create(Compose)

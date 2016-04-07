@@ -14,6 +14,7 @@ class CategoryStore extends ReduceStore {
   getInitialState() {
     return Immutable.List()
   }
+  
   getCategories() {
     return this.getState()
   }

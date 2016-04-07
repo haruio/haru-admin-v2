@@ -44,6 +44,7 @@
     "react-google-analytics": "^0.2.0",
     "react-immutable-proptypes": "^1.7.0",
     "react-router": "^2.0.1",
+    "react-s-alert": "^1.1.0",
     "react-tag-input": "^2.2.5",
     "react-youtube": "^5.1.0",
     "superagent": "^1.8.3",

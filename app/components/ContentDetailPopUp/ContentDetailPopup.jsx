@@ -1,116 +1,73 @@
 import React from 'react'
+import {Container} from 'flux/utils'
 
 import debug from 'debug'
 const log = debug('application:ContentDetailPopup.jsx')
 
-const btn_prev = require("image!../../assets/img/btn_prev.png")
-const btn_next = require("image!../../assets/img/btn_next.png")
-const btn_pop_close = require("image!../../assets/img/btn_pop_close.png")
+const btn_pop_close = require('image!../../assets/img/btn_pop_close.png')
 
+import PopupActions from '../../actions/PopupActions'
+import {POPUP} from '../../constants/AppConstants'
+import ContentDetailStore from '../../stores/ContentDetailStore'
 
+import DetailInfoPanel from './DetailInfoPanel'
+import DetailListPanel from './DetailListPanel'
 /**
  * A component to ContentDetailPopup
+ * history : 현재 선택된 이미지에 대한 state를 유지하기 위해서 여러 가지 방법을 고려해봤지만
+ * Container 에서는 자기 자신에 state를 가질수 없기 때문에 component를 따로 만들었다
+ * 하지만, 두 하위 컴포넌트 간에 통신을 위해서 어쩔수 없이 함수로 연결하는 방법을 택했다
+ * 코드에 이해가 어려울 수 있음
  * author : jungun.park
  */
+class ContentDetailPopup extends React.Component {
+  static getStores() {
+    return [ContentDetailStore]
+  }
 
-
-export default class ContentDetailPopup extends React.Component {
-
-  componentDidMount() {
-    // detail list cycle
-    $('#detail_list>div').cycle({
-      fx: 'scrollHorz',
-      timeout: 0,
-      speed: '2000',
-      after: onAfter,
-      prev: '#prev_list',
-      next: '#next_list'
-    })
-    function onAfter(curr, next, opts) {
-      var index = opts.currSlide;
-      $('#prev_list')[index == 0 ? 'hide' : 'show']()
-      $('#next_list')[index == opts.slideCount - 1 ? 'hide' : 'show']()
+  static calculateState() {
+    return {
+      content: ContentDetailStore.getContent(),
     }
   }
 
   render() {
+
     return (
-      <div id="contents_detail">
-        <div id="detail_info">
-          <p style={{backgroundImage:'url(http://assets2.moncast.com/image/0ac19364b6e7057c.jpeg)'}}><em>애교섞인 말투와, 나를 바라보며 미소짓는 모습을 봤을때 애교섞인 말투와, </em></p>
-          <table className="writeTable">
-            <colgroup><col width="200px" /><col width="*" /></colgroup>
-            <tbody>
-            <tr>
-              <th>출처</th>
-              <td><input type="text" className="txt" /></td>
-            </tr>
-            <tr>
-              <th>설명</th>
-              <td>
-                <textarea></textarea>
-                <p>최대 100자 이내로 작성해 주세요. (0/100)</p>
-              </td>
-            </tr>
-            <tr>
-              <th>파일명</th>
-              <td>아이유.png</td>
-            </tr>
-            <tr>
-              <th>사이즈</th>
-              <td>120*160</td>
-            </tr>
-            <tr>
-              <th>압축</th>
-              <td>120*160</td>
-            </tr>
-            <tr>
-              <th>수평 해상도</th>
-              <td>120*160</td>
-            </tr>
-            <tr>
-              <th>수직 해상도</th>
-              <td>120*160</td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-        <div id="detail_list">
-          <div>
-            <ul>
-              <li><p style={{"backgroundImage":"url(http://assets2.moncast.com/thumb/ed073321aeae200c.jpeg)"}}></p></li>
-              <li><p style={{"backgroundImage":"url(http://assets2.moncast.com/image/0ac19364b6e7057c.jpeg)"}}></p></li>
-              <li><p style={{"backgroundImage":"url(http://assets2.moncast.com/image/8ab535fd27d7b6bb.jpeg)"}}></p></li>
-              <li><p style={{"backgroundImage":"url(http://assets2.moncast.com/image/0ac19364b6e7057c.jpeg)"}}></p></li>
-              <li><p style={{"backgroundImage":"url(http://assets2.moncast.com/thumb/ed073321aeae200c.jpeg)"}}></p></li>
-              <li><p style={{"backgroundImage":"url(http://assets2.moncast.com/image/0ac19364b6e7057c.jpeg)"}}></p></li>
-              <li><p style={{"backgroundImage":"url(http://assets2.moncast.com/image/8ab535fd27d7b6bb.jpeg)"}}></p></li>
-            </ul>
-            <ul>
-              <li><p style={{"backgroundImage":"url(http://assets2.moncast.com/image/0ac19364b6e7057c.jpeg)"}}></p></li>
-              <li><p style={{"backgroundImage":"url(http://assets2.moncast.com/image/8ab535fd27d7b6bb.jpeg)"}}></p></li>
-              <li><p style={{"backgroundImage":"url(http://assets2.moncast.com/image/0ac19364b6e7057c.jpeg)"}}></p></li>
-              <li><p style={{"backgroundImage":"url(http://assets2.moncast.com/thumb/ed073321aeae200c.jpeg)"}}></p></li>
-              <li><p style={{"backgroundImage":"url(http://assets2.moncast.com/image/0ac19364b6e7057c.jpeg)"}}></p></li>
-              <li><p style={{"backgroundImage":"url(http://assets2.moncast.com/image/8ab535fd27d7b6bb.jpeg)"}}></p></li>
-              <li><p style={{"backgroundImage":"url(http://assets2.moncast.com/image/0ac19364b6e7057c.jpeg)"}}></p></li>
-            </ul>
-            <ul>
-              <li><p style={{"backgroundImage":"url(http://assets2.moncast.com/image/0ac19364b6e7057c.jpeg)"}}></p></li>
-              <li><p style={{"backgroundImage":"url(http://assets2.moncast.com/image/8ab535fd27d7b6bb.jpeg)"}}></p></li>
-              <li><p style={{"backgroundImage":"url(http://assets2.moncast.com/image/0ac19364b6e7057c.jpeg)"}}></p></li>
-            </ul>
-          </div>
-          <input type="image" src={btn_prev} alt="이전" id="prev_list" />
-          <input type="image" src={btn_next} alt="다음" id="next_list" />
-        </div>
+      <div id="contents_detail" onClick={this.clearEvent}>
+        <DetailInfoPanel ref="detailinfo" contentSeq={this.props.contentSeq} content={this.state.content} />
+        <DetailListPanel contentSeq={this.props.contentSeq}
+                         content={this.state.content}
+                         changeSelectedImage={this.changeSelectedImage}
+                         popClose={this.popClose} />
         <input type="image" src={btn_pop_close} alt="닫기" className="pop_close" onClick={this.popClose} />
       </div>
     )
   }
 
+  changeSelectedImage = (index) => {
+    if(this.refs.detailinfo) {
+      this.refs.detailinfo.changeSelectedImage(index)
+    }
+  }
+  /***
+   * 팝업을 닫는 이벤트
+   * @param e {MoveEvent} - click event clear
+   */
   popClose = (e) => {
-    $("#contents_detail").animate({'margin-top': '-100%', opacity: 0}, 200)
+    $('#contents_detail').animate({'margin-top': '-100%'}, 200)
+    PopupActions.closePopup(POPUP.CONTENTDETAIL)
   }
 
+  /***
+   * 상위 이벤트가 하위에 내려오는 것을 맊는 기능
+   * 팝업 밖을 클릭할때 팝업을 닫는 기능이 있는데 팝업을 누를때도 먹을 수 있어서 기능이 내려가지 않도록 stopPropagation함
+   * @param e {MoveEvent} - click event clear
+   */
+  clearEvent(e) {
+    e.stopPropagation()
+  }
 }
+
+const ContentDetailPopupContainer = Container.create(ContentDetailPopup)
+export default ContentDetailPopupContainer

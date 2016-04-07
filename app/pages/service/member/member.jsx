@@ -32,7 +32,7 @@ class Member extends React.Component {
   }
 
   componentDidMount() {
-      AppActions.getUserList({pageNo: 1, searchField: '', searchText: '', searchUserStat: ''})
+    AppActions.getUserList({pageNo: 1, searchField: '', searchText: '', searchUserStat: ''})
   }
 
   render() {

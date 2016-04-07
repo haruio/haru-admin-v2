@@ -18,6 +18,7 @@ export default keyMirror({
   UPDATE_CONTENT_REMOVECATEGORY: null,
   UPLOAD_CONTENT_IMAGE: null,
   CLEAR_CONTENT_IMAGE: null,
+  CHANGE_CONTENT_TYPE: null,
   /**
    * Compose COMMON
    */
@@ -29,7 +30,6 @@ export default keyMirror({
    * Compose Image
    */
   CREATE_IMAGE: null,
-  CREATE_IMAGES: null,
   GET_IMAGES: null,
   UPDATE_IMAGE: null,
   DELETE_IMAGE: null,
@@ -41,7 +41,6 @@ export default keyMirror({
   GET_IMAGE_POST_OBJ: null,
   GET_IMAGE_COMPOSE_CATEGORIES_CHANNELS: null,
   SUBMIT_IMAGE_SUCCESS: null,
-
   /**
    * Compose Video
    */
@@ -312,3 +311,8 @@ export const POPUP = keyMirror({
   REGISTER_CHANNEL: null,
   CHANNEL_USER: null
 }, '-', 'Popup')
+
+export const PUBLISH = keyMirror({
+  TEMP:null,
+  APPROVE:null
+})

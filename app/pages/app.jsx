@@ -24,6 +24,7 @@ import ContentDetailPopup from '../components/ContentDetailPopUp'
 import ga from 'react-google-analytics'
 var GAInitiailizer = ga.Initializer
 */
+import Alert from 'react-s-alert';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -56,6 +57,7 @@ export default class App extends React.Component {
           <PublishedContentPopup key={POPUP.PUBLISHEDCONTENT}/>
           <ContentDetailPopup key={POPUP.CONTENTDETAIL}/>
         </Popup>
+        <Alert stack={{limit: 3}} />
       </section>
     )
   }

@@ -51,7 +51,7 @@ export default class MetaPanel extends React.Component {
     this._adjustPanelHeight(true)
   }
 
-  _adjustPanelHeight(ismount) {
+  _adjustPanelHeight(ismount = false) {
     let timeout = 0
     if(ismount) {
       timeout = 200
@@ -76,7 +76,6 @@ export default class MetaPanel extends React.Component {
 
     let keywords = ''
     if(nextProps.content.get('keywords') != undefined) {
-      log(nextProps.content.get('keywords').toJS())
       keywords = nextProps.content.get('keywords').reduce(function (reduction, value, key) {
         reduction.push({id : key, text:value})
         return reduction
@@ -222,6 +221,8 @@ export default class MetaPanel extends React.Component {
         <tr>
           <th>{intlStores.get('cms.CMS_FLD_SOURCE')}</th>
           <td><input type="text" className="txt t1" ref="source"
+                     placeholder="Input the source of the content"
+
                      value={this.state.source || ''}
                      onChange={this.handleChange.bind(this, 'source')}
                      onBlur={this.onUpdateStore.bind(this, 'sourceDescription')}/></td>
@@ -312,15 +313,19 @@ export default class MetaPanel extends React.Component {
     })
   }
 
-
   /**
    * 키워드 관련 이벤트
    */
   handleDelete = (i) => {
     let keywords = this.state.keywords
     keywords.splice(i, 1)
-    this.setState({keywords: keywords})
-    // TODO: 키워드를 추가.
+    const keywordlist = keywords.map((keyword) => {
+      return keyword.text
+    })
+    ContentActions.updateContentMeta({
+      key:'keywords',
+      value:keywordlist.join(',')
+    })
   }
   handleAddition = (keyword) => {
     let keywords = this.state.keywords
@@ -328,7 +333,15 @@ export default class MetaPanel extends React.Component {
       id: keywords.length + 1,
       text: keyword
     })
-    this.setState({keywords: keywords})
+
+    const keywordlist = keywords.map((keyword) => {
+      return keyword.text
+    })
+
+    ContentActions.updateContentMeta({
+      key:'keywords',
+      value:keywordlist.join(',')
+    })
   }
   handleDrag = (keyword, currPos, newPos) => {
     let keywords = this.state.keywords
@@ -337,8 +350,14 @@ export default class MetaPanel extends React.Component {
     keywords.splice(currPos, 1)
     keywords.splice(newPos, 0, keyword)
 
-    // re-render
-    this.setState({ keywords: keywords })
+    const keywordlist = keywords.map((keyword) => {
+      return keyword.text
+    })
+
+    ContentActions.updateContentMeta({
+      key:'keywords',
+      value:keywordlist.join(',')
+    })
   }
 
   /**
