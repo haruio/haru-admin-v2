@@ -154,7 +154,7 @@ class ContentDetailStore extends MapStore {
       case AppConstants.GET_POST_DETAIL:
         return Immutable.Map(action.contents)
       case AppConstants.CLEAR_POST_DETAIL:
-        return this.initialState()
+        return this._initialState()
       case AppConstants.UPLOAD_POST_IMAGE:
         return state.set(action.target, action.image.resourceUrl)
       default:

@@ -21,7 +21,7 @@ class Header extends React.Component {
     // TODO : 유저 정보
     return (
       <header>
-        <h1><Link to="/content/mycontent"><img src={logo} alt="MAKE US" style={{width:'190px'}}/></Link></h1>
+        <h1><Link to="/content/mycontent"><img src={logo} alt="MAKE US" style={{width:'160px'}}/></Link></h1>
         <ul>
           <li><Link to="/content" activeClassName="on">Contents Management</Link></li>
           <li><Link to="/service" activeClassName="on">Service Management</Link></li>

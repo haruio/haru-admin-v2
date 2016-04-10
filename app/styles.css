@@ -532,8 +532,8 @@ img.porfile{display:inline-block;width:43px;height:43px;border:1px solid #dbdfe2
 #calendar_head{position:relative;text-align:center;margin:25px 0 10px}
 #calendar_head time{font-size:16px;color:#222}
 #calendar_head input{position:absolute;top:7px;left:50%}
-#calendar_head input.prev{margin-left:-120px}
-#calendar_head input.next{margin-left:42px}
+#calendar_head input.prev{margin-left:-140px}
+#calendar_head input.next{margin-left:57px}
 #calendar_head a{display:inline-block;vertical-align:-6px;margin-left:46px;opacity:0.5}
 #calendar_head a:hover{opacity:1}
 #calendar_area{background:#fff;box-shadow:0 0 2px #ccc;padding:18px;margin-bottom:30px}

@@ -22,7 +22,7 @@ class PushStore extends ReduceStore {
   reduce(state, action) {
     switch (action.type) {
       case AppConstants.GET_PUSH_LIST:
-        return Immutable.fromJS(action.pushList)
+        return Immutable.fromJS(action.pushList || [])
       default:
         return state
     }

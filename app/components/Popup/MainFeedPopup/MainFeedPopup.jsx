@@ -15,6 +15,20 @@ import AppActions from '../../../actions/AppActions'
 import debug from 'debug'
 const log = debug('application:MainFeedPopup.jsx')
 
+import ImageUploader from '../../ImageUploader'
+
+import immutable from 'immutable'
+
+
+/***
+ * TODO
+ *  1. 검색어 조회 기능
+ * 2. 이미지 업로드
+ * 3. 메인피드 부분에 업데이트
+ * 4. 메인피드 예약하기
+ * 5. 메인피드 삭제하기
+ */
+
 class MainFeedPopup extends React.Component {
 
   static getStores() {
@@ -24,7 +38,8 @@ class MainFeedPopup extends React.Component {
   static calculateState() {
     return {
       publish: PublishedListStore.getContentList(),
-      pagination: PopupPaginationStore.getPagination()
+      pagination: PopupPaginationStore.getPagination(),
+      selected: 0
     }
   }
 
@@ -61,7 +76,7 @@ class MainFeedPopup extends React.Component {
           <PageList pageObj={this.state.pagination} clickAction={this.movePage} />
           {this.renderRegisterThumbnail}
           <p className="btn_c">
-            <a href="" className="purple">확인</a>
+            <a onClick={this.registerMainFeed} className="purple">확인</a>
             <a onClick={this.props.close} className="gray">취소</a>
           </p>
         </div>
@@ -71,13 +86,15 @@ class MainFeedPopup extends React.Component {
 
   get renderPublishedList() {
     return this.state.publish.map((item, i) => {
-      return (<tr key={i} onClick={this.selectItem.bind(this, item.get('postSeq'))} style={{cursor:'pointer'}}>
+      const selected = cn({'on' : this.state.selected === item.get('postSeq')})
+
+      return (<tr key={i} onClick={this.selectItem.bind(this, item.get('postSeq'))} style={{cursor:'pointer'}} className={selected}>
         <td><img src={item.get('thumbnailUrl')} alt="thumbnail" /></td>
         <td className="al">{item.get('postTitle')}</td>
         <td>{item.get('isMain') ? <span className="ico_main">Main</span> : null}</td>
         <td>{item.get('isReserved') ? <span className="ico_reserve">예약</span> : null}</td>
         <td>{moment(item.get('publishStartDt')).format('YYYY-MM-DD')}<br/>{moment(item.get('publishStartDt')).format('hh:mm')}</td>
-        <td><a href="" className="btn_select">선택</a></td>
+        <td><a className="btn_select">선택</a></td>
       </tr>)
     })
   }
@@ -88,11 +105,7 @@ class MainFeedPopup extends React.Component {
       <tbody>
       <tr>
         <th>썸네일 등록</th>
-        <td>
-          <input type="text" className="txt w42" id="filen" /><span className="btn_file">Choose file<input type="file" onchange="javascript: document.getElementById('filen').value = this.value" /></span>
-          <a href="#" className="btn_preview has"><img src="http://assets2.moncast.com/channel/713f94bf61bb8b8c.jpeg" alt="" /></a>
-          <a href="" className="btn_del"></a>
-        </td>
+        <ImageUploader id="thumbnail" type="MAINFEED" value={immutable.Map({})} ref="thumbnail"/>
       </tr>
       </tbody>
     </table>)
@@ -104,14 +117,12 @@ class MainFeedPopup extends React.Component {
    */
   movePage(page) {
     ContentActions.getPublishContents(page)
-
   }
 
-  selectItem(id) {
-    AppActions.getPostDetail(PublishedListStore.getContentListById(id))
-    //this.props.close()
+  selectItem = (id) => {
+    this.setState({selected: id})
   }
-  
+
   /***
    * 상위 이벤트가 하위에 내려오는 것을 맊는 기능
    * 팝업 밖을 클릭할때 팝업을 닫는 기능이 있는데 팝업을 누를때도 먹을 수 있어서 기능이 내려가지 않도록 stopPropagation함
@@ -119,6 +130,12 @@ class MainFeedPopup extends React.Component {
    */
   clearEvent(e) {
     e.stopPropagation()
+  }
+
+  registerMainFeed = () => {
+    log('register')
+    log(PublishedListStore.getContentListById(this.state.selected).toJS())
+
   }
 }
 const MainFeedPopupContainer = Container.create(MainFeedPopup)

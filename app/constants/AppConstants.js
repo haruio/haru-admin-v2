@@ -128,13 +128,13 @@ export default keyMirror({
    * MainFeed Management
    */
   GET_MAINFEED: null,
-  CREATE_MAINFEED: null,
+  GET_MAINFEED_CONTENTS: null, // 발행된 컨텐츠 조회??
+  RESERVE_MAINFEED: null,
   READ_MAINFEED: null,
-  UPDATE_MAINFEED: null,
-  DELETE_MAINFEED: null,
-  GET_MAINFEED_CONTENTS: null,
-
-
+  CREATE_MAINFEED: null,
+  UPDATE_MAINFEEDITEM: null,
+  DELETE_MAINFEEDITEM: null,
+  CHANGE_TYPE_MAINFEED : null,
   /**
    * User Management
    */
@@ -290,6 +290,13 @@ export const IMAGE_VALIDATION = {
       width: 960,
       height: 350,
       size: 200
+    }
+  },
+  MAINFEED: {
+    thumbnail: {
+      width: 345,
+      height: 230,
+      size: 30
     }
   }
 }

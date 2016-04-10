@@ -14,6 +14,7 @@ import utility from '../utils/util.js'
 
 import { currentuser, URL, middleware_accesstoken } from './AuthActions.js'
 
+import moment from 'moment'
 
 /***
  * middleware_accesstoken
@@ -74,6 +75,95 @@ const AppActions = {
         target: target
       })
     }
+  },
+  /***
+   * Mainfeed API
+   * @param dateObj
+   */
+    //전체 불러오기
+  listMainFeedTemplate(dateObj) {
+    request.get(URL + '/sm/feed/template')
+      .use(middleware_accesstoken)
+      .query({
+        startDate: dateObj.publishDate || moment().utc().toISOString(),
+        endDate: dateObj.publishEndDate || moment().utc().add('1','day').subtract('1', 'second').toISOString()})
+      .end(function (err, res) {
+
+        AppDispatcher.handleViewAction({
+          type: AppConstants.GET_MAINFEED,
+          contents: res.body.data
+        })
+      })
+  },
+  //한개 불러오기
+  readMainFeedTemplate(groupId) {
+    request.get(URL + '/sm/feed/template/' + groupId)
+      .use(middleware_accesstoken)
+      .end(function (err, res) {
+
+        AppDispatcher.handleViewAction({
+          type: AppConstants.READ_MAINFEED,
+          contents: res.body
+        })
+      })
+  },
+  //새로 만들기
+  createMainFeedTemplate(typeid) {
+    AppDispatcher.handleViewAction({
+      type: AppConstants.CREATE_MAINFEED,
+      typeid: typeid
+    })
+  },
+  //타입 변경하기 (새로만들때만 가능함)
+  changeMainFeedTemplate(typeindex) {
+    AppDispatcher.handleViewAction({
+      type: AppConstants.CHANGE_TYPE_MAINFEED,
+      typeindex: typeindex
+    })
+  },
+  updateMainFeedTemplate(index, feeditem) {
+    AppDispatcher.handleViewAction({
+      type: AppConstants.UPDATE_MAINFEEDITEM,
+      index: index,
+      feeditem : feeditem
+    })
+  },
+  deleteMainFeedTemplate(index) {
+    AppDispatcher.handleViewAction({
+      type: AppConstants.DELETE_MAINFEEDITEM,
+      index: index
+    })
+  },
+  reserveMainFeedTemplate(dataObj, publishDate) {
+    request.post(URL + '/sm/feed/template')
+      .use(middleware_accesstoken)
+      .send(dataObj)
+      .end(function (err, res) {
+        // TODO : refactoring 필요!
+        if (err != null) {
+          return
+        } else {
+
+          if('ERROR' != res.body.type) {
+            alert('메인피드를 등록했습니다.')
+
+            AppDispatcher.handleViewAction({
+              type: AppConstants.RESERVE_MAINFEED,
+              publishDate: publishDate
+            })
+          }else {
+            switch(res.body.message) {
+              case 'INVALID_POST_SEQ' :
+                alert('템플릿 정보가 올바르지 않습니다.')
+                break
+              default :
+                alert('메인피드를 등록하지 못했습니다.')
+                break
+            }
+            return
+          }
+        }
+      })
   },
   /**
    * Banner by Keigun

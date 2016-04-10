@@ -3,27 +3,66 @@
  */
 import React from 'react'
 import { Link } from 'react-router'
+import {Container} from 'flux/utils'
+import moment from 'moment'
+
 import debug from 'debug'
 const log = debug('application:MainFeed.jsx')
 
 const btn_prev2 = require('image!../../../assets/img/btn_prev2.png')
 const btn_next2 = require('image!../../../assets/img/btn_next2.png')
 const btn_add3 = require('image!../../../assets/img/btn_add3.png')
+const bg_calendar = require('image!../../../assets/img/bg_calendar.png')
 
-export default class MainFeed extends React.Component {
-  constructor(props) {
-    super(props)
+import MainFeedTemplate from '../../../components/MainFeedTemplate'
 
+import MainfeedStore from '../../../stores/MainfeedStore'
+import AppActions from '../../../actions/AppActions'
+
+class MainFeed extends React.Component {
+  static contextTypes = {
+    router: React.PropTypes.object.isRequired
+  }
+
+  static getStores() {
+    return [MainfeedStore]
+  }
+
+  static calculateState(prevState, props) {
+    // TODO 날짜를 바꾸고싶을땐 어떻게 하지???
+    let searchDate = MainfeedStore.getSearchDate()
+    if (props.query != undefined && props.query.searchDate != undefined) {
+      searchDate = this.props.query.searchDate
+    }
+
+    return {
+      mainfeeds: MainfeedStore.getMainfeeds(),
+      searchDate:searchDate
+    }
   }
 
   componentDidMount() {
-    // TODO event 변경 필요
-    //메인피트 리스트
-    $(".main_list>li").hover(function () {
-      $(this).find('.modifi').stop().fadeIn(300).stop().animate({opacity:1}, 100)
-    }, function() {
-      $(this).find('.modifi').stop().fadeOut(300)
-    })
+    this._initCalendar()
+    this.getMainFeedList(this.state.searchDate)
+  }
+
+  _initCalendar() {
+    const _self = this
+    $('#mainfeedDate').datepicker({
+      dateFormat: 'yy-mm-dd',
+      onClose: function (dateText) {
+        AppActions.ChangeSearchDate(dateText)
+
+        _self.getMainFeedList(dateText)
+      }
+    }).datepicker('setDate', this.state.searchDate)
+  }
+
+  getMainFeedList(searchDate) {
+    const publishStartDate  = moment(searchDate+' 00:00:00').format('YYYY-MM-DD HH:mm:ss')
+    const publishEndDate = moment(searchDate +' 23:59:59').format('YYYY-MM-DD HH:mm:ss')
+
+    AppActions.listMainFeedTemplate({publishDate:moment(publishStartDate).utc().toISOString(), publishEndDate:moment(publishEndDate).utc().toISOString()})
   }
 
   render() {
@@ -34,147 +73,58 @@ export default class MainFeed extends React.Component {
         </hgroup>
         <div id="main_feed_timeline">
           <fieldset>
-            <time>
-              <input type="image" src={btn_prev2} alt="이전" />
-              <b>2015-09-04 (금)</b>
-              <input type="image" src={btn_next2} alt="다음" />
-              <a href="" className="btn_calendar"></a>
+            <time >
+              <input type="image" src={btn_prev2} alt="이전" onClick={this.changeSearchDate.bind(null, 'prev')} />
+              <input type="text" id="mainfeedDate" style={{display:'none'}}/>
+              <b onClick={this.onShowCalendar}>{this.state.searchDate} ({moment(this.state.searchDate, 'YYYY-MM-DD').format('dddd')})</b>
+              <input type="image" src={btn_next2} alt="다음" onClick={this.changeSearchDate.bind(null, 'next')} />
+              <a onClick={this.onShowCalendar} style={{verticalAlign:'-6px'}}><img src={bg_calendar} alt="달력"/></a>
             </time>
+
             <Link to="/service/mgmt/mainfeed/new"><img src={btn_add3} alt="추가" /></Link>
           </fieldset>
-          <div>
-            <time>am 11:00</time>
-            <ul className="main_list">
-              <li>
-                <a href="">
-                  <em style={{ backgroundImage:'url(http://assets2.moncast.com/thumb/4ada80b7b068013a.jpeg)' }}><span>00:40</span></em>
-                  <p>백주부도 흉내 내지 못할 뒤집기 기술백주부도 흉내 내지 못할 뒤집기 기술백주부도 흉내 내지 못할 뒤집기 기술백주부도 흉내 내지 못할 뒤집기 기술</p>
-                </a>
-              </li>
-              <li>
-                <a href="">
-                  <em style={{ backgroundImage:'url(http://assets2.moncast.com/thumb/1219f9f5cf29b60b.jpeg)' }}><span className="cnt">999</span></em>
-                  <p>백주부도 흉내 내지 못할 뒤집기 기술</p>
-                </a>
-              </li>
-              <li className="row2">
-                <a href="">
-                  <em style={{ backgroundImage:'url(http://assets2.moncast.com/thumb/cdaa3b672428cf45.jpeg)' }}><span className="cnt">209</span></em>
-                </a>
-              </li>
-              <li>
-                <a href="">
-                  <em style={{ backgroundImage:'url(http://assets2.moncast.com/thumb/1219f9f5cf29b60b.jpeg)' }}><span className="cnt">40</span></em>
-                  <p>백주부도 흉내 내지 못할 뒤집기 기술</p>
-                </a>
-              </li>
-              <li>
-                <a href="">
-                  <em style={{ backgroundImage:'url(http://assets2.moncast.com/thumb/1219f9f5cf29b60b.jpeg)' }}><span className="cnt">40</span></em>
-                  <p>백주부도 흉내 내지 못할 뒤집기 기술</p>
-                </a>
-              </li>
-            </ul>
-            <p className="btn_c">
-              <a href="" className="purple">수정하기</a>
-              <a href="" className="gray">삭제하기</a>
-            </p>
-          </div>
-          <div>
-            <time>am 11:00</time>
-            <ul className="main_list">
-              <li className="col2">
-                <a href="">
-                  <em style={{ backgroundImage:'url(http://assets2.moncast.com/thumb/edd0b2692409995a.jpeg)' }}><span>00:40</span></em>
-                </a>
-              </li>
-              <li className="row2">
-                <a href="">
-                  <em style={{ backgroundImage:'url(http://assets2.moncast.com/thumb/cdaa3b672428cf45.jpeg)' }}><span className="cnt">209</span></em>
-                </a>
-              </li>
-              <li>
-                <a href="">
-                  <em style={{ backgroundImage:'url(http://assets2.moncast.com/thumb/1219f9f5cf29b60b.jpeg)' }}><span className="cnt">40</span></em>
-                  <p>백주부도 흉내 내지 못할 뒤집기 기술</p>
-                </a>
-              </li>
-              <li>
-                <a href="">
-                  <em style={{ backgroundImage:'url(http://assets2.moncast.com/thumb/1219f9f5cf29b60b.jpeg)' }}><span className="cnt">40</span></em>
-                  <p>백주부도 흉내 내지 못할 뒤집기 기술</p>
-                </a>
-              </li>
-            </ul>
-            <p className="btn_c">
-              <a href="" className="purple">수정하기</a>
-              <a href="" className="gray">삭제하기</a>
-            </p>
-          </div>
-          <div>
-            <time>am 11:00</time>
-            <ul className="main_list">
-              <li className="col2">
-                <a href="">
-                  <em style={{ backgroundImage:'url(http://assets2.moncast.com/thumb/edd0b2692409995a.jpeg)' }}><span>00:40</span></em>
-                </a>
-              </li>
-              <li className="row2 right">
-                <a href="">
-                  <em style={{ backgroundImage:'url(http://assets2.moncast.com/thumb/cdaa3b672428cf45.jpeg)' }}><span className="cnt">209</span></em>
-                </a>
-              </li>
-              <li>
-                <a href="">
-                  <em style={{ backgroundImage:'url(http://assets2.moncast.com/thumb/1219f9f5cf29b60b.jpeg)' }}><span className="cnt">40</span></em>
-                  <p>백주부도 흉내 내지 못할 뒤집기 기술</p>
-                </a>
-              </li>
-              <li>
-                <a href="">
-                  <em style={{ backgroundImage:'url(http://assets2.moncast.com/thumb/1219f9f5cf29b60b.jpeg)' }}><span className="cnt">40</span></em>
-                  <p>백주부도 흉내 내지 못할 뒤집기 기술</p>
-                </a>
-              </li>
-            </ul>
-            <p className="btn_c">
-              <a href="" className="purple">수정하기</a>
-              <a href="" className="gray">삭제하기</a>
-            </p>
-          </div>
-          <div>
-            <time>am 11:00</time>
-            <ul className="main_list">
-              <li className="row2 right">
-                <a href="">
-                  <em style={{ backgroundImage:'url(http://assets2.moncast.com/thumb/cdaa3b672428cf45.jpeg)' }}><span className="cnt">209</span></em>
-                </a>
-              </li>
-              <li>
-                <a href="">
-                  <em style={{ backgroundImage:'url(http://assets2.moncast.com/thumb/1219f9f5cf29b60b.jpeg)' }}><span className="cnt">40</span></em>
-                  <p>백주부도 흉내 내지 못할 뒤집기 기술</p>
-                </a>
-              </li>
-              <li>
-                <a href="">
-                  <em style={{ backgroundImage:'url(http://assets2.moncast.com/thumb/1219f9f5cf29b60b.jpeg)' }}><span className="cnt">40</span></em>
-                  <p>백주부도 흉내 내지 못할 뒤집기 기술</p>
-                </a>
-              </li>
-              <li className="col2">
-                <a href="">
-                  <em style={{ backgroundImage:'url(http://assets2.moncast.com/thumb/edd0b2692409995a.jpeg)' }}><span>00:40</span></em>
-                </a>
-              </li>
-            </ul>
-            <p className="btn_c">
-              <a href="" className="purple">수정하기</a>
-              <a href="" className="gray">삭제하기</a>
-            </p>
-          </div>
+          {this.renderMainfeeds}
         </div>
       </article>
     )
   }
+
+  get renderMainfeeds() {
+    if(this.state.mainfeeds.size === 0) {
+      return null
+    }
+
+    return this.state.mainfeeds.map((mainfeed) => {
+      return (
+        <div key={mainfeed.get('feedGroupId')}>
+          <time>{moment(mainfeed.get('publishStartDt')).format("a H:mm ")}</time>
+          <MainFeedTemplate mainfeed={mainfeed} readonly={true} />
+          <p className="btn_c">
+            <Link to={'/service/mgmt/mainfeed/' + mainfeed.get('feedGroupId')} className="purple">수정하기</Link>
+            <a href="" className="gray">삭제하기</a>
+          </p>
+        </div>
+      )
+    })
+  }
+
+  changeSearchDate = (action) => {
+    let searchDate = moment(this.state.searchDate)
+    if (action === 'prev') {
+      searchDate = searchDate.subtract(1, 'day').format('YYYY-MM-DD')
+    } else if (action === 'next') {
+      searchDate = searchDate.add(1, 'day').format('YYYY-MM-DD')
+    }
+    this.setState({searchDate:searchDate})
+    $('#mainfeedDate').datepicker('setDate', searchDate)
+    this.getMainFeedList(searchDate)
+  }
+
+  onShowCalendar() {
+    $('#mainfeedDate').show().focus().hide()
+  }
 }
+
+const MainFeedContainer = Container.create(MainFeed, {withProps:true})
+export default MainFeedContainer
+

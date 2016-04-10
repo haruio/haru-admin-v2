@@ -141,7 +141,7 @@ class BannerList extends React.Component {
   get renderCalendarHead() {
     return (
       <div id="calendar_head">
-        <time id="bannertime" onClick={this.onShowCalendar} style={{cursor:'pointer'}}><input type="text" id="bannerDate" style={{display:'none'}}/>{this.state.searchDate} (금)</time>
+        <time id="bannertime" onClick={this.onShowCalendar} style={{cursor:'pointer'}}><input type="text" id="bannerDate" style={{display:'none'}}/>{this.state.searchDate} ({moment(this.state.searchDate, 'YYYY-MM-DD').format('dddd')})</time>
         <input type="image" src={btn_prev2} alt="prev" className="prev" onClick={this.changeSearchDate.bind(null, 'prev')}/>
         <input type="image" src={btn_next2} alt="next" className="next" onClick={this.changeSearchDate.bind(null, 'next')}/>
         <a onClick={this.onShowCalendar}><img src={bg_calendar} alt="달력"/></a>
