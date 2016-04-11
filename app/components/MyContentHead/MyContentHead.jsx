@@ -6,6 +6,8 @@ const log = debug('application:MyContentHead.jsx')
 import cn from 'classnames'
 import { CONTENT } from '../../constants/AppConstants'
 
+import intlStores from '../../utils/IntlStore'
+import ContentActions from '../../actions/ContentActions'
 /**
  * A component to MyContentHead
  * author : jungun.park
@@ -33,16 +35,39 @@ export default class MyContentHead extends React.Component {
         <fieldset id="search_box">
           <p>
             <label>검색조건</label>
-            <select>
-              <option>제목</option>
-              <option>작성자</option>
-              <option>프로그램</option>
+            <select ref="searchField">
+              <option value="TITLE">{intlStores.get('cms.CMS_FLD_TITLE')}</option>
+              <option value="AUTOR">작성자</option>
             </select>
           </p>
-          <input type="text" placeholder="Search"/><a href="" className="btn_search"></a>
+          <input type="text" placeholder="Search" ref="searchText" onKeyPress={this._handleKeyPress} />
+          <a onClick={this.searchContents} className="btn_search"></a>
         </fieldset>
       </div>
     )
+  }
+
+  _handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      this.searchContents()
+    }
+  }
+
+  /***
+   * search contents 검색을 하는 함수
+   *
+   */
+  searchContents = () => {
+    let searchType = this.state.searchType
+    if (searchType == 'ALL') {
+      searchType = ''
+    }
+    ContentActions.getMyContents(1, 30, '', '',
+      this.refs.searchField.value,
+      this.refs.searchText.value,
+      '',
+      '',
+      searchType)
   }
 
   changeSection = (index)=> {

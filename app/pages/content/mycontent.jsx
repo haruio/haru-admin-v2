@@ -78,7 +78,7 @@ export default class MyContent extends React.Component {
     return (
       <article id="my_contents" ref="mycontent">
         <TabMenu onSearch={ContentActions.getMyContents}  searchType={this.state.searchType} />
-        <MyContentHead ref="mycontenthead" moveSection={this.moveSection} />
+        <MyContentHead ref="mycontenthead" moveSection={this.moveSection} searchType={this.state.searchType} />
         <ContentList ref="create"  listId="create"  listTitle={intlStores.get('cms.CMS_FLD_CREATING')} content={this.state.writing} type={CONTENT.CREATE}/>
         <ContentList ref="waiting" listId="waiting" listTitle={intlStores.get('cms.CMS_FLD_WAITING')}  content={this.state.ready} type={CONTENT.WAITING}/>
         <ContentList ref="return"  listId="return"  listTitle={intlStores.get('cms.CMS_FLD_REJECT')}   content={this.state.reject} type={CONTENT.RETRUN}/>

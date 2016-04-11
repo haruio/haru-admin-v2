@@ -22,7 +22,7 @@ import immutable from 'immutable'
 
 /***
  * TODO
- *  1. 검색어 조회 기능
+ * 1. 검색어 조회 기능
  * 2. 이미지 업로드
  * 3. 메인피드 부분에 업데이트
  * 4. 메인피드 예약하기
@@ -48,12 +48,13 @@ class MainFeedPopup extends React.Component {
   }
 
   render() {
+    log(this.state)
     return (
       <div className="pop_wrap">
         <div className="pop pop2" id="main_feed_add" onClick={this.clearEvent}>
           <h2>{this.props.title || '메인피드(컨텐츠) 등록'}<span><a onClick={this.props.close} className="btn_close"></a></span></h2>
           <fieldset id="search_box">
-            <input type="text" placeholder="검색어를 입력해주세요." /><a href="" className="btn_search"></a>
+            <input type="text" placeholder="검색어를 입력해주세요." ref="searchtxt"  onKeyPress={this._handleKeyPress}/><a onClick={this.searchContents} className="btn_search"></a>
           </fieldset>
           <div className="table_wrap">
             <table className="listTable">
@@ -109,6 +110,22 @@ class MainFeedPopup extends React.Component {
       </tr>
       </tbody>
     </table>)
+  }
+
+  _handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      this.searchContents()
+    }
+  }
+
+  /***
+   * search contents 검색을 하는 함수
+   *
+   */
+  searchContents = () => {
+    let searchtxt = this.refs.searchtxt.value
+//pageNo = 1, pageSize = 8, orderField = '', orderMethod = '', searchField = '', searchText = '', channel = '', categories = '', type = ''
+    ContentActions.getPublishContents(1, 8, '', '', 'TITLE', searchtxt, '', '', '')
   }
 
   /***
