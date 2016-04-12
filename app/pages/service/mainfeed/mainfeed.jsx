@@ -97,15 +97,20 @@ class MainFeed extends React.Component {
     return this.state.mainfeeds.map((mainfeed) => {
       return (
         <div key={mainfeed.get('feedGroupId')}>
-          <time>{moment(mainfeed.get('publishStartDt')).format("a H:mm ")}</time>
+          <time>{moment(mainfeed.get('publishStartDt')).format('a H:mm ')}</time>
           <MainFeedTemplate mainfeed={mainfeed} readonly={true} />
           <p className="btn_c">
             <Link to={'/service/mgmt/mainfeed/' + mainfeed.get('feedGroupId')} className="purple">수정하기</Link>
-            <a href="" className="gray">삭제하기</a>
+            <a onClick={this.onMainFeedDelete.bind(this, mainfeed.get('feedGroupId'))} className="gray">삭제하기</a>
           </p>
         </div>
       )
     })
+  }
+  onMainFeedDelete(groupid) {
+    if(confirm('정말 삭제하시겠습니까?')) {
+      AppActions.deleteMainFeed(groupid, this.state.searchDate)
+    }
   }
 
   changeSearchDate = (action) => {

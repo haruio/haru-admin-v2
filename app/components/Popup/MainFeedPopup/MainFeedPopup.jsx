@@ -10,19 +10,20 @@ import PageList from '../../PageList'
 import PopupPaginationStore from '../../../stores/PopupPaginationStore'
 import PublishedListStore from '../../../stores/PublishedListStore'
 import ContentActions from '../../../actions/ContentActions'
-import AppActions from '../../../actions/AppActions'
+import MainfeedDetailStore from '../../../stores/MainfeedDetailStore'
 
 import debug from 'debug'
 const log = debug('application:MainFeedPopup.jsx')
 
 import ImageUploader from '../../ImageUploader'
 
-import immutable from 'immutable'
-
+import AppActions from '../../../actions/AppActions'
+import {IMAGE_VALIDATION} from '../../../constants/AppConstants'
+import Alert from 'react-s-alert'
 
 /***
  * TODO
- * 1. 검색어 조회 기능
+ * 1. 검색어 조회 기능 (compelete)
  * 2. 이미지 업로드
  * 3. 메인피드 부분에 업데이트
  * 4. 메인피드 예약하기
@@ -32,14 +33,15 @@ import immutable from 'immutable'
 class MainFeedPopup extends React.Component {
 
   static getStores() {
-    return [PublishedListStore, PopupPaginationStore]
+    return [PublishedListStore, PopupPaginationStore, MainfeedDetailStore]
   }
 
-  static calculateState() {
+  static calculateState(prevState, props) {
     return {
       publish: PublishedListStore.getContentList(),
       pagination: PopupPaginationStore.getPagination(),
-      selected: 0
+      selectedMainfeed : MainfeedDetailStore.getMainfeedbyIndex(props.feedIdx),
+      selected: prevState ? prevState.selected : MainfeedDetailStore.getMainfeedbyIndex(props.feedIdx).get('postSeq')
     }
   }
 
@@ -48,7 +50,7 @@ class MainFeedPopup extends React.Component {
   }
 
   render() {
-    log(this.state)
+    //log(this.state)
     return (
       <div className="pop_wrap">
         <div className="pop pop2" id="main_feed_add" onClick={this.clearEvent}>
@@ -78,7 +80,7 @@ class MainFeedPopup extends React.Component {
           {this.renderRegisterThumbnail}
           <p className="btn_c">
             <a onClick={this.registerMainFeed} className="purple">확인</a>
-            <a onClick={this.props.close} className="gray">취소</a>
+            <a onClick={this.onHandleCanceled} className="gray">취소</a>
           </p>
         </div>
       </div>
@@ -106,10 +108,18 @@ class MainFeedPopup extends React.Component {
       <tbody>
       <tr>
         <th>썸네일 등록</th>
-        <ImageUploader id="thumbnail" type="MAINFEED" value={immutable.Map({})} ref="thumbnail"/>
+        <ImageUploader id="thumbnailUrl" type="MAINFEED" value={this.state.selectedMainfeed} ref="thumbnailUrl" uploadImage={this.uploadImage}/>
       </tr>
       </tbody>
     </table>)
+  }
+
+  uploadImage = (e, props) => {
+    AppActions.uploadMainFeedThumbnailImage(e.target.files[0], props.type, props.id,
+      IMAGE_VALIDATION[props.type][props.id].width,
+      IMAGE_VALIDATION[props.type][props.id].height,
+      IMAGE_VALIDATION[props.type][props.id].size,
+      this.props.feedIdx)
   }
 
   _handleKeyPress = (e) => {
@@ -124,7 +134,6 @@ class MainFeedPopup extends React.Component {
    */
   searchContents = () => {
     let searchtxt = this.refs.searchtxt.value
-//pageNo = 1, pageSize = 8, orderField = '', orderMethod = '', searchField = '', searchText = '', channel = '', categories = '', type = ''
     ContentActions.getPublishContents(1, 8, '', '', 'TITLE', searchtxt, '', '', '')
   }
 
@@ -150,10 +159,25 @@ class MainFeedPopup extends React.Component {
   }
 
   registerMainFeed = () => {
-    log('register')
-    log(PublishedListStore.getContentListById(this.state.selected).toJS())
+    if(this.refs.thumbnailUrl.getImagePath() === '') {
+      /* 임시 저장후 메인으로 가야하는것인가? */
+      Alert.error('메인피드 섬네일 등록되지 않았습니다.', {
+        position: 'top-right',
+        effect: 'slide',
+        timeout: 3000
+      })
+      return
+    }
 
+    const selectedItem = PublishedListStore.getContentListById(this.state.selected)
+    AppActions.updateMainFeedTemplate(this.props.feedIdx, selectedItem)
+    this.props.close()
+  }
+
+  onHandleCanceled = () => {
+    AppActions.clearMainFeedThumbnailImage(this.props.feedIdx, this.state.selectedMainfeed.get('thumbnailUrl'))
+    this.props.close()
   }
 }
-const MainFeedPopupContainer = Container.create(MainFeedPopup)
+const MainFeedPopupContainer = Container.create(MainFeedPopup, {withProps: true})
 export default MainFeedPopupContainer

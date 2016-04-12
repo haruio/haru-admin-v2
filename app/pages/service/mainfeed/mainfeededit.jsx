@@ -13,6 +13,8 @@ import AppActions from '../../../actions/AppActions'
 import MainFeedDetailStore from '../../../stores/MainfeedDetailStore'
 
 import MainFeedTemplate from '../../../components/MainFeedTemplate'
+import moment from 'moment'
+import Alert from 'react-s-alert'
 
 class MainFeedEdit extends React.Component {
   static contextTypes = {
@@ -29,15 +31,25 @@ class MainFeedEdit extends React.Component {
     }
   }
 
+
   componentDidMount() {
+    this._initCalendar()
+
     if (this.props.params.id !== undefined) {
       AppActions.readMainFeedTemplate(this.props.params.id)
     } else {
       setTimeout(() => {
-        AppActions.createMainFeedTemplate()
+        AppActions.createMainFeedTemplate(1)
       })
     }
   }
+
+  _initCalendar() {
+    $('#mainfeedDate').datepicker({
+      dateFormat: 'yy-mm-dd'
+    }).datepicker('setDate', new Date())
+  }
+
 
   render() {
     return (
@@ -55,7 +67,8 @@ class MainFeedEdit extends React.Component {
             <tr>
               <th>노출 시간</th>
               <td>
-                <input type="text" placeholder="2015-08-08" className="txt t3"/><a href="" className="btn_calendar"></a>
+                <input type="text" className="txt t3" id="mainfeedDate" ref="mainfeedDate"/>
+                <a onClick={this.showCalendar} className="btn_calendar"></a>
                 <select style={{ width:'70px' }} ref="publishHour">
                   <option value="00">0시</option>
                   <option value="01">1시</option>
@@ -97,13 +110,17 @@ class MainFeedEdit extends React.Component {
           </table>
           <MainFeedTemplate mainfeed={this.state.mainfeed} />
           <p className="btn_r">
-            <a className="blue">예약하기</a>
+            <a onClick={this.reserveMainFeed} className="blue">예약하기</a>
             <a className="purple">삭제하기</a>
             <a className="gray">취소하기</a>
           </p>
         </div>
       </article>
     )
+  }
+
+  showCalendar() {
+    $('#mainfeedDate').datepicker('show')
   }
 
   get renderSelectTemplate() {
@@ -136,6 +153,43 @@ class MainFeedEdit extends React.Component {
   _changeTemplate(index) {
     AppActions.changeMainFeedTemplate(index)
   }
+
+  reserveMainFeed = () => {
+    const allregister = this.state.mainfeed.get('feeds').every((feed) => {
+      return feed.get('thumbnailUrl') === ''
+    })
+    if(allregister) {
+      /* 임시 저장후 메인으로 가야하는것인가? */
+      Alert.error('빈 부분을 다 채워주십시오', {
+        position: 'top-right',
+        effect: 'slide',
+        timeout: 3000
+      })
+      return
+    }
+
+    let reserve = moment(`${this.refs.mainfeedDate.value} ${this.refs.publishHour.value}:${this.refs.publishMinute.value}`, 'YYYYMMDD hh:mm')
+    const publishvalid = this.state.mainfeed.get('feeds').every((feed) => {
+      return moment(feed.get('publishStartDt')).diff(reserve) > 0
+    })
+
+    if(publishvalid) {
+      /* 임시 저장후 메인으로 가야하는것인가? */
+      Alert.error('컨텐츠 발행일시가 메인피드 노출시간보다 늦은 컨텐츠가 있습니다.', {
+        position: 'top-right',
+        effect: 'slide',
+        timeout: 3000
+      })
+      return
+    }
+
+    //log(this.state.mainfeed.toJS())
+
+    if(confirm('메인피드를 예약(등록) 하겠습니까?')) {
+      AppActions.reserveMainFeed(this.state.mainfeed.toJS())
+    }
+  }
+
 }
 
 const MainFeedEditContainer = Container.create(MainFeedEdit)

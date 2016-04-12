@@ -78,6 +78,8 @@ export default keyMirror({
   INVALID_SESSION_TOKEN: null,
 
   UPLOAD_IMAGE: null,
+  UPLOAD_MAINFEED_IMAGE: null,
+  CLEAR_MAINFEED_IMAGE:null,
   UPLOAD_CATEGORY_IMAGE: null,
   CLEAR_CATEGORY_IMAGE: null,
   UPLOAD_CHANNEL_IMAGE: null,
@@ -293,7 +295,7 @@ export const IMAGE_VALIDATION = {
     }
   },
   MAINFEED: {
-    thumbnail: {
+    thumbnailUrl: {
       width: 345,
       height: 230,
       size: 30

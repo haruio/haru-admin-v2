@@ -19,7 +19,6 @@ import ContentActions from '../../actions/ContentActions'
 import intlStores from '../../utils/IntlStore'
 import {PUBLISH} from '../../constants/AppConstants'
 
-import Alert from 'react-s-alert';
 
 /**
  * A page to Compose

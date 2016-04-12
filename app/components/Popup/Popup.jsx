@@ -21,6 +21,20 @@ class Popup extends React.Component {
     }
   }
 
+  componentDidMount() {
+    document.addEventListener('keydown', this.handleKeyPress)
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.handleKeyPress)
+  }
+
+  handleKeyPress = (e) => {
+    if(e.code == 'Escape') {
+      this.closePopup()
+    }
+  }
+
   closePopup(e) {
     if (e) {
       e.preventDefault()

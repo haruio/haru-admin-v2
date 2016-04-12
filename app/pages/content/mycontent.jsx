@@ -16,7 +16,7 @@ import { CONTENT } from '../../constants/AppConstants'
 import ContentActions from '../../actions/ContentActions'
 import MyContentListStore from '../../stores/MyContentListStore'
 
-export default class MyContent extends React.Component {
+class MyContent extends React.Component {
   static getStores() {
     return [MyContentListStore]
   }
@@ -77,8 +77,14 @@ export default class MyContent extends React.Component {
   render() {
     return (
       <article id="my_contents" ref="mycontent">
-        <TabMenu onSearch={ContentActions.getMyContents}  searchType={this.state.searchType} />
-        <MyContentHead ref="mycontenthead" moveSection={this.moveSection} searchType={this.state.searchType} />
+        <TabMenu onSearch={ContentActions.getMyContents} searchType={this.state.searchType} />
+        <MyContentHead ref="mycontenthead"
+                       moveSection={this.moveSection}
+                       searchType={this.state.searchType}
+                       writecnt={this.state.writing.size}
+                       readycnt={this.state.ready.size}
+                       rejectcnt={this.state.reject.size}
+        />
         <ContentList ref="create"  listId="create"  listTitle={intlStores.get('cms.CMS_FLD_CREATING')} content={this.state.writing} type={CONTENT.CREATE}/>
         <ContentList ref="waiting" listId="waiting" listTitle={intlStores.get('cms.CMS_FLD_WAITING')}  content={this.state.ready} type={CONTENT.WAITING}/>
         <ContentList ref="return"  listId="return"  listTitle={intlStores.get('cms.CMS_FLD_REJECT')}   content={this.state.reject} type={CONTENT.RETRUN}/>

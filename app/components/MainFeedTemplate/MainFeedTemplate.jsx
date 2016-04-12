@@ -36,7 +36,7 @@ export default class MainFeedTemplate extends React.Component {
       // 컨텐츠가 있다면, thumbnailUrl 이 있는것으로 판단함
       if (feed.get('thumbnailUrl') !== '') {
         return (
-          <li key={i} className={style} ref="item" onMouseOver={this.movseOver} onMouseOut={this.mouseOut}>
+          <li key={i} className={style + ' item'} onMouseOver={this.movseOver} onMouseOut={this.mouseOut}>
             <a onClick={this.onPopupFeedList.bind(null, {feedIdx:i, feedStyleCd:feedStyleCd})}>
               <div>
                 <em style={{backgroundImage: 'url('+feed.get('thumbnailUrl')+')'}}>
@@ -70,12 +70,27 @@ export default class MainFeedTemplate extends React.Component {
     PopupActions.openPopup(POPUP.MAINFEED, feedObj)
   }
 
-  movseOver = () => {
-    $(this.refs.item).find('.modifi').stop().fadeIn(300).stop().animate({opacity: 1}, 100)
+  movseOver = (e) => {
+    const target = this._getTargetClass($(e.target), 'item')
+    $(target).find('.modifi').stop().fadeIn(300).stop().animate({opacity: 1}, 100)
   }
 
-  mouseOut = () => {
-    $(this.refs.item).find('.modifi').stop().fadeOut(300)
+  mouseOut = (e) => {
+    const target = this._getTargetClass($(e.target), 'item')
+    $(target).find('.modifi').stop().fadeOut(300)
   }
 
+  _getTargetClass(el, targetClass) {
+    let tempEl = el[0]
+    if (tempEl.className == targetClass) {
+      return tempEl
+    } else {
+      while (tempEl.parentNode) {
+        tempEl = tempEl.parentNode
+        if (tempEl.className && tempEl.className.indexOf(targetClass) != -1)
+          return tempEl
+      }
+    }
+    return null
+  }
 }

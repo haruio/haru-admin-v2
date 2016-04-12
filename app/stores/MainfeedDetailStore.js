@@ -17,6 +17,13 @@ class MainfeedDetailStore extends MapStore {
     return Immutable.Map(this._initialState())
   }
 
+  getMainfeed() {
+    return this.getState()
+  }
+  getMainfeedbyIndex(idx) {
+    return this.getState().getIn(['feeds', idx], Immutable.Map({}))
+  }
+
   _initialState() {
     return Immutable.fromJS({
       createDt: null,
@@ -47,25 +54,25 @@ class MainfeedDetailStore extends MapStore {
         dataObj = {templateType:1, cellCnt:6}
         break
       case 2:
-        dataObj = {templateType:2, cellCnt:5, mergeCellIdx:0, mergeCellStyle:"H", mergeCellTitle:"Content (2x1)"}
+        dataObj = {templateType:2, cellCnt:5, mergeCellIdx:0, mergeCellStyle:'H', mergeCellTitle:'Content (2x1)'}
         break
       case 3:
-        dataObj = {templateType:3, cellCnt:5, mergeCellIdx:2, mergeCellStyle:"H", mergeCellTitle:"Content (2x1)"}
+        dataObj = {templateType:3, cellCnt:5, mergeCellIdx:2, mergeCellStyle:'H', mergeCellTitle:'Content (2x1)'}
         break
       case 4:
-        dataObj = {templateType:4, cellCnt:5, mergeCellIdx:4, mergeCellStyle:"H", mergeCellTitle:"Content (2x1)"}
+        dataObj = {templateType:4, cellCnt:5, mergeCellIdx:4, mergeCellStyle:'H', mergeCellTitle:'Content (2x1)'}
         break
       case 5:
-        dataObj = {templateType:5, cellCnt:5, mergeCellIdx:0, mergeCellStyle:"V", mergeCellTitle:"Content (1x2)"}
+        dataObj = {templateType:5, cellCnt:5, mergeCellIdx:0, mergeCellStyle:'V', mergeCellTitle:'Content (1x2)'}
         break
       case 6:
-        dataObj = {templateType:6, cellCnt:5, mergeCellIdx:1, mergeCellStyle:"V", mergeCellTitle:"Content (1x2)"}
+        dataObj = {templateType:6, cellCnt:5, mergeCellIdx:1, mergeCellStyle:'V', mergeCellTitle:'Content (1x2)'}
         break
       case 7:
-        dataObj = {templateType:7, cellCnt:5, mergeCellIdx:2, mergeCellStyle:"V", mergeCellTitle:"Content (1x2)"}
+        dataObj = {templateType:7, cellCnt:5, mergeCellIdx:2, mergeCellStyle:'V', mergeCellTitle:'Content (1x2)'}
         break
       case 8:
-        dataObj = {templateType:8, cellCnt:5, mergeCellIdx:3, mergeCellStyle:"V", mergeCellTitle:"Content (1x2)"}
+        dataObj = {templateType:8, cellCnt:5, mergeCellIdx:3, mergeCellStyle:'V', mergeCellTitle:'Content (1x2)'}
         break
       default:
         dataObj = {templateType:1, cellCnt:6}
@@ -95,19 +102,24 @@ class MainfeedDetailStore extends MapStore {
     return state.set('templeteType', action.typeindex)
   }
 
-  getMainfeed() {
-    return this.getState()
-  }
-
   reduce(state, action) {
     switch (action.type) {
       case AppConstants.READ_MAINFEED:
         return Immutable.fromJS(action.contents || [])
+      case AppConstants.CREATE_MAINFEED:
+        return this._initialState()
       case AppConstants.CHANGE_TYPE_MAINFEED:
         return this._changeTypeMainfeed(state, action)
+      case AppConstants.UPLOAD_MAINFEED_IMAGE:
+        return state.setIn(['feeds', action.selectedindex, 'thumbnailUrl'], action.image.resourceUrl)
+      case AppConstants.CLEAR_MAINFEED_IMAGE:
+        return state.setIn(['feeds', action.selectedindex, 'thumbnailUrl'], action.url)
       case AppConstants.UPDATE_MAINFEEDITEM:
         // 해당 인덱스에 feeds를 찾아서 변경한다
-        return state
+        let mainfeeds = state.getIn(['feeds', action.index], null)
+        let feed = mainfeeds.merge(action.feeditem)
+        feed = feed.set('thumbnailUrl', mainfeeds.get('thumbnailUrl'))
+        return state.setIn(['feeds', action.index], feed)
       case AppConstants.DELETE_MAINFEEDITEM:
         // 해당 인덱스에 feeds를 찾아서 삭제한다
         return state

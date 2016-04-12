@@ -687,7 +687,7 @@ img.thumbnail{width:80px;height:40px;vertical-align:top;margin: 5px;}
 .hover_effect .e_bg a:hover{background:rgba(255,255,255,0.6);}
 
 #main_feed_add .ico_reserve{display:inline-block;width:38px;height:20px;border: 2px solid #c9bbdf; border-radius: 3px;text-align: center;vertical-align: middle; color: #b8a7d3; padding-top: 2px; font-weight: 600;}
-
+#main_feed_add input.t6 {width:430px !important;}
 
 /* popup animation 20160324, jungun.park */
 .popup-appear {
@@ -710,4 +710,22 @@ img.thumbnail{width:80px;height:40px;vertical-align:top;margin: 5px;}
 
 .disabled-link {
   pointer-events: none;
+}
+
+/*react-s-alert 이슈로 오버라이딩*/
+.s-alert-box.s-alert-info .s-alert-box-inner{
+  background: #00A2D3;
+  color: #fff;
+}
+.s-alert-box.s-alert-success .s-alert-box-inner{
+  background: #27AE60;
+  color: #fff;
+}
+.s-alert-box.s-alert-warning .s-alert-box-inner{
+  background: #F1C40F;
+  color: #fff;
+}
+.s-alert-box.s-alert-error .s-alert-box-inner{
+  background: #E74C3C;
+  color: #fff;
 }

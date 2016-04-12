@@ -15,6 +15,7 @@ import utility from '../utils/util.js'
 import { currentuser, URL, middleware_accesstoken } from './AuthActions.js'
 
 import moment from 'moment'
+import Alert from 'react-s-alert'
 
 /***
  * middleware_accesstoken
@@ -58,6 +59,31 @@ const AppActions = {
         }
       })
   },
+  uploadMainFeedThumbnailImage(filePath, type, target, width, height, size, selectedindex) {
+    request.post(URL + '/resources')
+      .set('x-auth-token', currentuser.accesstoken)
+      .attach('file', filePath, filePath.name)
+      .query({width: width, height: height, size: size})
+      .end(function (err, res) {
+        if (utility.errorHandler(err, res)) {
+          return
+        }
+
+        AppDispatcher.handleViewAction({
+          type: AppConstants.UPLOAD_MAINFEED_IMAGE,
+          image: res.body,
+          target: target,
+          selectedindex: selectedindex
+        })
+      })
+  },
+  clearMainFeedThumbnailImage(selectedindex, url) {
+    AppDispatcher.handleViewAction({
+      type: AppConstants.CLEAR_MAINFEED_IMAGE,
+      selectedindex: selectedindex,
+      url:url
+    })
+  },
   clearImage(type, target) {
     if (type === 'CATEGORY') {
       AppDispatcher.handleViewAction({
@@ -88,7 +114,9 @@ const AppActions = {
         startDate: dateObj.publishDate || moment().utc().toISOString(),
         endDate: dateObj.publishEndDate || moment().utc().add('1','day').subtract('1', 'second').toISOString()})
       .end(function (err, res) {
-
+        if (utility.errorHandler(err, res)) {
+          return
+        }
         AppDispatcher.handleViewAction({
           type: AppConstants.GET_MAINFEED,
           contents: res.body.data
@@ -100,7 +128,9 @@ const AppActions = {
     request.get(URL + '/sm/feed/template/' + groupId)
       .use(middleware_accesstoken)
       .end(function (err, res) {
-
+        if (utility.errorHandler(err, res)) {
+          return
+        }
         AppDispatcher.handleViewAction({
           type: AppConstants.READ_MAINFEED,
           contents: res.body
@@ -134,35 +164,75 @@ const AppActions = {
       index: index
     })
   },
-  reserveMainFeedTemplate(dataObj, publishDate) {
+  reserveMainFeed(dataObj) {
     request.post(URL + '/sm/feed/template')
       .use(middleware_accesstoken)
       .send(dataObj)
       .end(function (err, res) {
         // TODO : refactoring 필요!
-        if (err != null) {
+        if (utility.errorHandler(err, res)) {
           return
-        } else {
-
-          if('ERROR' != res.body.type) {
-            alert('메인피드를 등록했습니다.')
-
-            AppDispatcher.handleViewAction({
-              type: AppConstants.RESERVE_MAINFEED,
-              publishDate: publishDate
-            })
-          }else {
-            switch(res.body.message) {
-              case 'INVALID_POST_SEQ' :
-                alert('템플릿 정보가 올바르지 않습니다.')
-                break
-              default :
-                alert('메인피드를 등록하지 못했습니다.')
-                break
-            }
-            return
-          }
         }
+
+        /* known error */
+        if('ERROR' === res.body.type) {
+          let message = ''
+          switch(res.body.message) {
+            case 'INVALID_POST_SEQ':
+              message = '템플릿 정보가 올바르지 않습니다.'
+              break
+            default:
+              message = '메인피드를 등록하지 못했습니다.'
+              break
+          }
+
+          Alert.success(message, {
+            position: 'top-right',
+            effect: 'slide',
+            timeout: 3000
+          })
+          return
+        }
+
+        Alert.success('메인피드를 등록했습니다.', {
+          position: 'top-right',
+          effect: 'slide',
+          timeout: 3000
+        })
+
+        /*  AppDispatcher.handleViewAction({
+            type: AppConstants.RESERVE_MAINFEED,
+            publishDate: publishDate
+          })*/
+
+      })
+  },
+  deleteMainFeed(groupId, searchDate) {
+    request.del(URL + '/sm/feed/template/' + groupId)
+      .use(middleware_accesstoken)
+      .end(function (err, res) {
+        if (utility.errorHandler(err, res)) {
+          return
+        }
+
+        if('ERROR' === res.body.type) {
+          Alert.error('메인피드를 삭제하지 못했습니다.', {
+            position: 'top-right',
+            effect: 'slide',
+            timeout: 3000
+          })
+          return
+        }
+
+        Alert.success('해당 메인피드를 삭제하였습니다.', {
+          position: 'top-right',
+          effect: 'slide',
+          timeout: 3000
+        })
+
+        const publishStartDate = moment(searchDate+' 00:00:00').format('YYYY-MM-DD HH:mm:ss')
+        const publishEndDate = moment(searchDate +' 23:59:59').format('YYYY-MM-DD HH:mm:ss')
+        AppActions.listMainFeedTemplate({publishDate:moment(publishStartDate).utc().toISOString(), publishEndDate:moment(publishEndDate).utc().toISOString()})
       })
   },
   /**
