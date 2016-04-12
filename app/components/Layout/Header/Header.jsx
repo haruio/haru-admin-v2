@@ -1,4 +1,5 @@
 import React from 'react'
+import {Container} from 'flux/utils'
 import { Link } from 'react-router'
 
 import debug from 'debug'
@@ -9,16 +10,27 @@ import LangSelector from '../LangSelector'
 
 const logo = require('image!../../../assets/img/login_logo.png')
 const defaultimg = require('image!../../../assets/img/default.png')
+import UserStore from '../../../stores/UserStore'
 
-
+import AuthActions from '../../../actions/AuthActions'
 /**
  * A component to Header
  * author : jungun.park
  */
 
 class Header extends React.Component {
+
+  static getStores() {
+    return [UserStore]
+  }
+
+  static calculateState() {
+    return {
+      user : UserStore.getUser()
+    }
+  }
+
   render() {
-    // TODO : 유저 정보
     return (
       <header>
         <h1><Link to="/content/mycontent"><img src={logo} alt="MAKE US" style={{width:'160px'}}/></Link></h1>
@@ -29,13 +41,20 @@ class Header extends React.Component {
           <li><Link to="/system" activeClassName="on">System Management</Link></li>
         </ul>
         <LangSelector lang="ko_KR" />
-        <p>
-          <b><a href="">PinkjjangPinkjjang</a></b>
-          <img src={defaultimg} alt="default" /><a href="">3</a>
+        <p onClick={this.onLogOut} style={{cursor:'pointer'}}>
+          <b><a >{this.state.user.realNm}</a></b>
+          <img src={defaultimg} alt="default" /><a href=""></a>
         </p>
       </header>
     )
   }
+
+  onLogOut() {
+    if(confirm('are you logout??')) {
+      AuthActions.Logout()
+    }
+  }
 }
 
-export default Header
+const HeaderContainer = Container.create(Header)
+export default HeaderContainer

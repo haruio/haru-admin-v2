@@ -40,21 +40,22 @@ const AuthActions = {
   JoginWithEmail(userData) {
     request.post(utility.getUserUrl() + '/adminusers/signup')
       .set('Content-Type', 'application/json')
-      .send(userData).end(function (err, res) {
+      .send(userData)
+      .end(function (err, res) {
+        if (err != null) {
+          log('JoginWithEmail :' + err)
+          return
+        }
+
         if (res.body.errorCode && res.body.message) {
           log(res.body.message)
           return
         }
 
-        if (err != null) {
-          //TODO: error
-          log('JoginWithEmail :' + err)
-          return
-        }
-
         if (res.body.otpKey != '') {
-          alert('회원가입 완료, 로그인 하세요.')
-          window.location.href = '/'
+          AppDispatcher.handleViewAction({
+            type: AppConstants.USER_JOIN
+          })
         }
       })
   },
@@ -63,7 +64,6 @@ const AuthActions = {
    * @param userData {object} - email user data
    */
   LoginWithEmail(userData) {
-    log(userData)
     request.post(utility.getUserUrl() + '/adminusers/login')
       .set('Content-Type', 'application/json')
       .send(userData).end(function (err, res) {
@@ -101,9 +101,15 @@ const AuthActions = {
       })
   },
   Logout() {
-    AppDispatcher.handleViewAction({
-      type: AppConstants.USER_LOGOUT
-    })
+    request.post(utility.getUserUrl() + '/adminusers/logout')
+      .set('Content-Type', 'application/json')
+      .use(middleware_accesstoken)
+      .end(function (err, res) {
+
+        AppDispatcher.handleViewAction({
+          type: AppConstants.USER_LOGOUT
+        })
+      })
   }
 }
 

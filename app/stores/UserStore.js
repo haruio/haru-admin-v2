@@ -9,6 +9,7 @@ import AppDispatcher from '../dispatcher/AppDispatcher'
 
 import debug from 'debug'
 const log = debug('application:UserStore.jsx')
+import Alert from 'react-s-alert'
 
 class UserStore extends ReduceStore {
   getInitialState() {
@@ -51,6 +52,18 @@ class UserStore extends ReduceStore {
     return state.set('user', action.user).set('token', action.accessToken)
   }
 
+  _userJoin(state, action) {
+    setTimeout(function () {
+      Alert.success('회원가입 완료, 로그인 하세요.', {
+        position: 'top-right',
+        effect: 'slide',
+        timeout: 3000
+      })
+    }, 500)
+    browserHistory.replace('/login')
+
+    return state
+  }
   reduce(state, action) {
     switch (action.type) {
       case AppConstants.USER_LOGIN:
@@ -63,6 +76,8 @@ class UserStore extends ReduceStore {
       case AppConstants.INVALID_SESSION_TOKEN:
         this.clearUserData()
         return state.clear().set('error', {code: 0, msg: ''})
+      case AppConstants.USER_JOIN:
+        return this._userJoin(state,action)
       default:
         return state
     }
