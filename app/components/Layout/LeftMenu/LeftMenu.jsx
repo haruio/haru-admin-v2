@@ -70,10 +70,27 @@ class LeftMenu extends React.Component {
           </ul>
         </nav>
       )
-    } else {
+    } else if (router.isActive('/stats')) {
       return (
-        <nav />
+        <nav>
+          <ul id="lnb" className="service">
+            <li className={cn({ 'on': router.isActive('/stats/user') })}><Link to="/stats/user" className="l2_b">회원 통계</Link></li>
+            <li className={cn({ 'on': router.isActive('/stats/content') })}><Link to="/stats/content" className="l2_a">컨텐츠 통계</Link>
+              <ul>
+                <li><Link to="/stats/content/stat" activeClassName="on">{intlStores.get('st.MENU_TXT_CONTENT_STAT')}</Link></li>
+                <li><Link to="/stats/content/list" activeClassName="on">{intlStores.get('st.MENU_TXT_CONTENT_STAT_LIST')}</Link></li>
+              </ul>
+            </li>
+          </ul>
+        </nav>
       )
+    } else if (router.isActive('/system')) {
+      return (
+        <nav>
+        </nav>
+      )
+    } else {
+      return (<nav />)
     }
   }
 }

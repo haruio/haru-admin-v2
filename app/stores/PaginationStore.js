@@ -58,6 +58,9 @@ class PaginationStore extends MapStore {
         return Immutable.fromJS(action.pagination)
       case AppConstants.GET_REPORT_POST_LIST:
         return Immutable.fromJS(action.pagination)
+      /*stat*/
+      case AppConstants.GET_CONTENT_CHART_DATA:
+        return Immutable.fromJS(action.pagination)
       default:
         return state
     }

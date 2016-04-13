@@ -98,6 +98,7 @@ export default keyMirror({
   SELECT_BANNER_POST_DETAIL: null,
   CHANGE_PLATFORM: null,
   CHANGE_SEACHDATE: null,
+  UPLOAD_BANNER_IMAGE:null,
 
   /**
    * Post
@@ -312,6 +313,7 @@ export const POPUP = keyMirror({
   HISTORY: null,
   PUBLISHEDCONTENT: null,
   CONTENTDETAIL: null,
+  POSTTREND: null,
   MAINFEED: null,
 
 

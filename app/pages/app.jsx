@@ -20,6 +20,7 @@ import PublishPopup from '../components/Popup/PublishPopup'
 import MainFeedPopup from '../components/Popup/MainFeedPopup'
 import PublishedContentPopup from '../components/Popup/PublishedContentPopup'
 import ContentDetailPopup from '../components/ContentDetailPopUp'
+import PostTrendPopup from '../components/Popup/PostTrendPopup'
 /*
 import ga from 'react-google-analytics'
 var GAInitiailizer = ga.Initializer
@@ -56,6 +57,7 @@ export default class App extends React.Component {
           <MainFeedPopup key={POPUP.MAINFEED}/>
           <PublishedContentPopup key={POPUP.PUBLISHEDCONTENT}/>
           <ContentDetailPopup key={POPUP.CONTENTDETAIL}/>
+          <PostTrendPopup key={POPUP.POSTTREND}/>
         </Popup>
         <Alert stack={{limit: 3}} />
       </section>

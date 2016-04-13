@@ -66,8 +66,7 @@ class Comment extends React.Component {
           </fieldset>
         </hgroup>
         <div id="contents">
-          <p
-            className="table_info">{intlStores.get('common.COMMON_FLD_TOTAL') + ' ' + this.state.pagination.get('totalCount') + ' ' + intlStores.get('common.COMMON_FLD_COUNT')}</p>
+          <p className="table_info">{intlStores.get('common.COMMON_FLD_TOTAL') + ' ' + this.state.pagination.get('totalCount') + ' ' + intlStores.get('common.COMMON_FLD_COUNT')}</p>
           <div className="table_wrap">
             <table className="listTable">
               <colgroup>

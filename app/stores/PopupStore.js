@@ -23,7 +23,6 @@ class PopupStore extends ReduceStore {
   }
 }
 
-
 // Export a singleton instance of the store
 const instance = new PopupStore(AppDispatcher)
 export default instance

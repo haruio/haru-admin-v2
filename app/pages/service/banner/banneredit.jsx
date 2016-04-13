@@ -16,6 +16,7 @@ import BannerDetailStore from '../../../stores/BannerDetailStore'
 
 const edit1 = require('image!../../../assets/img/ct_edit1.png')
 const icon_plus = require('image!../../../assets/img/icon_plus.png')
+import intlStores from '../../../utils/IntlStore'
 
 class BannerEdit extends React.Component {
   static contextTypes = {
@@ -67,7 +68,7 @@ class BannerEdit extends React.Component {
                 <ImageUploader id="imgSmallUrl" type="BANNER" value={banner} ref="imgSmallUrl"/>
               </tr>
               <tr>
-                <th>노출 플랫폼</th>
+                <th>{intlStores.get('sm.SM_FLD_EXP_PLATFORM')}</th>
                 <td>
                   <p className="input_margin">
                     <input type="radio" id="publish1" name="publish" defaultChecked/> <label htmlFor="publish1">Android</label>
@@ -79,7 +80,7 @@ class BannerEdit extends React.Component {
                 </td>
               </tr>
               <tr>
-                <th>배너 타입</th>
+                <th>{intlStores.get('sm.SM_FLD_BANNER_TYPE')}</th>
                 <td>
                   <p className="input_margin">
                     <input type="radio" id="bannertype1" name="bannertype" defaultChecked/>
@@ -107,11 +108,9 @@ class BannerEdit extends React.Component {
                   <input type="text" placeholder="2015-08-08" className="txt t3"/>
                   <a href="" className="btn_calendar"></a>
                   <select style={{width:'70px'}}>
-
                     <option>12시</option>
                   </select>
                   <select style={{width:'70px'}}>
-
                     <option>00분</option>
                   </select>
                 </td>

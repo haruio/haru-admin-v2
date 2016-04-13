@@ -38,7 +38,9 @@ import ReportPost from './pages/service/report/post'
 import Push from './pages/service/push/push'
 import PushEdit from './pages/service/push/pushedit'
 
-
+import StatsUser from './pages/stat/user'
+import StatsContent from './pages/stat/content/content'
+import StatsContentList from './pages/stat/content/contentlist'
 // User
 import Login from './pages/member/login.jsx'
 import Join from './pages/member/join.jsx'
@@ -149,7 +151,15 @@ export default class extends React.Component {
               <Route path=":id" component={ PushEdit }/>
             </Route>
         </Route>
-
+        <Route path="stats">
+          <IndexRedirect to="user" />
+          <Route path="user" component={StatsUser}></Route>
+          <Route path="content">
+            <IndexRedirect to="stat" />
+            <Route path="stat" component={StatsContent}></Route>
+            <Route path="list" component={StatsContentList}></Route>
+          </Route>
+        </Route>
 
         </Route>
         <Route path="*" component={ NotFound }/>

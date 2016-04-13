@@ -626,6 +626,15 @@ img.porfile{display:inline-block;width:43px;height:43px;border:1px solid #dbdfe2
 .find_pw {border-right: 1px solid #dddedf; padding-right: 50px;}
 .find_otp {padding-left: 50px;}
 
+.listTableVColor{width:100%}
+.listTableVColor th{background:#f6f8f8;padding:3px 0;height:45px;color:#5a6165;font-weight:600}
+.listTableVColor th a.order_both{display:inline-block;background:#f6f8f8 url(assets/img/sort_both.png) no-repeat center right;padding:3px 0;width:80px;color:#5a6165;font-weight:600;}
+.listTableVColor th a.order_asc{display:inline-block;background:#f6f8f8 url(assets/img/sort_asc.png) no-repeat center right;padding:3px 0;width:80px;color:#5a6165;font-weight:600;}
+.listTableVColor th a.order_desc{display:inline-block;background:#f6f8f8 url(assets/img/sort_desc.png) no-repeat center right;padding:3px 0;width:80px;color:#5a6165;font-weight:600;}
+.listTableVColor td{border-top:1px solid #dee1e2;text-align:center;color:#5a6165;padding:3px 0;height:45px; word-break:normal;}
+.listTableVColor td.al{text-align:left;padding-left:15px}
+.listTableVColor col:nth-child(2n+2) {background: #f9f9f9}
+
 /*Pinkjjang*/
 /*input & btn*/
 .input_margin label {padding: 0 10px 0 5px;}

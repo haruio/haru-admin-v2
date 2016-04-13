@@ -56,6 +56,12 @@ const AppActions = {
             image: res.body,
             target: target
           })
+        } else if (type === 'BANNER') {
+          AppDispatcher.handleViewAction({
+            type: AppConstants.UPLOAD_BANNER_IMAGE,
+            image: res.body,
+            target: target
+          })
         }
       })
   },
