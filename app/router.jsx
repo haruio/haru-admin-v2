@@ -65,6 +65,7 @@ export default class extends React.Component {
   }
 
   requireAuth(nextState, replace) {
+    log(UserStore.isLoginSuccess())
     if (!UserStore.isLoginSuccess()) {
       replace({
         pathname: '/login',

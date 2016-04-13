@@ -13,8 +13,6 @@ import PostTrendPopupStore from '../../../stores/PostTrendPopupStore'
 
 import ReactHighcharts from 'react-highcharts'
 /***
- * 컨텐츠 발행에 히스토리를 알려주는 페이지
- * TODO : 다국어 처리 필요
  * Author : jungun.park
  */
 class PostTrendPopup extends React.Component {

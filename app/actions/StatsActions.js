@@ -1,5 +1,5 @@
 import debug from 'debug'
-const log = debug('application:StatsActions.jsx')
+const log = debug('application:AuthActions.jsx')
 
 import AppDispatcher from '../dispatcher/AppDispatcher.js'
 import AppConstants from '../constants/AppConstants.js'
@@ -13,14 +13,14 @@ const StatsActions = {
   getUserChartData(searchObj) {
     request.get(utility.getUrl() + '/tm/user/graph')
       .use(middleware_accesstoken)
-      .query({startDate: moment(searchObj.startDate).format('YYYY-MM-DD'), endDate: moment(searchObj.endDate).add(1, 'day').format("YYYY-MM-DD")})
+      .query({startDate: moment(searchObj.startDate).format("YYYY-MM-DD"), endDate: moment(searchObj.endDate).add(1, 'day').format("YYYY-MM-DD")})
       .end(function (err, res) {
         if (utility.errorHandler(err, res)) {
           return
         }
 
         AppDispatcher.handleViewAction({
-          actionType: AppConstants.GET_USER_CHART_DATA,
+          type: AppConstants.GET_USER_CHART_DATA,
           userChartData: res.body
         })
       })
@@ -34,7 +34,7 @@ const StatsActions = {
         }
 
         AppDispatcher.handleViewAction({
-          actionType: AppConstants.GET_GENDER_CHART_DATA,
+          type: AppConstants.GET_GENDER_CHART_DATA,
           genderTypeData:res.body
         })
       })
@@ -48,7 +48,7 @@ const StatsActions = {
         }
 
         AppDispatcher.handleViewAction({
-          actionType: AppConstants.GET_AGE_CHART_DATA,
+          type: AppConstants.GET_AGE_CHART_DATA,
           ageTypeData:res.body
         })
       })
@@ -61,7 +61,7 @@ const StatsActions = {
           return
         }
         AppDispatcher.handleViewAction({
-          actionType: AppConstants.GET_JOIN_CHART_DATA,
+          type: AppConstants.GET_JOIN_CHART_DATA,
           joinTypeData:res.body
         })
       })
@@ -75,7 +75,7 @@ const StatsActions = {
         }
 
         AppDispatcher.handleViewAction({
-          actionType: AppConstants.GET_USER_TABLE_DATA,
+          type: AppConstants.GET_USER_TABLE_DATA,
           userTableData:res.body
         })
       })

@@ -738,3 +738,9 @@ img.thumbnail{width:80px;height:40px;vertical-align:top;margin: 5px;}
   background: #E74C3C;
   color: #fff;
 }
+
+
+
+/*add stats*/
+#contents .stat_panel{width:94%;height:340px;margin:10px auto;padding:30px;background-color:white;border:solid 1px #D6D6D6;}
+#contents .stat_panel .stat_item{width:30%;float:left;margin:0 10px}
