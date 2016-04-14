@@ -36,7 +36,7 @@ class StatsContent extends React.Component {
 
   componentDidMount() {
     this.searchContentStatistic()
-    
+
     StatsActions.getContentDailyTrendData({
       startDate:moment().subtract(8, 'day').format('YYYY-MM-DD'),
       endDate:  moment().subtract(1, 'day').format('YYYY-MM-DD')
@@ -77,7 +77,7 @@ class StatsContent extends React.Component {
           <div className="stat_panel">
             <ReactHighcharts config={postDailyConfig}></ReactHighcharts>
           </div>
-          <div className="table_wrap" style={{clear:'left'}}>
+          <div className="table_wrap">
             <table className="listTableVColor">
               <colgroup>
                 <col width="*"/>

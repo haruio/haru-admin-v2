@@ -39,7 +39,7 @@ header p b a{display:inline-block;width:80px;overflow:hidden;text-overflow:ellip
 header p img{display:inline-block;margin-left:12px;width:46px;height:48px;border:2px solid #13a2df;border-radius:50%;vertical-align:-2px}
 header p>a{position:absolute;top:-3px;right:-8px;display:block;width:22px;height:22px;line-height:22px;background:#12aaeb;border-radius:50%;text-align:center;color:#fff}
 #container{width:100%;min-width:1280px}
-#container>nav{position:fixed;top:0;left:0;width:240px;height:100%;background:#016ba7;z-index:40;padding-top:70px;overflow:auto;}
+#container>nav{position:fixed;top:0;left:0;width:240px;height:100%;background:#016ba7;z-index:40;padding-top:70px;overflow:auto;box-sizing: border-box;}
 #container>nav>div{padding-top:70px;background:#506069}
 #container>nav>div ul{position:absolute;top:180px;left:20px;border:1px solid #29373f;border-radius:5px;background:#3a4a53;width:198px;max-height:471px;overflow:auto;display:none;z-index:10}
 #container>nav>div ul li{height:58px;border-top:1px solid #29373f}
@@ -742,5 +742,5 @@ img.thumbnail{width:80px;height:40px;vertical-align:top;margin: 5px;}
 
 
 /*add stats*/
-#contents .stat_panel{width:94%;height:340px;margin:10px auto;padding:30px;background-color:white;border:solid 1px #D6D6D6;}
+#contents .stat_panel{width:94%;margin:10px auto;padding:30px;background-color:white;border:solid 1px #D6D6D6;overflow: hidden;}
 #contents .stat_panel .stat_item{width:30%;float:left;margin:0 10px}

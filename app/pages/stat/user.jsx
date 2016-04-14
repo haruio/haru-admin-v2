@@ -66,7 +66,7 @@ class StatsUser extends React.Component {
           <div className="stat_panel">
             <ReactHighcharts config={userChartConfig}></ReactHighcharts>
           </div>
-          <div className="table_wrap" style={{clear:'left'}}>
+          <div className="table_wrap">
             <table className="listTableVColor">
               <colgroup>
                 <col width="*" /><col width="7%" />
