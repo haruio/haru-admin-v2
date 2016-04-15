@@ -106,8 +106,6 @@ class Compose extends React.Component {
   }
 
   onSubmit = (submitType) => {
-    log(this.state.content.toJS())
-
     if(submitType == PUBLISH.TEMP) {
       /**
 

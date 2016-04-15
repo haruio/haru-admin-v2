@@ -2,18 +2,24 @@ import React from 'react'
 import { Link } from 'react-router'
 import cn from 'classnames'
 
+
+import debug from 'debug'
+const log = debug('application:LeftMenu.jsx')
+
+
 import intlStores from '../../../utils/IntlStore'
 
 /**
  * A component to LeftMenu
  * author : jungun.park
  */
-class LeftMenu extends React.Component {
+export default class LeftMenu extends React.Component {
   static contextTypes = {
     router: React.PropTypes.object.isRequired
   }
 
   render() {
+    log('left')
     let router = this.context.router
 
     // URL을 기반으로 Left Menu를 뿌려줌. react-router isActive, activeClassName을 활용하여 개발
@@ -94,5 +100,3 @@ class LeftMenu extends React.Component {
     }
   }
 }
-
-export default LeftMenu

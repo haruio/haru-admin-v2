@@ -28,7 +28,7 @@ header ul li a.on{
   border-bottom:2px solid #12aaeb;
   font-size:18px;font-weight:bold;color:#f1f3f7
 }
-header dl{position:absolute;top:9px;right:230px}
+header dl{position:absolute;top:9px;right:210px}
 header dl dt{height:50px;line-height:50px;padding-right:15px;background:url(assets/img/bg_arrow1.png) no-repeat right 24px;color:#8f8f90;text-align:right;cursor:pointer}
 header dl dd{width:110px;border-radius:5px;overflow:hidden;box-shadow:0 0 10px #555;display:none}
 header dl dd a{display:block;height:27px;line-height:27px;padding-left:12px;background:#fff;border-top:1px solid #d7d6d6;color:#777}
