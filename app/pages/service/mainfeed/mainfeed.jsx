@@ -46,12 +46,12 @@ class MainFeed extends React.Component {
     this.getMainFeedList(this.state.searchDate)
   }
 
-  _initCalendar() {
+  _initCalendar = () => {
     const _self = this
     $('#mainfeedDate').datepicker({
       dateFormat: 'yy-mm-dd',
       onClose: function (dateText) {
-        AppActions.ChangeSearchDate(dateText)
+        AppActions.changeMainFeedSearchDate(dateText)
 
         _self.getMainFeedList(dateText)
       }
@@ -120,8 +120,7 @@ class MainFeed extends React.Component {
     } else if (action === 'next') {
       searchDate = searchDate.add(1, 'day').format('YYYY-MM-DD')
     }
-    this.setState({searchDate:searchDate})
-    $('#mainfeedDate').datepicker('setDate', searchDate)
+    AppActions.changeMainFeedSearchDate(searchDate)
     this.getMainFeedList(searchDate)
   }
 

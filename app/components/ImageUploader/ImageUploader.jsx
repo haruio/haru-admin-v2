@@ -20,29 +20,44 @@ export default class ImageUploader extends React.Component {
         IMAGE_VALIDATION[props.type][props.id].width,
         IMAGE_VALIDATION[props.type][props.id].height,
         IMAGE_VALIDATION[props.type][props.id].size)
-    }
+    },
+    onClearImage: (props) => {
+      AppActions.clearImage(props.type, props.id)
+    },
+    feedStyleCd : 'D'
   }
 
   static propTypes = {
     id: React.PropTypes.string.isRequired,
     type: React.PropTypes.string.isRequired,
     value : ImmutablePropTypes.map,
-    uploadImage: React.PropTypes.func
+    uploadImage: React.PropTypes.func,
+    onClearImage: React.PropTypes.func,
+    feedStyleCd: React.PropTypes.string
   }
 
 
   render() {
     const value = this.props.value.get(this.props.id) ? this.props.value.get(this.props.id) : ''
 
-    const placeholder = 'Width*Height : ' + IMAGE_VALIDATION[this.props.type][this.props.id].width + '*'
-      +  IMAGE_VALIDATION[this.props.type][this.props.id].height
-      + ',  File Size : ' + IMAGE_VALIDATION[this.props.type][this.props.id].size + 'KB'
+    let imageid = this.props.id
+    /* main feed 전용 */
+    if (this.props.feedStyleCd === 'V') {
+      imageid = 'thumbnailUrlCol'
+    } else if (this.props.feedStyleCd === 'H') {
+      imageid = 'thumbnailUrlRow'
+    }
+
+    const placeholder = 'Width*Height : ' + IMAGE_VALIDATION[this.props.type][imageid].width + '*'
+      +  IMAGE_VALIDATION[this.props.type][imageid].height
+      + ',  File Size : ' + IMAGE_VALIDATION[this.props.type][imageid].size + 'KB'
+
     return (
       <td>
         <input type="text" className="txt t6" id={'input-' + this.props.id} value={value} readOnly placeholder={placeholder}/>
         <span className="btn_file">Choose file<input type="file" id={'file-input-' + this.props.id} onChange={this.onChange}/></span>
         {this.previewImage}
-        <a id={'btn-del-' + this.props.id} className={cn('btn_del', {'hide': value == ''})} onClick={this.onClearClick}></a>
+        <a id={'btn-del-' + this.props.id} className={cn('btn_del', {'hide': value == ''})} onClick={this.props.onClearImage.bind(this, this.props)}></a>
       </td>
     )
   }

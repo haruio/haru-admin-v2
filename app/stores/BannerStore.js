@@ -31,9 +31,9 @@ class BannerStore extends MapStore {
     switch (action.type) {
       case AppConstants.GET_BANNER_LIST:
         return state.set('banners', Immutable.fromJS(action.contents || []))
-      case AppConstants.CHANGE_PLATFORM:
+      case AppConstants.BANNERLIST_CHANGE_PLATFORM:
         return state.set('platform', action.platform)
-      case AppConstants.CHANGE_SEACHDATE:
+      case AppConstants.BANNERLIST_CHANGE_SEACHDATE:
         return state.set('searchDate', action.searchDate)
       default:
         return state

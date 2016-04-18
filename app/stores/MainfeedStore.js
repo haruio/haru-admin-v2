@@ -20,6 +20,7 @@ class MainfeedStore extends MapStore {
   getMainfeeds() {
     return this.getState().get('contents')
   }
+  
   getSearchDate() {
     return this.getState().get('searchDate')
   }
@@ -28,7 +29,7 @@ class MainfeedStore extends MapStore {
     switch (action.type) {
       case AppConstants.GET_MAINFEED:
         return state.set('contents', Immutable.fromJS(action.contents || []))
-      case AppConstants.CHANGE_SEACHDATE:
+      case AppConstants.MAINFEED_CHANGE_SEACHDATE:
         return state.set('searchDate', action.searchDate)
       default:
         return state

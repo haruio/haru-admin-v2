@@ -3,6 +3,7 @@
  */
 import Immutable from 'immutable'
 import {MapStore} from 'flux/utils'
+import {browserHistory} from 'react-router'
 
 import AppConstants from '../constants/AppConstants'
 import AppDispatcher from '../dispatcher/AppDispatcher'
@@ -28,8 +29,9 @@ class MainfeedDetailStore extends MapStore {
     return Immutable.fromJS({
       createDt: null,
       feedGroupId: '',
-      publishStartDt: moment().utc().format('YYYY-MM-DDT00:00:00.000Z'),
-      publishEndDt: '9999-12-31T00:00:00.000Z',
+      publishStartDt: moment().minute(0).second(0).valueOf(),
+      //publishStartDt: moment().utc().format('YYYY-MM-DDT00:00:00.000Z'),
+      publishEndDt: 253402214400000,
       templeteType: '1',
       feeds: [
         {'postSeq':0,'feedTypeCd':'M','feedStyleCd':'D','thumbnailUrl':'','postTitle':'Content (1x1)'},
@@ -120,8 +122,10 @@ class MainfeedDetailStore extends MapStore {
         let feed = mainfeeds.merge(action.feeditem)
         feed = feed.set('thumbnailUrl', mainfeeds.get('thumbnailUrl'))
         return state.setIn(['feeds', action.index], feed)
-      case AppConstants.DELETE_MAINFEEDITEM:
-        // 해당 인덱스에 feeds를 찾아서 삭제한다
+      case AppConstants.UPDATE_MAINFEED_DATE:
+        return state.set('publishStartDt', action.value)
+      case AppConstants.COMPLETE_REGISTE_MAINFEED:
+        browserHistory.replace('/service/mgmt/mainfeed')
         return state
       default:
         return state

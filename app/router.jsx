@@ -17,6 +17,7 @@ import Deleted from './pages/content/deleted.jsx'
 // service
 import BannerEdit from './pages/service/banner/banneredit.jsx'
 import Banner from './pages/service/banner/banner.jsx'
+import bannerChannelList from './pages/service/banner/bannerChannelList'
 import MainFeed from './pages/service/mainfeed/mainfeed.jsx'
 import MainFeedEdit from './pages/service/mainfeed/mainfeededit.jsx'
 import Channel from './pages/service/channel/channel.jsx'
@@ -113,6 +114,7 @@ export default class extends React.Component {
               <Route path="mainfeed/:id" component={ MainFeedEdit }/>
 
               <Route path="banner" component={ Banner }/>
+              <Route path="bannerchannel" component={ bannerChannelList }/>
               <Route path="banner/new" component={ BannerEdit }/>
               <Route path="banner/:id" component={ BannerEdit }/>
 

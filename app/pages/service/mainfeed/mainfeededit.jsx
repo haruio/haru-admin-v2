@@ -2,6 +2,7 @@
  * Created by pheadra on 7/8/15.
  */
 import React from 'react'
+import {Link} from 'react-router'
 import {Container} from 'flux/utils'
 import cn from 'classnames'
 
@@ -31,7 +32,6 @@ class MainFeedEdit extends React.Component {
     }
   }
 
-
   componentDidMount() {
     this._initCalendar()
 
@@ -44,14 +44,20 @@ class MainFeedEdit extends React.Component {
     }
   }
 
-  _initCalendar() {
+  _initCalendar = () => {
     $('#mainfeedDate').datepicker({
-      dateFormat: 'yy-mm-dd'
-    }).datepicker('setDate', new Date())
+      dateFormat: 'yy-mm-dd',
+      onClose: (dateText) => {
+        const datesplit = dateText.split('-')
+        const date = this.state.mainfeed.get('publishStartDt')
+        let changeddate = moment(date).set('year', datesplit[0]).set('month', datesplit[1] - 1).set('date', datesplit[2])
+        AppActions.updateMainFeedDate(changeddate.valueOf())
+      }
+    }).datepicker('setDate', moment(this.state.mainfeed.get('publishStartDt')).format('YYYY-MM-DD'))
   }
-
-
+  
   render() {
+    log(this.state.mainfeed.toJS())
     return (
       <article>
         <hgroup>
@@ -69,7 +75,9 @@ class MainFeedEdit extends React.Component {
               <td>
                 <input type="text" className="txt t3" id="mainfeedDate" ref="mainfeedDate"/>
                 <a onClick={this.showCalendar} className="btn_calendar"></a>
-                <select style={{ width:'70px' }} ref="publishHour">
+                <select style={{ width:'70px' }} ref="publishHour"
+                        value={moment(this.state.mainfeed.get('publishStartDt')).format('HH')}
+                        onChange={this.onChangeTime.bind(this, 'hour')}>
                   <option value="00">0시</option>
                   <option value="01">1시</option>
                   <option value="02">2시</option>
@@ -95,7 +103,9 @@ class MainFeedEdit extends React.Component {
                   <option value="22">22시</option>
                   <option value="23">23시</option>
                 </select>
-                <select style={{ width:'70px' }} ref="publishMinute">
+                <select style={{ width:'70px' }} ref="publishMinute"
+                        value={moment(this.state.mainfeed.get('publishStartDt')).format('mm')}
+                        onChange={this.onChangeTime.bind(this, 'minute')}>
                   <option value="00">00분</option>
                   <option value="10">10분</option>
                   <option value="20">20분</option>
@@ -109,14 +119,19 @@ class MainFeedEdit extends React.Component {
             </tbody>
           </table>
           <MainFeedTemplate mainfeed={this.state.mainfeed} />
-          <p className="btn_r">
-            <a onClick={this.reserveMainFeed} className="blue">예약하기</a>
-            <a className="purple">삭제하기</a>
-            <a className="gray">취소하기</a>
-          </p>
+          {this.renderButton}
         </div>
       </article>
     )
+  }
+
+  onChangeTime = (timetype, e) => {
+    const publishStartDt = this.state.mainfeed.get('publishStartDt')
+    if(timetype === 'hour') {
+      AppActions.updateMainFeedDate(moment(publishStartDt).hour(e.target.value).valueOf())
+    } else {
+      AppActions.updateMainFeedDate(moment(publishStartDt).minute(e.target.value).valueOf())
+    }
   }
 
   showCalendar() {
@@ -168,7 +183,8 @@ class MainFeedEdit extends React.Component {
       return
     }
 
-    let reserve = moment(`${this.refs.mainfeedDate.value} ${this.refs.publishHour.value}:${this.refs.publishMinute.value}`, 'YYYYMMDD hh:mm')
+    let reserve = moment(this.state.mainfeed.get('publishStartDt'))
+
     const publishvalid = this.state.mainfeed.get('feeds').every((feed) => {
       return moment(feed.get('publishStartDt')).diff(reserve) > 0
     })
@@ -183,10 +199,34 @@ class MainFeedEdit extends React.Component {
       return
     }
 
-    //log(this.state.mainfeed.toJS())
-
     if(confirm('메인피드를 예약(등록) 하겠습니까?')) {
-      AppActions.reserveMainFeed(this.state.mainfeed.toJS())
+      log(this.state.mainfeed.toJS())
+      if(this.state.mainfeed.get('feedGroupId') === '') {
+        AppActions.reserveMainFeed(this.state.mainfeed.toJS())
+      } else {
+        AppActions.updateMainFeed(this.state.mainfeed.toJS())
+      }
+    }
+  }
+
+  get renderButton() {
+    if (this.props.params.id === undefined) {
+      return (<p className="btn_r">
+        <a onClick={this.reserveMainFeed} className="blue">예약하기</a>
+        <Link to="/service/mgmt/mainfeed" className="gray">취소하기</Link>
+      </p>)
+    } else {
+      return (<p className="btn_r">
+        <a onClick={this.reserveMainFeed} className="blue">수정하기</a>
+        <a onClick={this.onMainFeedDelete.bind(this, this.state.mainfeed.get('feedGroupId'))} className="purple">삭제하기</a>
+        <Link to="/service/mgmt/mainfeed" className="gray">취소하기</Link>
+      </p>)
+    }
+  }
+
+  onMainFeedDelete(groupid) {
+    if(confirm('정말 삭제하시겠습니까?')) {
+      AppActions.deleteMainFeedItem(groupid)
     }
   }
 

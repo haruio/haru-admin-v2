@@ -23,7 +23,7 @@ const ContentActions = {
    * My Content 조회 메소드
    */
   getMyContents(pageNo = 1, pageSize = 30, orderField = '', orderMethod = '', searchField = '', searchText = '', channel = '', categories = '', type = '') {
-    request.get(URL + '/contents/pending/my')
+    request.get(URL + '/cm/contents/pending/my')
       .use(middleware_accesstoken)
       .query({searchField: searchField, searchText: searchText})
       .query({channel: channel, categories: categories})
@@ -45,7 +45,7 @@ const ContentActions = {
    * my content 삭제 메소드
    */
   deleteContent(contentId) {
-    request.del(URL + '/contents/pending/' + contentId)
+    request.del(URL + '/cm/contents/pending/' + contentId)
       .use(middleware_accesstoken)
       .end(function (err, res) {
         if (utility.errorHandler(err, res)) {
@@ -60,7 +60,7 @@ const ContentActions = {
    * @param contentId {String} - content id
      */
   getContent(contentId) {
-    request.get(URL + '/contents/pending/' + contentId)
+    request.get(URL + '/cm/contents/pending/' + contentId)
       .use(middleware_accesstoken)
       .end(function (err, res) {
         if (utility.errorHandler(err, res)) {
@@ -212,7 +212,7 @@ const ContentActions = {
    * @param submitData {Object} - 컨텐츠 임시저장용 데이터
      */
   saveTemporaryContent(submitData) {
-    request.post(URL + '/contents/pending')
+    request.post(URL + '/cm/contents/pending')
       .use(middleware_accesstoken)
       .send(submitData)
       .end(function (err, res) {
@@ -233,7 +233,7 @@ const ContentActions = {
    * @param submitData {Object} - 컨텐츠 임시저장용 데이터
    */
   appoveContent(submitData) {
-    request.post(URL + '/contents/pending/request')
+    request.post(URL + '/cm/contents/pending/request')
       .use(middleware_accesstoken)
       .send(submitData)
       .end(function (err, res) {
@@ -256,7 +256,7 @@ const ContentActions = {
    * 배너, 추천 컨텐츠에서 발행된 컨텐츠 검색시에 활용함
    */
   getPublishContents(pageNo = 1, pageSize = 8, orderField = '', orderMethod = '', searchField = '', searchText = '', channel = '', categories = '', type = '') {
-    request.get(utility.getUrl() + '/contents/published')
+    request.get(URL + '/cm/contents/published')
       .use(middleware_accesstoken)
       .query({pageNum: pageNo, pageSize: pageSize})
       .query({orderField: orderField, orderMethod: orderMethod})
@@ -291,7 +291,7 @@ const ContentActions = {
    * 발행된 Content List
    */
   getViewedContents(pageNo = 1, pageSize = 30, orderField = '', orderMethod = '', searchField = '', searchText = '', channel = '', categories = '', type = '') {
-    request.get(URL + '/contents/viewed')
+    request.get(URL + '/cm/contents/viewed')
       .use(middleware_accesstoken)
       .query({pageNum: pageNo, pageSize: pageSize})
       .query({orderField: orderField, orderMethod: orderMethod})
@@ -332,7 +332,7 @@ const ContentActions = {
                       channel = '',
                       categories = '',
                       type = '') {
-    request.get(`${URL}/contents/reserved`)
+    request.get(`${URL}/cm/contents/reserved`)
       .use(middleware_accesstoken)
       .query({pageNum: pageNo, pageSize: pageSize})
       .query({orderField: orderField, orderMethod: orderMethod})
@@ -376,7 +376,7 @@ const ContentActions = {
                     categories = '',
                     type = '') {
 
-    request.get(`${URL}/contents/deleted?pageNum=${pageNo}&pageSize=${pageSize}`)
+    request.get(`${URL}/cm/contents/deleted?pageNum=${pageNo}&pageSize=${pageSize}`)
       .use(middleware_accesstoken)
       .query({pageNum: pageNo, pageSize: pageSize})
       .query({orderField: orderField, orderMethod: orderMethod})
@@ -420,7 +420,7 @@ const ContentActions = {
                        categories = '',
                        type = '') {
 
-    request.get(URL + '/contents/pending/requested')
+    request.get(URL + '/cm/contents/pending/requested')
       .use(middleware_accesstoken)
       .query({pageNum: pageNo, pageSize: pageSize})
       .query({orderField: orderField, orderMethod: orderMethod})
@@ -454,7 +454,7 @@ const ContentActions = {
    * 승인 요청 취소
    */
   requestCancelRequest(postSeq) {
-    request.post(`${URL}/contents/pending/${postSeq}/cancelrequest`)
+    request.post(`${URL}/cm/contents/pending/${postSeq}/cancelrequest`)
       .use(middleware_accesstoken)
       .end(function (err, res) {
         if (utility.errorHandler(err, res)) {
@@ -468,7 +468,7 @@ const ContentActions = {
    * 예약된, 발행된, 검수 Content  삭제
    */
   deleteContents(contentId, callback) {
-    request.del(URL + '/contents/pending/' + contentId)
+    request.del(URL + `/cm/contents/pending/${contentId}`)
       .use(middleware_accesstoken)
       .end(function (err, res) {
         if (utility.errorHandler(err, res)) {
@@ -483,7 +483,7 @@ const ContentActions = {
    * post history 얻기
    */
   getContentHistory(postSeq) {
-    request.get(`${URL}/contents/pending/${postSeq}/history`)
+    request.get(`${URL}/cm/contents/pending/${postSeq}/history`)
       .use(middleware_accesstoken)
       .end(function (err, res) {
         if (utility.errorHandler(err, res)) {
@@ -501,7 +501,7 @@ const ContentActions = {
    * post 반려 리스트 얻기
    */
   getContentReject(postSeq) {
-    request.get(`${URL}/contents/pending/${postSeq}/history/rejected`)
+    request.get(`${URL}/cm/contents/pending/${postSeq}/history/rejected`)
       .use(middleware_accesstoken)
       .end(function (err, res) {
         if (utility.errorHandler(err, res)) {
@@ -519,7 +519,7 @@ const ContentActions = {
    * post 반려
    */
   requestContentReject(postSeq, message) {
-    request.post(`${URL}/contents/pending/${postSeq}/reject`)
+    request.post(`${URL}/cm/contents/pending/${postSeq}/reject`)
       .use(middleware_accesstoken)
       .send({message: message})
       .end(function (err, res) {
@@ -534,7 +534,7 @@ const ContentActions = {
    * post 검수 요청
    */
   requestContentInspection(postSeq, requestData) {
-    request.post(`${URL}/contents/pending/${postSeq}/publish`)
+    request.post(`${URL}/cm/contents/pending/${postSeq}/publish`)
       .use(middleware_accesstoken)
       .send(requestData)
       .end(function (err, res) {

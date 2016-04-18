@@ -50,7 +50,7 @@ class MainFeedPopup extends React.Component {
   }
 
   render() {
-    //log(this.state)
+    log(this.props)
     return (
       <div className="pop_wrap">
         <div className="pop pop2" id="main_feed_add" onClick={this.clearEvent}>
@@ -106,20 +106,42 @@ class MainFeedPopup extends React.Component {
     return (<table className="writeTable">
       <colgroup><col width="90px" /><col width="*" /></colgroup>
       <tbody>
-      <tr>
-        <th>썸네일 등록</th>
-        <ImageUploader id="thumbnailUrl" type="MAINFEED" value={this.state.selectedMainfeed} ref="thumbnailUrl" uploadImage={this.uploadImage}/>
-      </tr>
+        <tr>
+          <th>썸네일 등록</th>
+          <ImageUploader id="thumbnailUrl"
+                         type="MAINFEED"
+                         ref="thumbnailUrl"
+                         value={this.state.selectedMainfeed}
+                         feedStyleCd={this.props.feedStyleCd}
+                         uploadImage={this.uploadImage}
+                         onClearImage={this.onClearImage}/>
+        </tr>
       </tbody>
     </table>)
   }
 
   uploadImage = (e, props) => {
-    AppActions.uploadMainFeedThumbnailImage(e.target.files[0], props.type, props.id,
-      IMAGE_VALIDATION[props.type][props.id].width,
-      IMAGE_VALIDATION[props.type][props.id].height,
-      IMAGE_VALIDATION[props.type][props.id].size,
+    this.prethumbnail = props.value.get('thumbnailUrl')
+
+    log(props.value.toJS())
+    let imageid = props.id
+    /* main feed 전용 */
+    if (this.props.feedStyleCd === 'V') {
+      imageid = 'thumbnailUrlCol'
+    } else if (this.props.feedStyleCd === 'H') {
+      imageid = 'thumbnailUrlRow'
+    }
+
+    AppActions.uploadMainFeedThumbnailImage(e.target.files[0], props.type,'thumbnailUrl',
+      IMAGE_VALIDATION[props.type][imageid].width,
+      IMAGE_VALIDATION[props.type][imageid].height,
+      IMAGE_VALIDATION[props.type][imageid].size,
       this.props.feedIdx)
+  }
+
+  onClearImage = (props) => {
+    log(this.props)
+    AppActions.clearMainFeedThumbnailImage(this.props.feedIdx, this.prethumbnail)
   }
 
   _handleKeyPress = (e) => {
@@ -175,7 +197,7 @@ class MainFeedPopup extends React.Component {
   }
 
   onHandleCanceled = () => {
-    AppActions.clearMainFeedThumbnailImage(this.props.feedIdx, this.state.selectedMainfeed.get('thumbnailUrl'))
+    AppActions.clearMainFeedThumbnailImage(this.props.feedIdx, this.prethumbnail || '')
     this.props.close()
   }
 }

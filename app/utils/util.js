@@ -1,3 +1,6 @@
+import AppDispatcher from '../dispatcher/AppDispatcher.js'
+import AppConstants from '../constants/AppConstants.js'
+import Alert from 'react-s-alert'
 import CryptoJS from 'crypto-js'
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////         URL Parsing 관련 메소드              ///////////////////////////////////////////////
@@ -37,9 +40,24 @@ export default {
    * 서버 response의 user token 관련 error handler
    */
   errorHandler(err, res) {
-    if(res.body && res.body.errorCode && (res.body.errorCode == 'ADMIN.MISSING_SESSION_TOKEN' || res.body.errorCode == 'ADMIN.INVALID_SESSION_TOKEN')) {
-      alert(res.body.message)
-      location.href = '/'
+    if(res.body && res.body.errorCode
+      && (res.body.errorCode == 'ADMIN.MISSING_SESSION_TOKEN'
+        || res.body.errorCode == 'ADMIN.INVALID_SESSION_TOKEN')) {
+
+      // 처리 방식 변경 필요
+      //alert(res.body.message)
+      setTimeout(function () {
+        Alert.success(res.body.message, {
+          position: 'top-right',
+          effect: 'slide',
+          timeout: 3000
+        })
+      }, 500)
+      //location.href = '/'
+
+      AppDispatcher.handleViewAction({
+        type: AppConstants.INVALID_SESSION_TOKEN
+      })
       return true
     } else if(res.body && res.body.errorCode && res.body.message) {
       alert(res.body.message)
@@ -203,5 +221,4 @@ export default {
     }
     return false
   }
-
 }

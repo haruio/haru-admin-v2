@@ -24,6 +24,7 @@ import Alert from 'react-s-alert'
  * @returns {*}
  */
 
+
 const AppActions = {
   /***
    * Image Upload
@@ -106,6 +107,11 @@ const AppActions = {
         type: AppConstants.CLEAR_CONTENT_IMAGE,
         target: target
       })
+    } else if (type === 'BANNER') {
+      AppDispatcher.handleViewAction({
+        type: AppConstants.CLEAR_BANNER_IMAGE,
+        target : target
+      })
     }
   },
   /***
@@ -143,6 +149,12 @@ const AppActions = {
         })
       })
   },
+  changeMainFeedSearchDate(searchDate) {
+    AppDispatcher.handleViewAction({
+      type: AppConstants.MAINFEED_CHANGE_SEACHDATE,
+      searchDate: searchDate
+    })
+  },
   //새로 만들기
   createMainFeedTemplate(typeid) {
     AppDispatcher.handleViewAction({
@@ -162,6 +174,12 @@ const AppActions = {
       type: AppConstants.UPDATE_MAINFEEDITEM,
       index: index,
       feeditem : feeditem
+    })
+  },
+  updateMainFeedDate(value) {
+    AppDispatcher.handleViewAction({
+      type: AppConstants.UPDATE_MAINFEED_DATE,
+      value: value
     })
   },
   deleteMainFeedTemplate(index) {
@@ -206,11 +224,51 @@ const AppActions = {
           timeout: 3000
         })
 
-        /*  AppDispatcher.handleViewAction({
-            type: AppConstants.RESERVE_MAINFEED,
-            publishDate: publishDate
-          })*/
+        AppDispatcher.handleViewAction({
+          type: AppConstants.COMPLETE_REGISTE_MAINFEED
+        })
 
+      })
+  },
+  updateMainFeed(dataObj) {
+    request.put(URL + '/sm/feed/template')
+      .use(middleware_accesstoken)
+      .send(dataObj)
+      .end(function (err, res) {
+        // TODO : refactoring 필요!
+        if (utility.errorHandler(err, res)) {
+          return
+        }
+
+        /* known error */
+        if('ERROR' === res.body.type) {
+          let message = ''
+          switch(res.body.message) {
+            case 'INVALID_POST_SEQ':
+              message = '템플릿 정보가 올바르지 않습니다.'
+              break
+            default:
+              message = '메인피드를 등록하지 못했습니다.'
+              break
+          }
+
+          Alert.success(message, {
+            position: 'top-right',
+            effect: 'slide',
+            timeout: 3000
+          })
+          return
+        }
+
+        Alert.success('메인피드를 수정했습니다.', {
+          position: 'top-right',
+          effect: 'slide',
+          timeout: 3000
+        })
+
+        AppDispatcher.handleViewAction({
+          type: AppConstants.COMPLETE_REGISTE_MAINFEED
+        })
       })
   },
   deleteMainFeed(groupId, searchDate) {
@@ -241,11 +299,94 @@ const AppActions = {
         AppActions.listMainFeedTemplate({publishDate:moment(publishStartDate).utc().toISOString(), publishEndDate:moment(publishEndDate).utc().toISOString()})
       })
   },
+  deleteMainFeedItem(groupId) {
+    request.del(URL + '/sm/feed/template/' + groupId)
+      .use(middleware_accesstoken)
+      .end(function (err, res) {
+        if (utility.errorHandler(err, res)) {
+          return
+        }
+
+        if('ERROR' === res.body.type) {
+          Alert.error('메인피드를 삭제하지 못했습니다.', {
+            position: 'top-right',
+            effect: 'slide',
+            timeout: 3000
+          })
+          return
+        }
+
+        Alert.success('해당 메인피드를 삭제하였습니다.', {
+          position: 'top-right',
+          effect: 'slide',
+          timeout: 3000
+        })
+
+        AppDispatcher.handleViewAction({
+          type: AppConstants.COMPLETE_REGISTE_MAINFEED
+        })
+      })
+  },
   /**
    * Banner by Keigun
    */
   getBannerList(pageNo, pageSize, startDate, endDate, platform) {
     request.get(URL + '/sm/banners')
+      .use(middleware_accesstoken)
+      .query({ pageNum: pageNo, pageSize: pageSize })
+      .query({ startDate: startDate, endDate: endDate })
+      .query({ platform: platform})
+      .end(function (err, res) {
+        if(utility.errorHandler(err, res)) {
+          return
+        }
+
+        AppDispatcher.handleViewAction({
+          type: AppConstants.GET_BANNER_LIST,
+          contents : res.body.data,
+          pagination: {
+            pageSize: res.body.pageSize,
+            firstPageNo: res.body.firstPageNo,
+            startPageNo: res.body.startPageNo,
+            prevPageNo: res.body.prevPageNo,
+            pageNo: res.body.pageNo,
+            nextPageNo: res.body.nextPageNo,
+            endPageNo: res.body.endPageNo,
+            finalPageNo: res.body.finalPageNo,
+            totalCount: res.body.totalCount
+          }
+        })
+      })
+  },
+  getBannerChannelList(pageNo, pageSize, startDate, endDate, platform) {
+    request.get(URL + '/sm/banners/channel')
+      .use(middleware_accesstoken)
+      .query({ pageNum: pageNo, pageSize: pageSize })
+      .query({ platform: platform})
+      .end(function (err, res) {
+        if(utility.errorHandler(err, res)) {
+          return
+        }
+
+        AppDispatcher.handleViewAction({
+          type: AppConstants.GET_BANNER_LIST,
+          contents : res.body.data,
+          pagination: {
+            pageSize: res.body.pageSize,
+            firstPageNo: res.body.firstPageNo,
+            startPageNo: res.body.startPageNo,
+            prevPageNo: res.body.prevPageNo,
+            pageNo: res.body.pageNo,
+            nextPageNo: res.body.nextPageNo,
+            endPageNo: res.body.endPageNo,
+            finalPageNo: res.body.finalPageNo,
+            totalCount: res.body.totalCount
+          }
+        })
+      })
+  },
+  getBannerOtherList(pageNo, pageSize, startDate, endDate, platform) {
+    request.get(URL + '/sm/banners/other')
       .use(middleware_accesstoken)
       .query({ pageNum: pageNo, pageSize: pageSize })
       .query({ startDate: startDate, endDate: endDate })
@@ -296,13 +437,6 @@ const AppActions = {
       type: AppConstants.CLEAR_BANNER
     })
   },
-  deleteBannerImage(target) {
-    AppDispatcher.handleViewAction({
-      type: AppConstants.DELETE_BANNER_IMAGE,
-      target : target
-    })
-  },
-
   getPostByUrl(url) {
     request.get(`${URL}/contents/url/${url}`)
       .use(middleware_accesstoken)
@@ -318,7 +452,24 @@ const AppActions = {
         })
       })
   },
-
+  getBannerPost(post) {
+    AppDispatcher.handleViewAction({
+      type: AppConstants.SELECT_BANNER_POST_DETAIL,
+      post: post
+    })
+  },
+  ChangePlatform(platform) {
+    AppDispatcher.handleViewAction({
+      type: AppConstants.BANNERLIST_CHANGE_PLATFORM,
+      platform: platform
+    })
+  },
+  ChangeSearchDate(searchDate) {
+    AppDispatcher.handleViewAction({
+      type: AppConstants.BANNERLIST_CHANGE_SEACHDATE,
+      searchDate: searchDate
+    })
+  },
   createBanner(data) {
     request.post(URL + '/sm/banners')
       .use(middleware_accesstoken)
@@ -329,9 +480,19 @@ const AppActions = {
         }
       })
   },
-
   modifyBanner(seq, data) {
     request.put(`${URL}/sm/banners/${seq}`)
+      .use(middleware_accesstoken)
+      .send(data)
+      .end(function (err, res) {
+
+        if(utility.errorHandler(err, res)) {
+          return
+        }
+      })
+  },
+  deleteBanner(seq, data) {
+    request.del(`${URL}/sm/banners/${seq}`)
       .use(middleware_accesstoken)
       .send(data)
       .end(function (err, res) {
@@ -354,22 +515,29 @@ const AppActions = {
         AppActions.getBannerList(1, 10, startDate, endDate, platform)
       })
   },
-  getBannerPost(post) {
+  updateBannerPlatform(platform) {
     AppDispatcher.handleViewAction({
-      type: AppConstants.SELECT_BANNER_POST_DETAIL,
-      post: post
-    })
-  },
-  ChangePlatform(platform) {
-    AppDispatcher.handleViewAction({
-      type: AppConstants.CHANGE_PLATFORM,
+      type: AppConstants.BANNER_CHANGE_PLATFORM,
       platform: platform
     })
   },
-  ChangeSearchDate(searchDate) {
+  updateBannerType(typeCd) {
     AppDispatcher.handleViewAction({
-      type: AppConstants.CHANGE_SEACHDATE,
-      searchDate: searchDate
+      type: AppConstants.BANNER_CHANGE_TYPE,
+      typeCd: typeCd
+    })
+  },
+  updateBannerURL(url) {
+    AppDispatcher.handleViewAction({
+      type: AppConstants.BANNER_CHANGE_URL,
+      url: url
+    })
+  },
+  updateBannerDate(datetype, value) {
+    AppDispatcher.handleViewAction({
+      type: AppConstants.BANNER_CHANGE_TIME,
+      datetype:datetype,
+      value: value
     })
   },
   /**
@@ -431,6 +599,7 @@ const AppActions = {
    * Recommend Post - Keigun, edit jungun.park (20160319)
    */
   getRecommendPostList(pageNo=1, pageSize=20, orderField='', orderMethod='', searchField='', searchText='', type='') {
+    log('test')
     request.get(URL + '/sm/recommends/post')
       .use(middleware_accesstoken)
       .query({ pageNo: pageNo, pageSize: pageSize })
@@ -484,6 +653,7 @@ const AppActions = {
     })
   },
   clearPostDetail() {
+    log('clearPostDetail')
     AppDispatcher.handleViewAction({
       type: AppConstants.CLEAR_RECOMMEND_POST_DETAIL
     })
@@ -859,7 +1029,7 @@ const AppActions = {
       })
   },
   deleteUser(userList) {
-    request.del(utility.getUrl() + '/sm/users/' + userList.userId)
+    request.del(URL + '/sm/users/' + userList.userId)
       .use(middleware_accesstoken)
       .end(function (err, res) {
         if (err != null) {
@@ -887,7 +1057,7 @@ const AppActions = {
    * Comments API
    */
   getCommentList(userObj) {
-    request.get(utility.getUrl() + '/sm/comments')
+    request.get(URL + '/sm/comments')
       .use(middleware_accesstoken)
       .query({searchField: userObj.searchField||''})
       .query({searchText: userObj.searchText||''})
@@ -969,34 +1139,7 @@ const AppActions = {
         }
       })
   },
-  /***
-   * Push API
-   */
-  getPushList(userObj) {
-    request.get(URL + '/sm/push')
-      .use(middleware_accesstoken)
-      .query({searchField: userObj.searchField||''})
-      .query({searchText: userObj.searchText||''})
-      .query({pageNum: userObj.pageNo||1, pageSize: userObj.pageSize||10 })
-      .end(function (err, res) {
 
-        AppDispatcher.handleViewAction({
-          type: AppConstants.GET_PUSH_LIST,
-          pushList: res.body.data,
-          pagination: {
-            pageSize : res.body.pageSize,
-            firstPageNo : res.body.firstPageNo,
-            startPageNo : res.body.startPageNo,
-            prevPageNo : res.body.prevPageNo,
-            pageNo : res.body.pageNo,
-            nextPageNo : res.body.nextPageNo,
-            endPageNo : res.body.endPageNo,
-            finalPageNo : res.body.finalPageNo,
-            totalCount : res.body.totalCount
-          }
-        })
-      })
-  },
   /***
    * Report API
    */
@@ -1036,6 +1179,34 @@ const AppActions = {
         AppDispatcher.handleViewAction({
           type: AppConstants.GET_REPORT_COMMENT_LIST,
           data: res.body.data,
+          pagination: {
+            pageSize : res.body.pageSize,
+            firstPageNo : res.body.firstPageNo,
+            startPageNo : res.body.startPageNo,
+            prevPageNo : res.body.prevPageNo,
+            pageNo : res.body.pageNo,
+            nextPageNo : res.body.nextPageNo,
+            endPageNo : res.body.endPageNo,
+            finalPageNo : res.body.finalPageNo,
+            totalCount : res.body.totalCount
+          }
+        })
+      })
+  },
+  /***
+   * Push API
+   */
+  getPushList(userObj) {
+    request.get(URL + '/sm/push')
+      .use(middleware_accesstoken)
+      .query({searchField: userObj.searchField||''})
+      .query({searchText: userObj.searchText||''})
+      .query({pageNum: userObj.pageNo||1, pageSize: userObj.pageSize||10 })
+      .end(function (err, res) {
+
+        AppDispatcher.handleViewAction({
+          type: AppConstants.GET_PUSH_LIST,
+          pushList: res.body.data,
           pagination: {
             pageSize : res.body.pageSize,
             firstPageNo : res.body.firstPageNo,

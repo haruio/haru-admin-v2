@@ -39,8 +39,8 @@ export default class App extends React.Component {
     //GA initalize
     //var GA_TRACKING_CODE = 'UA-53731828-10'
     //ga('create', GA_TRACKING_CODE, 'auto')
-
   }
+
   render() {
     return (
       <section>

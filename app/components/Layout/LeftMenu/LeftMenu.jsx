@@ -52,7 +52,8 @@ export default class LeftMenu extends React.Component {
             <li className={cn({ 'on': router.isActive('/service/mgmt') })}><Link to="/service/mgmt/" className="l2_a">서비스 관리</Link>
               <ul>
                 <li><Link to="/service/mgmt/mainfeed" activeClassName="on">메인피드 관리</Link></li>
-                <li><Link to="/service/mgmt/banner" activeClassName="on">배너 관리</Link></li>
+                <li><Link to="/service/mgmt/banner" activeClassName="on">배너 관리(채널제외)</Link></li>
+                <li><Link to="/service/mgmt/bannerchannel" activeClassName="on">배너 관리(채널)</Link></li>
                 <li><Link to="/service/mgmt/keyword" activeClassName="on">추천 검색어 관리</Link></li>
                 <li><Link to="/service/mgmt/post" activeClassName="on">추천 컨텐츠</Link></li>
                 <li><Link to="/service/mgmt/channel"  activeClassName="on">채널 관리</Link></li>

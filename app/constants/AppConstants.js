@@ -76,7 +76,7 @@ export default keyMirror({
   USER_LOGOUT: null,
   USER_LOGINFAIL: null,
   INVALID_SESSION_TOKEN: null,
-
+  /*upload image*/
   UPLOAD_IMAGE: null,
   UPLOAD_MAINFEED_IMAGE: null,
   CLEAR_MAINFEED_IMAGE:null,
@@ -84,7 +84,8 @@ export default keyMirror({
   CLEAR_CATEGORY_IMAGE: null,
   UPLOAD_CHANNEL_IMAGE: null,
   CLEAR_CHANNEL_IMAGE: null,
-
+  UPLOAD_BANNER_IMAGE:null,
+  CLEAR_BANNER_IMAGE:null,
   DELETE_BANNER_IMAGE: null,
 
   /**
@@ -96,10 +97,14 @@ export default keyMirror({
   CLEAR_BANNER: null,
   GET_POST_DETAIL_BYURL: null,
   SELECT_BANNER_POST_DETAIL: null,
-  CHANGE_PLATFORM: null,
-  CHANGE_SEACHDATE: null,
-  UPLOAD_BANNER_IMAGE:null,
+  BANNERLIST_CHANGE_PLATFORM: null,
+  BANNERLIST_CHANGE_SEACHDATE: null,
+  MAINFEED_CHANGE_SEACHDATE: null,
 
+  BANNER_CHANGE_PLATFORM: null,
+  BANNER_CHANGE_TYPE: null,
+  BANNER_CHANGE_URL: null,
+  BANNER_CHANGE_TIME: null,
   /**
    * Post
    */
@@ -112,7 +117,7 @@ export default keyMirror({
   GET_RECOMMEND_POST: null,
   GET_RECOMMEND_KEYWORD: null,
   MOVE_RECOMMEND_KEYWORD_LIST: null,
-
+  CLEAR_RECOMMEND_POST_DETAIL: null,
   /**
    * Channel Management - by billy
    */
@@ -137,7 +142,9 @@ export default keyMirror({
   CREATE_MAINFEED: null,
   UPDATE_MAINFEEDITEM: null,
   DELETE_MAINFEEDITEM: null,
-  CHANGE_TYPE_MAINFEED : null,
+  CHANGE_TYPE_MAINFEED: null,
+  UPDATE_MAINFEED_DATE: null,
+  COMPLETE_REGISTE_MAINFEED: null,
   /**
    * User Management
    */
@@ -300,6 +307,16 @@ export const IMAGE_VALIDATION = {
       width: 345,
       height: 230,
       size: 30
+    },
+    thumbnailUrlRow: {
+      width: 345,
+      height: 712,
+      size: 60
+    },
+    thumbnailUrlCol: {
+      width: 700,
+      height: 230,
+      size: 60
     }
   }
 }

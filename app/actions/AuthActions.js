@@ -10,8 +10,9 @@ export const APPVERSION = 'v0.9'
 export const BUILDVERSION = '10'
 
 const API_VERSION = 'v1'
+const CMSAPI_VERSION = 'v2'
 export const DINGOURL = `http://dev-id-api.dingo.tv/${API_VERSION}`
-export const URL = 'http://dev-admin.dingo.tv/kerberos'
+export const URL = `http://dev-admin.dingo.tv/kerberos/${CMSAPI_VERSION}`
 export let currentuser = {
   accesstoken: localStorage.getItem('ls.AccessToken'),
   location: localStorage.getItem('ls.i18n') != null || localStorage.getItem('ls.i18n') != undefined ? localStorage.getItem('ls.i18n') : 'en_US'
