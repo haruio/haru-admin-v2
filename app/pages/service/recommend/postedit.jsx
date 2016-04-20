@@ -35,18 +35,8 @@ class RecommendPostEdit extends React.Component {
   }
 
   static calculateState() {
-    const postdetail = PostStore.getRecommendPost()
-    if ($('.txt.daterange').data('daterangepicker') !== undefined) {
-      // 기존에 값이 있다면 변경
-      $('.txt.daterange').data('daterangepicker')
-        .setStartDate(moment(postdetail.get('recommendStartDt')).format('YYYY-MM-DD'))
-      $('.txt.daterange').data('daterangepicker')
-        .setEndDate(moment(postdetail.get('recommendEndDt')).format('YYYY-MM-DD'))
-    }
-
     return {
-      postdetail: postdetail,
-      persent: postdetail.get('recommendPct') || 50, // default : 50
+      postdetail: PostStore.getRecommendPost(),
       post: PostStore.getPost()
     }
   }
@@ -68,18 +58,16 @@ class RecommendPostEdit extends React.Component {
       locale: {format: 'YYYY-MM-DD'}
     })
     $('.txt.daterange').on('apply.daterangepicker', (ev, picker) => {
-      this.startDate = picker.startDate.format('YYYY-MM-DD')
-      this.endDate = picker.endDate.format('YYYY-MM-DD')
       $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'))
+      AppActions.updateRecommendDate('date', picker.startDate.valueOf(), picker.endDate.valueOf())
     })
+
+    $('.txt.daterange').data('daterangepicker').setStartDate(moment(this.state.postdetail.get('recommendStartDt')).format('YYYY-MM-DD'));
+    $('.txt.daterange').data('daterangepicker').setEndDate(moment(this.state.postdetail.get('recommendEndDt')).format('YYYY-MM-DD'))
   }
 
   render() {
-    // 기존에 값이 있다면 초기값 셋팅
-    if(this.props.params.id !== undefined) {
-      this.startDate = moment(this.state.postdetail.get('recommendEndDt')).format('YYYY-MM-DD')
-      this.endDate = moment(this.state.postdetail.get('recommendEndDt')).format('YYYY-MM-DD')
-    }
+    log(this.state.postdetail.toJS())
 
     return (
       <article>
@@ -110,9 +98,9 @@ class RecommendPostEdit extends React.Component {
                 <th>{intlStores.get('sm.SM_FLD_PROBABLE')}</th>
                 <td>
                   <p className="btn_w340">
-                    <input type="range" min="0" max="100" value={this.state.persent} step="5"
+                    <input type="range" min="0" max="100" value={this.state.postdetail.get('recommendPct')} step="5"
                            className="txt btn_w300" onChange={this.onChangePercent}/>
-                    <span style={{float:'right'}}>{this.state.persent + '%'}</span>
+                    <span style={{float:'right'}}>{this.state.postdetail.get('recommendPct') + '%'}</span>
                   </p>
                 </td>
               </tr>
@@ -171,7 +159,7 @@ class RecommendPostEdit extends React.Component {
   }
   // range 변경 이벤트
   onChangePercent = (e) => {
-    this.setState({persent: e.target.value})
+    AppActions.updateRecommendMeta('recommendPct', e.target.value)
   }
   // hover event
   movseOver = () => {
@@ -183,45 +171,35 @@ class RecommendPostEdit extends React.Component {
 
   // 발행 이벤트
   handleSubmit = ()=> {
-
     if (this.state.post.size == 0) {
       alert(intlStores.get('sm.SM_MSG_NEED_REC_CONTENT'))
       return
     }
 
-    if (this.startDate == undefined || this.startDate.length == 0) {
-      alert(intlStores.get('sm.SM_MSG_NEED_START_D'))
-      return
-    }
-
-    if (this.endDate == undefined || this.endDate.length == 0) {
-      alert(intlStores.get('sm.SM_MSG_NEED_END_D'))
-      return
-    }
-
     let requestData = {}
     requestData.postSeq = this.state.post.get('postSeq')
-    requestData.recommendStartDt = this.startDate
-    requestData.recommendEndDt = this.endDate
-    requestData.recommendPct = this.state.persent
+
+    // 기존에 값이 있다면 초기값 셋팅
+    requestData.recommendStartDt = moment(this.state.postdetail.get('recommendStartDt')).format('YYYY-MM-DD')
+    requestData.recommendEndDt = moment(this.state.postdetail.get('recommendEndDt')).format('YYYY-MM-DD')
+    requestData.recommendPct = this.state.postdetail.get('recommendPct')
 
     if (this.props.params.id == undefined) {
       //insert
       if (window.confirm(intlStores.get('common.COMMON_MSG_REG'))) {
-        AppActions.createRecommendPost(requestData)
-        this.context.router.push('/service/mgmt/post')
+        AppActions.createRecommendPost(requestData, () => {
+          this.context.router.push('/service/mgmt/post')
+        })
       }
     } else {
       //update
       if (window.confirm(intlStores.get('common.COMMON_MSG_EDIT'))) {
-        AppActions.modifyRecommendPost(this.props.params.id, requestData)
-        this.context.router.push('/service/mgmt/post')
+        AppActions.modifyRecommendPost(this.props.params.id, requestData, () => {
+          this.context.router.push('/service/mgmt/post')
+        })
       }
     }
-
   }
-
-
 }
-const RecommendPostEditContainer = Container.create(RecommendPostEdit) // , {withProps:true}
+const RecommendPostEditContainer = Container.create(RecommendPostEdit)
 export default RecommendPostEditContainer

@@ -82,8 +82,4 @@ export default class ImageUploader extends React.Component {
   onChange = (e) => {
     this.props.uploadImage(e, this.props)
   }
-
-  onClearClick = () => {
-    AppActions.clearImage(this.props.type, this.props.id)
-  }
 }

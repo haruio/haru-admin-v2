@@ -11,8 +11,25 @@ import debug from 'debug'
 const log = debug('application:CategoryStore.jsx')
 
 class CategoryDetailStore extends MapStore {
+  getInitialState() {
+    return Immutable.Map(this._init())
+  }
+
   getCategory() {
     return this.getState()
+  }
+
+  _init() {
+    return {
+      name:'',
+      shortNm:'',
+      urlNm:'',
+      iconImageUrl:'',
+      bgImageUrl: '',
+      categoryViewCd: 'Y',
+      description: '',
+      delYn: 'N'
+    }
   }
 
   reduce(state, action) {
@@ -20,11 +37,13 @@ class CategoryDetailStore extends MapStore {
       case AppConstants.GET_CATEGORY_DETAIL:
         return Immutable.Map(action.contents)
       case AppConstants.CLEAR_CATEGORY_DETAIL:
-        return state.clear()
+        return Immutable.fromJS(this._init())
       case AppConstants.UPLOAD_CATEGORY_IMAGE:
         return state.set(action.target, action.image.resourceUrl)
       case AppConstants.CLEAR_CATEGORY_IMAGE:
         return state.set(action.target, '')
+      case AppConstants.UPDATE_CATEGORY_META:
+        return state.set(action.key, action.data)
       default:
         return state
     }

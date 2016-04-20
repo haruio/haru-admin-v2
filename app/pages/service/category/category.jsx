@@ -33,6 +33,10 @@ class Category extends React.Component {
     }
   }
 
+  componentWillMount() {
+    AppActions.getCategories()
+  }
+  
   componentDidMount() {
     //TODO : sortable component 제작 필요
     $('#category_list').sortable({})

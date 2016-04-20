@@ -55,7 +55,7 @@ class MainFeedEdit extends React.Component {
       }
     }).datepicker('setDate', moment(this.state.mainfeed.get('publishStartDt')).format('YYYY-MM-DD'))
   }
-  
+
   render() {
     log(this.state.mainfeed.toJS())
     return (
@@ -168,11 +168,27 @@ class MainFeedEdit extends React.Component {
   _changeTemplate(index) {
     AppActions.changeMainFeedTemplate(index)
   }
+  
+  get renderButton() {
+    if (this.props.params.id === undefined) {
+      return (<p className="btn_r">
+        <a onClick={this.reserveMainFeed} className="blue">예약하기</a>
+        <Link to="/service/mgmt/mainfeed" className="gray">취소하기</Link>
+      </p>)
+    } else {
+      return (<p className="btn_r">
+        <a onClick={this.reserveMainFeed} className="blue">수정하기</a>
+        <a onClick={this.onMainFeedDelete.bind(this, this.state.mainfeed.get('feedGroupId'))} className="purple">삭제하기</a>
+        <Link to="/service/mgmt/mainfeed" className="gray">취소하기</Link>
+      </p>)
+    }
+  }
 
   reserveMainFeed = () => {
     const allregister = this.state.mainfeed.get('feeds').every((feed) => {
       return feed.get('thumbnailUrl') === ''
     })
+
     if(allregister) {
       /* 임시 저장후 메인으로 가야하는것인가? */
       Alert.error('빈 부분을 다 채워주십시오', {
@@ -200,27 +216,11 @@ class MainFeedEdit extends React.Component {
     }
 
     if(confirm('메인피드를 예약(등록) 하겠습니까?')) {
-      log(this.state.mainfeed.toJS())
       if(this.state.mainfeed.get('feedGroupId') === '') {
         AppActions.reserveMainFeed(this.state.mainfeed.toJS())
       } else {
-        AppActions.updateMainFeed(this.state.mainfeed.toJS())
+        AppActions.updateMainFeed(this.state.mainfeed.toJS(), this.state.mainfeed.get('feedGroupId'))
       }
-    }
-  }
-
-  get renderButton() {
-    if (this.props.params.id === undefined) {
-      return (<p className="btn_r">
-        <a onClick={this.reserveMainFeed} className="blue">예약하기</a>
-        <Link to="/service/mgmt/mainfeed" className="gray">취소하기</Link>
-      </p>)
-    } else {
-      return (<p className="btn_r">
-        <a onClick={this.reserveMainFeed} className="blue">수정하기</a>
-        <a onClick={this.onMainFeedDelete.bind(this, this.state.mainfeed.get('feedGroupId'))} className="purple">삭제하기</a>
-        <Link to="/service/mgmt/mainfeed" className="gray">취소하기</Link>
-      </p>)
     }
   }
 

@@ -109,10 +109,10 @@ class RecommendPost extends React.Component {
             <td><input type="checkbox" name="postBox" value={content.get('recommendSeq')}/></td>
             <td onClick={this._moveRecommendPostDetail.bind(this, content.get('recommendSeq'))}>{content.get('recommendSeq')}</td>
             <td onClick={this._moveRecommendPostDetail.bind(this, content.get('recommendSeq'))}><img src={content.get('thumbnailUrl')} alt="" className="thumbnail"/></td>
-            <td onClick={this._moveRecommendPostDetail.bind(this, content.get('recommendSeq'))}className="al">{content.get('postTitle')}</td>
+            <td onClick={this._moveRecommendPostDetail.bind(this, content.get('recommendSeq'))} className="al">{content.get('postTitle')}</td>
             <td onClick={this._moveRecommendPostDetail.bind(this, content.get('recommendSeq'))}></td>
             <td onClick={this._moveRecommendPostDetail.bind(this, content.get('recommendSeq'))}>{moment(content.get('recommendStartDt')).format('YYYY-MM-DD')}</td>
-            <td onClick={this._moveRecommendPostDetail.bind(this, content.get('recommendSeq'))}>{moment(content.get('recommendEndD')).format('YYYY-MM-DD')}</td>
+            <td onClick={this._moveRecommendPostDetail.bind(this, content.get('recommendSeq'))}>{moment(content.get('recommendEndDt')).format('YYYY-MM-DD')}</td>
             <td onClick={this._moveRecommendPostDetail.bind(this, content.get('recommendSeq'))}>{content.get('recommendPct')}%</td>
           </tr>
         )

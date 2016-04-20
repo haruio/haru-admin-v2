@@ -30,14 +30,9 @@ class MainfeedDetailStore extends MapStore {
       createDt: null,
       feedGroupId: '',
       publishStartDt: moment().minute(0).second(0).valueOf(),
-      //publishStartDt: moment().utc().format('YYYY-MM-DDT00:00:00.000Z'),
       publishEndDt: 253402214400000,
-      templeteType: '1',
+      templeteType: '0',
       feeds: [
-        {'postSeq':0,'feedTypeCd':'M','feedStyleCd':'D','thumbnailUrl':'','postTitle':'Content (1x1)'},
-        {'postSeq':0,'feedTypeCd':'M','feedStyleCd':'D','thumbnailUrl':'','postTitle':'Content (1x1)'},
-        {'postSeq':0,'feedTypeCd':'M','feedStyleCd':'D','thumbnailUrl':'','postTitle':'Content (1x1)'},
-        {'postSeq':0,'feedTypeCd':'M','feedStyleCd':'D','thumbnailUrl':'','postTitle':'Content (1x1)'},
         {'postSeq':0,'feedTypeCd':'M','feedStyleCd':'D','thumbnailUrl':'','postTitle':'Content (1x1)'},
         {'postSeq':0,'feedTypeCd':'M','feedStyleCd':'D','thumbnailUrl':'','postTitle':'Content (1x1)'}
       ]
@@ -104,6 +99,16 @@ class MainfeedDetailStore extends MapStore {
     return state.set('templeteType', action.typeindex)
   }
 
+  _updateMainFeed(state, action) {
+    // 해당 인덱스에 feeds를 찾아서 변경한다
+    let mainfeeds = state.getIn(['feeds', action.index], null)
+    let feed = mainfeeds.merge(action.feeditem)
+    if(mainfeeds.get('thumbnailUrl') !== '') {
+      feed = feed.set('thumbnailUrl', mainfeeds.get('thumbnailUrl'))
+    }
+    return state.setIn(['feeds', action.index], feed)
+  }
+
   reduce(state, action) {
     switch (action.type) {
       case AppConstants.READ_MAINFEED:
@@ -117,11 +122,7 @@ class MainfeedDetailStore extends MapStore {
       case AppConstants.CLEAR_MAINFEED_IMAGE:
         return state.setIn(['feeds', action.selectedindex, 'thumbnailUrl'], action.url)
       case AppConstants.UPDATE_MAINFEEDITEM:
-        // 해당 인덱스에 feeds를 찾아서 변경한다
-        let mainfeeds = state.getIn(['feeds', action.index], null)
-        let feed = mainfeeds.merge(action.feeditem)
-        feed = feed.set('thumbnailUrl', mainfeeds.get('thumbnailUrl'))
-        return state.setIn(['feeds', action.index], feed)
+        return this._updateMainFeed(state, action)
       case AppConstants.UPDATE_MAINFEED_DATE:
         return state.set('publishStartDt', action.value)
       case AppConstants.COMPLETE_REGISTE_MAINFEED:

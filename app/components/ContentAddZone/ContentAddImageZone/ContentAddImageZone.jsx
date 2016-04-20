@@ -29,8 +29,6 @@ export default class ContentAddImageZone extends React.Component {
               idLists.push($(el).attr('data-id'))
             }
           })
-          //AppActions.changeImageList(idLists)
-
           return false
         }
       })

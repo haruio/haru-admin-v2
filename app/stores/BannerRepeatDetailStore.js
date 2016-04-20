@@ -8,10 +8,10 @@ import AppConstants from '../constants/AppConstants'
 import AppDispatcher from '../dispatcher/AppDispatcher'
 
 import debug from 'debug'
-const log = debug('application:BannerDetailStore.jsx')
+const log = debug('application:BannerChannelDetailStore.jsx')
 import moment from 'moment'
 
-class BannerDetailStore extends MapStore {
+class BannerChannelDetailStore extends MapStore {
   getInitialState() {
     return Immutable.Map(this._init())
   }
@@ -23,13 +23,13 @@ class BannerDetailStore extends MapStore {
     return {
       bannerSeq: null,
       bannerStartDt: moment().valueOf(),
-      bannerEndDt: moment().add(1, 'days').hour(23).minute(59).second(59).valueOf(),
-      bannerTypeCd: 'PST',
+      bannerEndDt: 253402214400000,
+      bannerTypeCd: 'CHN',
       bannerUrl: '',
       imgLargeUrl: '',
       imgSmallUrl: '',
       platformCd: 'ALL',
-      showViewCd : 'F' // fixed
+      showViewCd : 'R' // repeat
     }
   }
 
@@ -73,5 +73,5 @@ class BannerDetailStore extends MapStore {
 }
 
 // Export a singleton instance of the store
-const instance = new BannerDetailStore(AppDispatcher)
+const instance = new BannerChannelDetailStore(AppDispatcher)
 export default instance

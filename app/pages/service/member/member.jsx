@@ -71,8 +71,9 @@ class Member extends React.Component {
                 <col width="*"/>
                 <col width="14%"/>
                 <col width="14%"/>
-                <col width="15%"/>
-                <col width="15%"/>
+                <col width="10%"/>
+                <col width="10%"/>
+                <col width="8%"/>
               </colgroup>
               <thead>
               <tr>
@@ -81,6 +82,7 @@ class Member extends React.Component {
                 <th>닉네임(아이디)</th>
                 <th>나이(성별)</th>
                 <th>회원상태</th>
+                <th>가입경로</th>
                 <th>가입일</th>
                 <th>푸쉬</th>
               </tr>
@@ -92,7 +94,7 @@ class Member extends React.Component {
           </div>
           <PageList pageObj={this.state.pagination} clickAction={this.movePage}/>
           <p className="btn_r">
-            <a onClick={this.banUserList} className="purple btn_w140">Select List Ban</a>
+            <a onClick={this.banUserList} className="purple btn_w140">Selected List Ban</a>
           </p>
         </div>
       </article>
@@ -132,24 +134,31 @@ class Member extends React.Component {
             break
         }
 
+        let authTypeCd = 'mail'
+        switch (user.get('authTypeCd')) {
+          case 'EM':
+            authTypeCd = 'Mail'
+            break
+          case 'FB':
+            authTypeCd = 'Facebook'
+            break
+        }
+
         return (
           <tr key={i}>
-            <td><input type="checkbox" name="postBox" data-value={user.get('userId')}/></td>
-            <td onClick={this.onPopupUserProfile.bind(null, {userId:user.get('userId')})}><img
-              src={user.get('profileImageUrl') || ''} onError={this.onImageError} className="porfile"
-              alt="userProfile"/></td>
-            <td onClick={this.onPopupUserProfile.bind(null, {userId:user.get('userId')})}><a
-            >{user.get('nickNm')}({user.get('userId')})</a>
+            <td><input type="checkbox" name="postBox" value={user.get('userId')}/></td>
+            <td onClick={this.onPopupUserProfile.bind(null, {userId:user.get('userId')})}>
+              <img src={user.get('profileImageUrl') || ''} onError={this.onImageError} className="porfile" alt="userProfile"/></td>
+            <td onClick={this.onPopupUserProfile.bind(null, {userId:user.get('userId')})}>
+              <a>{user.get('nickNm')}({user.get('userId')})</a>
             </td>
-            <td
-              onClick={this.onPopupUserProfile.bind(null, {userId:user.get('userId')})}>{moment().diff(moment(user.get('birthdayDt')).subtract(1, 'YEAR') || moment().year(), 'YEAR')}
-              ({gender})
+            <td onClick={this.onPopupUserProfile.bind(null, {userId:user.get('userId')})}>
+              {moment().diff(moment(user.get('birthdayDt')).subtract(1, 'YEAR') || moment().year(), 'YEAR')}({gender})
             </td>
             <td onClick={this.onPopupUserProfile.bind(null, {userId:user.get('userId')})}>{userStatus}</td>
-            <td
-              onClick={this.onPopupUserProfile.bind(null, {userId:user.get('userId')})}>{moment(user.get('createDt')).format('YYYY-MM-DD')}</td>
-            <td
-              onClick={this.onPopupUserProfile.bind(null, {userId:user.get('userId')})}>{user.get('pushAllowCd') != 'Y' ? 'X' : '○'}</td>
+            <td onClick={this.onPopupUserProfile.bind(null, {userId:user.get('userId')})}>{authTypeCd}</td>
+            <td onClick={this.onPopupUserProfile.bind(null, {userId:user.get('userId')})}>{moment(user.get('createDt')).format('YYYY-MM-DD')}</td>
+            <td onClick={this.onPopupUserProfile.bind(null, {userId:user.get('userId')})}>{user.get('pushAllowCd') != 'Y' ? 'X' : '○'}</td>
           </tr>
         )
       })
@@ -210,8 +219,9 @@ class Member extends React.Component {
 
     if (userList.length > 0) {
       userList.forEach(function (user, index) {
-        //UserActions.banUser(user)
+        AppActions.banUser(user)
       })
+
     } else {
       alert('유저를 선택하세요.')
     }

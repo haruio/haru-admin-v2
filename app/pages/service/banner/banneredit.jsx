@@ -95,15 +95,7 @@ class BannerEdit extends React.Component {
               </colgroup>
               <tbody>
               <tr>
-                <th>PC Image</th>
-                <ImageUploader id="imgLargeUrl" type="BANNER" value={banner} ref="imgLargeUrl"/>
-              </tr>
-              <tr>
-                <th>Mobile Image</th>
-                <ImageUploader id="imgSmallUrl" type="BANNER" value={banner} ref="imgSmallUrl"/>
-              </tr>
-              <tr>
-                <th>{intlStores.get('sm.SM_FLD_EXP_PLATFORM')}</th>
+                <th><b>{intlStores.get('sm.SM_FLD_EXP_PLATFORM')}</b></th>
                 <td>
                   <p className="input_margin">
                     <input type="radio" id="publish5" name="publish"
@@ -129,6 +121,8 @@ class BannerEdit extends React.Component {
                   </p>
                 </td>
               </tr>
+              {this.renderMobileThumbnail}
+              {this.renderPCThumbnail}
               <tr>
                 <th>{intlStores.get('sm.SM_FLD_BANNER_TYPE')}</th>
                 <td>
@@ -189,6 +183,35 @@ class BannerEdit extends React.Component {
           {this.renderButton}
         </div>
       </article>
+    )
+  }
+
+  get renderMobileThumbnail() {
+    const banner = this.state.banner
+    const platform = banner.get('platformCd')
+    if(platform === 'PC') {
+      return null
+    }
+    return (
+    <tr>
+      <th>Mobile Image</th>
+      <ImageUploader id="imgSmallUrl" type="BANNER" value={banner} ref="imgSmallUrl"/>
+    </tr>
+    )
+  }
+  get renderPCThumbnail() {
+    const banner = this.state.banner
+    const platform = banner.get('platformCd')
+
+    if(!(platform === 'ALL' || platform === 'PC')) {
+      return null
+    }
+
+    return (
+      <tr>
+        <th>PC Image</th>
+        <ImageUploader id="imgLargeUrl" type="BANNER" value={banner} ref="imgLargeUrl"/>
+      </tr>
     )
   }
 
@@ -278,7 +301,8 @@ class BannerEdit extends React.Component {
       <tr>
         <th>{intlStores.get('sm.SM_FLD_NEED_CHANNEL')}</th>
         <td>
-          <select id="categoryList" style={{width:'360px'}} value={defaultCategory} onChange={this.onChangeChannel}>
+          <select id="channelList" style={{width:'360px'}} value={defaultCategory} onChange={this.onChangeChannel}>
+            <option>--- channel ---</option>
             {ChannelList}
           </select>
         </td>
@@ -305,6 +329,7 @@ class BannerEdit extends React.Component {
         <th>{intlStores.get('sm.SM_FLD_NEED_CATEGORY')}</th>
         <td>
           <select id="categoryList" style={{width:'360px'}} value={defaultCategory} onChange={this.onChangeCategory}>
+            <option>--- category ---</option>
             {CategoryList}
           </select>
         </td>
@@ -394,7 +419,7 @@ class BannerEdit extends React.Component {
     return (
       <p className="btn_r btnbox_w960">
         <a onClick={this.handleSubmit} className="purple">{buttonName}</a>&nbsp;
-        <Link to="/service/mgmt/banner" className="gray">취소하기</Link>
+        <Link to="/service/mgmt/banner/list" className="gray">취소하기</Link>
       </p>
     )
   }
@@ -403,7 +428,7 @@ class BannerEdit extends React.Component {
     // PC Banner validation
     if(this.state.banner.get('platformCd') === 'ALL'
       || this.state.banner.get('platformCd') === 'PC') {
-      if(this.refs.imgLargeUrl.getImagePath() === '') {
+      if(this.refs.imgLargeUrl !== undefined && this.refs.imgLargeUrl.getImagePath() === '') {
         Alert.error('PC Image을 올려주세요', {
           position: 'top-right',
           effect: 'slide',
@@ -414,7 +439,7 @@ class BannerEdit extends React.Component {
     }
 
     // Mobile Banner validation
-    if(this.refs.imgSmallUrl.getImagePath() === '') {
+    if(this.refs.imgSmallUrl !== undefined && this.refs.imgSmallUrl.getImagePath() === '') {
       Alert.error('Mobile Image을 올려주세요', {
         position: 'top-right',
         effect: 'slide',
@@ -424,15 +449,27 @@ class BannerEdit extends React.Component {
     }
 
     //TODO : Content validation
+    if(this.state.banner.get('bannerUrl') === '') {
+      Alert.error('추가적인 입력이 부족합니다.', {
+        position: 'top-right',
+        effect: 'slide',
+        timeout: 3000
+      })
+      return
+    }
 
     // Submit
     if(this.state.banner.get('bannerSeq') === null) {
       if (confirm('배너 등록을 하겠습니까?')) {
-        AppActions.createBanner(this.state.banner.toJS())
+        AppActions.createBanner(this.state.banner.toJS(), () => {
+          this.context.router.push('/service/mgmt/banner')
+        })
       }
     } else {
       if (confirm('해당 배너 수정을 하겠습니까?')) {
-        AppActions.modifyBanner(this.state.banner.get('bannerSeq'), this.state.banner.toJS())
+        AppActions.modifyBanner(this.state.banner.get('bannerSeq'), this.state.banner.toJS(), () => {
+          this.context.router.push('/service/mgmt/banner')
+        })
       }
     }
   }

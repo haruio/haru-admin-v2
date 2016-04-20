@@ -118,6 +118,8 @@ export default keyMirror({
   GET_RECOMMEND_KEYWORD: null,
   MOVE_RECOMMEND_KEYWORD_LIST: null,
   CLEAR_RECOMMEND_POST_DETAIL: null,
+  UPDATE_RECOMMEND_META: null,
+  UPDATE_RECOMMEND_DATE: null,
   /**
    * Channel Management - by billy
    */
@@ -125,6 +127,7 @@ export default keyMirror({
   GET_CHANNEL_DETAIL: null,
   DELETE_CHANNEL_IMAGE: null,
   CLEAR_CHANNEL_DETAIL: null,
+  UPDATE_CHANNEL_META: null,
   /**
    * Category Management - by billy
    */
@@ -132,6 +135,7 @@ export default keyMirror({
   GET_CATEGORY_DETAIL: null,
   DELETE_CATEGORY_IMAGE: null,
   CLEAR_CATEGORY_DETAIL: null,
+  UPDATE_CATEGORY_META: null,
   /**
    * MainFeed Management
    */
@@ -229,8 +233,8 @@ export const IMAGE_VALIDATION = {
       size: 100
     },
     lastImageUrl: {
-      width: 640,
-      height: 1136,
+      width: 720,
+      height: 1280,
       size: 100
     }
   },

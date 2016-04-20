@@ -17,7 +17,8 @@ import Deleted from './pages/content/deleted.jsx'
 // service
 import BannerEdit from './pages/service/banner/banneredit.jsx'
 import Banner from './pages/service/banner/banner.jsx'
-import bannerChannelList from './pages/service/banner/bannerChannelList'
+import bannerChannelList from './pages/service/bannerrepeat/bannerRepeat.jsx'
+import bannerChannelEdit from './pages/service/bannerrepeat/bannerRepeatEdit.jsx'
 import MainFeed from './pages/service/mainfeed/mainfeed.jsx'
 import MainFeedEdit from './pages/service/mainfeed/mainfeededit.jsx'
 import Channel from './pages/service/channel/channel.jsx'
@@ -113,10 +114,18 @@ export default class extends React.Component {
               <Route path="mainfeed/new" component={ MainFeedEdit }/>
               <Route path="mainfeed/:id" component={ MainFeedEdit }/>
 
-              <Route path="banner" component={ Banner }/>
-              <Route path="bannerchannel" component={ bannerChannelList }/>
-              <Route path="banner/new" component={ BannerEdit }/>
-              <Route path="banner/:id" component={ BannerEdit }/>
+              <Route path="banner">
+                <IndexRedirect to="list" />
+                <Route path="list" component={ Banner }/>
+                <Route path="new" component={ BannerEdit }/>
+                <Route path=":id" component={ BannerEdit }/>
+              </Route>
+              <Route path="bannerrepeat">
+                <IndexRedirect to="list" />
+                <Route path="list" component={ bannerChannelList }/>
+                <Route path="new" component={ bannerChannelEdit }/>
+                <Route path=":id" component={ bannerChannelEdit }/>
+              </Route>
 
               <Route path="keyword" component={ Recommendkeyword }/>
 

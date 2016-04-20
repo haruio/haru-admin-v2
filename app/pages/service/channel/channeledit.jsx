@@ -39,62 +39,6 @@ class ChannelEdit extends React.Component {
     }
   }
 
-  /***
-   * input tag를 입력할때 마다 호출되는 onChange Handler
-   *
-   * @param key - input tag key
-   * @param e {KeyboardEvent} - input keyboard event
-   */
-  handleChange = (key, e) => {
-    this.setState({channel: this.state.channel.set(key, e.target.value)})
-  }
-
-  /***
-   * 공개 / 비공개 라디오 버튼이 변경될때 마다 변경됨
-   * @param value {string} - Y, N 공개/비공개 여부
-   */
-  handleCheckChange = (value) => {
-    this.setState({channel: this.state.channel.set('channelViewCd', value)})
-  }
-
-  handleSubmitChannel = () => {
-    const name = this.refs.name.value
-    const shortNm = this.refs.shortNm.value
-    const urlNm = this.refs.urlNm.value
-    const iconImageUrl = this.refs.iconImageUrl.getImagePath()
-    const bgImageUrl = this.refs.bgImageUrl.getImagePath()
-    const description = this.refs.description.value
-    const channelViewCd = this.state.channel.get('channelViewCd')
-    log(channelViewCd)
-    // TODO : validate
-
-    // 리퀘스트 데이터 만들기
-    let requestData = {}
-    requestData.name = name
-    requestData.shortNm = shortNm
-    requestData.urlNm = urlNm
-    requestData.iconImageUrl = iconImageUrl
-    requestData.bgImageUrl = bgImageUrl
-    requestData.channelViewCd = channelViewCd
-    requestData.description = description
-    requestData.delYn = 'N'
-
-    // 리퀘스트 요청
-    if (this.isAddCategory) {
-      if(window.confirm(intlStores.get('common.COMMON_MSG_REG'))) {
-        AppActions.addChannel(requestData)
-        this.context.router.push('/service/mgmt/channel')
-      }
-    } else {
-      if (window.confirm(intlStores.get('common.COMMON_MSG_EDIT'))) {
-        requestData.channelSeq = this.props.params.id
-        AppActions.putChannel(requestData)
-        this.context.router.push('/service/mgmt/channel')
-      }
-    }
-  }
-
-
   render() {
     const channel = this.state.channel
     log(channel.toJS())
@@ -158,13 +102,61 @@ class ChannelEdit extends React.Component {
               </tbody>
             </table>
           </div>
-          <p className="btn_r btnbox_w960">
-            <a onClick={this.handleSubmitChannel} className="purple">{intlStores.get('common.COMMON_BTN_REGISTER')}</a>
-            <Link to="/service/mgmt/channel" className="gray">{intlStores.get('common.COMMON_BTN_CANCEL')}</Link>
-          </p>
+          {this.renderButton}
         </div>
       </article>
     )
+  }
+
+  get renderButton() {
+    if(this.props.params.id !== undefined) {
+      return (<p className="btn_r btnbox_w960">
+        <a onClick={this.handleSubmitChannel} className="purple">{intlStores.get('common.COMMON_BTN_EDIT')}</a>
+        <Link to="/service/mgmt/channel" className="gray">{intlStores.get('common.COMMON_BTN_CANCEL')}</Link>
+      </p>)
+    } else {
+      return (<p className="btn_r btnbox_w960">
+        <a onClick={this.handleSubmitChannel} className="purple">{intlStores.get('common.COMMON_BTN_REGISTER')}</a>
+        <Link to="/service/mgmt/channel" className="gray">{intlStores.get('common.COMMON_BTN_CANCEL')}</Link>
+      </p>)
+    }
+  }
+  /***
+   * input tag를 입력할때 마다 호출되는 onChange Handler
+   *
+   * @param key - input tag key
+   * @param e {KeyboardEvent} - input keyboard event
+   */
+  handleChange = (key, e) => {
+    //this.setState({channel: this.state.channel.set(key, e.target.value)})
+    AppActions.updateChannelMeta(key, e.target.value)
+  }
+
+  /***
+   * 공개 / 비공개 라디오 버튼이 변경될때 마다 변경됨
+   * @param value {string} - Y, N 공개/비공개 여부
+   */
+  handleCheckChange = (value) => {
+    //this.setState({channel: this.state.channel.set('channelViewCd', value)})
+    AppActions.updateChannelMeta('channelViewCd', value)
+  }
+
+  handleSubmitChannel = () => {
+    // TODO validation
+    // 리퀘스트 요청
+    if(this.props.params.id === undefined) {
+      if(window.confirm(intlStores.get('common.COMMON_MSG_REG'))) {
+        AppActions.addChannel(this.state.channel.toJS(), () => {
+          this.context.router.push('/service/mgmt/channel')
+        })
+      }
+    } else {
+      if (window.confirm(intlStores.get('common.COMMON_MSG_EDIT'))) {
+        AppActions.putChannel(this.state.channel.toJS(), this.props.params.id, () => {
+          this.context.router.push('/service/mgmt/channel')
+        })
+      }
+    }
   }
 }
 const ChannelEditContainer = Container.create(ChannelEdit)

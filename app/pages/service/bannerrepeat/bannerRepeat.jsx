@@ -2,7 +2,7 @@
  * Created by pheadra on 7/8/15.
  */
 import React from 'react'
-import {Container} from '../../../../node_modules/flux/utils'
+import {Container} from 'flux/utils'
 import {Link} from 'react-router'
 import cn from 'classnames'
 import moment from 'moment'
@@ -11,13 +11,9 @@ import debug from 'debug'
 const log = debug('application:BannerChannelList.jsx')
 
 import AppActions from '../../../actions/AppActions'
+import BannerStore from '../../../stores/BannerStore'
 import intlStores from'../../../utils/IntlStore'
 
-const btn_prev2 = require('image!../../../assets/img/btn_prev2.png')
-const btn_next2 = require('image!../../../assets/img/btn_next2.png')
-const bg_calendar = require('image!../../../assets/img/bg_calendar.png')
-
-import BannerStore from '../../../stores/BannerStore'
 
 /***
  * Banner List
@@ -84,9 +80,8 @@ class BannerChannelList extends React.Component {
             </table>
           </div>
           <p className="btn_r">
-            <Link to="/service/mgmt/banner/new"
-                  className="purple btn_w140">{intlStores.get('common.COMMON_BTN_REGISTER')}</Link>&nbsp;
-            <a href="">{intlStores.get('common.COMMON_BTN_DELETE')}</a>
+            <Link to="/service/mgmt/bannerrepeat/new" className="purple btn_w140">{intlStores.get('common.COMMON_BTN_REGISTER')}</Link>&nbsp;
+            <a onClick={this.deleteSelectedItem}>{intlStores.get('common.COMMON_BTN_DELETE')}</a>
           </p>
         </div>
       </article>
@@ -96,6 +91,7 @@ class BannerChannelList extends React.Component {
   get renderPlatformTab() {
     return (
       <ul id="tab_btns">
+        <li><button onClick={this.changePlatform.bind(this, 'ALL')} className={cn({'on': this.state.platform == 'ALL'})}>ALL</button></li>
         <li><button onClick={this.changePlatform.bind(this, 'AND')} className={cn({'on': this.state.platform == 'AND'})}>Android</button></li>
         <li><button onClick={this.changePlatform.bind(this, 'IOS')} className={cn({'on': this.state.platform == 'IOS'})}>IOS</button></li>
         <li><button onClick={this.changePlatform.bind(this, 'PC')}  className={cn({'on': this.state.platform == 'PC'})}>PC Web</button></li>
@@ -153,11 +149,16 @@ class BannerChannelList extends React.Component {
           break
       }
 
+      let thumbnail = banner.get('imgSmallUrl')
+      if(thumbnail === undefined) {
+        thumbnail = banner.get('imgLargeUrl')
+      }
+
       return (
         <tr key={banner.get('bannerSeq')}>
-          <td><input type="checkbox" name="postBox" /></td>
+          <td><input type="checkbox" name="postBox" value={banner.get('bannerSeq')}/></td>
           <td className="bn1" onClick={this._moveBannerDetail.bind(this, banner.get('bannerSeq'))}>{banner.get('bannerSeq')}</td>
-          <td onClick={this._moveBannerDetail.bind(this, banner.get('bannerSeq'))}><img className="thumbnail" src={banner.get('imgSmallUrl')} alt="thumbnail"/></td>
+          <td onClick={this._moveBannerDetail.bind(this, banner.get('bannerSeq'))}><img className="thumbnail" src={thumbnail} alt="thumbnail"/></td>
           <td onClick={this._moveBannerDetail.bind(this, banner.get('bannerSeq'))}>{bannertype}</td>
           <td onClick={this._moveBannerDetail.bind(this, banner.get('bannerSeq'))}>{platform}</td>
           <td onClick={this._moveBannerDetail.bind(this, banner.get('bannerSeq'))}>{moment(banner.get('bannerStartDt')).format('YYYY-MM-DD HH:MM')}</td>
@@ -170,22 +171,25 @@ class BannerChannelList extends React.Component {
   // Event
   changePlatform(platform) {
     AppActions.ChangePlatform(platform)
+    AppActions.getBannerChannelList(1, 10, platform)
   }
 
-  changeSearchDate = (action) => {
-    let searchDate = moment(this.state.searchDate)
-    if (action === 'prev') {
-      searchDate = searchDate.subtract(1, 'day').format('YYYY-MM-DD')
-    } else if (action === 'next') {
-      searchDate = searchDate.add(1, 'day').format('YYYY-MM-DD')
+  deleteSelectedItem= () => {
+    let checkedList = []
+    $("input[name='postBox']:checked").each(function () {
+      checkedList.push($(this).val())
+    })
+
+    if (checkedList.length > 0 && window.confirm(intlStores.get('common.COMMON_MSG_DEL'))) {
+      AppActions.deleteBannerList(checkedList, () => {
+        this.getBannerList(1, this.state.platform)
+      })
+      $("input[name='postBox']").prop('checked', false)
     }
-    this.setState({searchDate:searchDate})
-    $('#bannerDate').datepicker('setDate', searchDate)
-    this.getBannerList(1, searchDate, this.state.platform)
   }
 
   _moveBannerDetail = (bannerSeq) => {
-    this.context.router.push('/service/mgmt/banner/' + bannerSeq)
+    this.context.router.push('/service/mgmt/bannerrepeat/' + bannerSeq)
   }
 
   toggleCheckBox = () => {

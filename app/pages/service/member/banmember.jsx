@@ -27,7 +27,7 @@ class BanMember extends React.Component {
 
   static calculateState() {
     return {
-      members: MemberStore.getMembers(),
+      members: MemberStore.getBanMembers(),
       pagination: PaginationStore.getPagination()
     }
   }
@@ -94,7 +94,7 @@ class BanMember extends React.Component {
           </div>
           <PageList pageObj={this.state.pagination} clickAction={this.movePage}/>
           <p className="btn_r">
-            <a className="purple btn_w140">준비중</a>
+            <a onClick={this.unbanUserList} className="purple btn_w140">Selected List UnBan</a>
             <a onClick={this.deleteSelectedItem}>{intlStores.get('common.COMMON_BTN_DELETE')}</a>
           </p>
         </div>
@@ -137,7 +137,7 @@ class BanMember extends React.Component {
 
         return (
           <tr key={i} >
-            <td><input type="checkbox" name="postBox" data-value={user.get('userId')}/></td>
+            <td><input type="checkbox" name="postBox" value={user.get('userId')}/></td>
             <td onClick={this.onPopupUserProfile.bind(null, {userId:user.get('userId')})}>
               <img src={user.get('profileImageUrl') || ''} onError={(e) => {e.target.src = userDefault}} className="porfile" alt="userProfile"/>
             </td>
@@ -178,6 +178,22 @@ class BanMember extends React.Component {
     this.listUsers({pageNo: pageNo, searchField: searchField,  searchText:searchText})
   }
 
+  unbanUserList() {
+    let userList = []
+    userList = $('input:checked').toArray().map((row, i)=> {
+      return {userId: row.value}
+    })
+
+    if (userList.length > 0) {
+      userList.forEach(function (user, index) {
+        AppActions.unbanUser(user)
+      })
+      $("input[name='postBox']").prop('checked', false)
+    } else {
+      alert('유저를 선택하세요.')
+    }
+  }
+
   deleteSelectedItem() {
     let userList = []
     userList = $('input:checked').toArray().map((row)=> {
@@ -186,8 +202,9 @@ class BanMember extends React.Component {
 
     if (userList.length > 0) {
       userList.forEach(function (user) {
-        UserActions.banUser(user)
+        AppActions.deleteUser(user)
       })
+      $("input[name='postBox']").prop('checked', false)
     } else {
       alert('유저를 선택하세요.')
     }

@@ -22,6 +22,7 @@ const ct_edit7 = require('image!../../assets/img/ct_edit7.png')
  * A component to ContentList
  * author : jungun.park
  */
+// TODO : 임시저장 부분
 
 export default class ContentListItem extends React.Component {
   constructor(props) {
@@ -38,7 +39,7 @@ export default class ContentListItem extends React.Component {
 
   render() {
     const content = this.props.content
-
+    
     let thumnail
     let author
     let title

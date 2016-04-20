@@ -181,17 +181,8 @@ class MainFeedPopup extends React.Component {
   }
 
   registerMainFeed = () => {
-    if(this.refs.thumbnailUrl.getImagePath() === '') {
-      /* 임시 저장후 메인으로 가야하는것인가? */
-      Alert.error('메인피드 섬네일 등록되지 않았습니다.', {
-        position: 'top-right',
-        effect: 'slide',
-        timeout: 3000
-      })
-      return
-    }
-
     const selectedItem = PublishedListStore.getContentListById(this.state.selected)
+    log(selectedItem)
     AppActions.updateMainFeedTemplate(this.props.feedIdx, selectedItem)
     this.props.close()
   }

@@ -25,7 +25,7 @@ import PostTrendPopup from '../components/Popup/PostTrendPopup'
 import ga from 'react-google-analytics'
 var GAInitiailizer = ga.Initializer
 */
-import Alert from 'react-s-alert';
+import Alert from 'react-s-alert'
 
 export default class App extends React.Component {
   constructor(props) {
@@ -49,6 +49,7 @@ export default class App extends React.Component {
           <LeftMenu/>
           {this.props.children}
         </section>
+        
         <Popup>
           <MemberPopup key={POPUP.MEMBER}/>
           <HistoryPopup key={POPUP.HISTORY}/>

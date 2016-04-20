@@ -91,7 +91,42 @@ class MainFeed extends React.Component {
 
   get renderMainfeeds() {
     if(this.state.mainfeeds.size === 0) {
-      return null
+      return (
+        <div>
+          <ul className="main_list">
+            <li className="item">
+              <Link to="/service/mgmt/mainfeed/new">
+                <span className="add"></span>
+              </Link>
+            </li>
+            <li className="item">
+              <Link to="/service/mgmt/mainfeed/new">
+                <span className="add"></span>
+              </Link>
+            </li>
+            <li className="item">
+              <Link to="/service/mgmt/mainfeed/new">
+                <span className="add"></span>
+              </Link>
+            </li>
+            <li className="item">
+              <Link to="/service/mgmt/mainfeed/new">
+                <span className="add"></span>
+              </Link>
+            </li>
+            <li className="item">
+              <Link to="/service/mgmt/mainfeed/new">
+                <span className="add"></span>
+              </Link>
+            </li>
+            <li className="item">
+              <Link to="/service/mgmt/mainfeed/new">
+                <span className="add"></span>
+              </Link>
+            </li>
+          </ul>
+        </div>
+      )
     }
 
     return this.state.mainfeeds.map((mainfeed) => {

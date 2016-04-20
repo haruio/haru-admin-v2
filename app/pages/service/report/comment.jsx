@@ -73,7 +73,8 @@ class ReportComment extends React.Component {
           </div>
           <PageList pageObj={this.state.pagination} clickAction={this.movePage}/>
           <p className="btn_r">
-            <a className="purple">삭제하기</a>
+            <a onClick={this.onHandleBlind} className="blue">블라인드</a>
+            <a onClick={this.onHandleDelete} className="purple">삭제하기</a>
           </p>
         </div>
       </article>
@@ -102,6 +103,34 @@ class ReportComment extends React.Component {
     })
   }
 
+  onHandleBlind() {
+    let checkedList = []
+    $("input[name='postBox']:checked").each(function () {
+      checkedList.push($(this).val())
+    })
+
+    if (checkedList.length > 0 && window.confirm(intlStores.get('common.COMMON_MSG_DEL'))) {
+      AppActions.deleteBannerList(checkedList, () => {
+        AppActions.getReportCommentList({})
+      })
+      $("input[name='postBox']").prop('checked', false)
+    }
+  }
+
+  onHandleDelete() {
+    let checkedList = []
+    $("input[name='postBox']:checked").each(function () {
+      checkedList.push($(this).val())
+    })
+
+    if (checkedList.length > 0 && window.confirm(intlStores.get('common.COMMON_MSG_DEL'))) {
+      AppActions.deleteBannerList(checkedList, () => {
+        this.getBannerList(1, this.state.searchDate, this.state.platform )
+      })
+      $("input[name='postBox']").prop('checked', false)
+    }
+  }
+  
   /***
    * Move Page
    * @param page {number} - 이동할 페이지

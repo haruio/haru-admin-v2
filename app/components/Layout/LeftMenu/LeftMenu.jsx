@@ -13,6 +13,8 @@ import intlStores from '../../../utils/IntlStore'
  * A component to LeftMenu
  * author : jungun.park
  */
+// TODO : 해당 페이지에서 세부 페이지로 가면 activeClassName 이 풀리는 버그.
+
 export default class LeftMenu extends React.Component {
   static contextTypes = {
     router: React.PropTypes.object.isRequired
@@ -53,7 +55,7 @@ export default class LeftMenu extends React.Component {
               <ul>
                 <li><Link to="/service/mgmt/mainfeed" activeClassName="on">메인피드 관리</Link></li>
                 <li><Link to="/service/mgmt/banner" activeClassName="on">배너 관리(채널제외)</Link></li>
-                <li><Link to="/service/mgmt/bannerchannel" activeClassName="on">배너 관리(채널)</Link></li>
+                <li><Link to="/service/mgmt/bannerrepeat" activeClassName="on">반복배너 관리(채널)</Link></li>
                 <li><Link to="/service/mgmt/keyword" activeClassName="on">추천 검색어 관리</Link></li>
                 <li><Link to="/service/mgmt/post" activeClassName="on">추천 컨텐츠</Link></li>
                 <li><Link to="/service/mgmt/channel"  activeClassName="on">채널 관리</Link></li>

@@ -64,10 +64,11 @@ class BannerList extends React.Component {
   }
 
   getBannerList(page, initdate, platform) {
+    log(initdate)
     const startDate = moment(initdate + ' 00:00:00', 'YYYYMMDD HH:mm:ss').utc().format('YYYY-MM-DD HH:mm:ss')
     const endDate = moment(initdate + ' 23:59:59', 'YYYYMMDD HH:mm:ss').utc().format('YYYY-MM-DD HH:mm:ss')
 
-    AppActions.getBannerList(page, 10, startDate, endDate, platform)
+    AppActions.getBannerOtherList(page, 10, startDate, endDate, platform)
   }
 
   render() {
@@ -121,7 +122,7 @@ class BannerList extends React.Component {
           <p className="btn_r">
             <Link to="/service/mgmt/banner/new"
                   className="purple btn_w140">{intlStores.get('common.COMMON_BTN_REGISTER')}</Link>&nbsp;
-            <a href="">{intlStores.get('common.COMMON_BTN_DELETE')}</a>
+            <a onClick={this.deleteSelectedItem}>{intlStores.get('common.COMMON_BTN_DELETE')}</a>
           </p>
         </div>
       </article>
@@ -131,6 +132,7 @@ class BannerList extends React.Component {
   get renderPlatformTab() {
     return (
       <ul id="tab_btns">
+        <li><button onClick={this.changePlatform.bind(this, 'ALL')} className={cn({'on': this.state.platform == 'ALL'})}>ALL</button></li>
         <li><button onClick={this.changePlatform.bind(this, 'AND')} className={cn({'on': this.state.platform == 'AND'})}>Android</button></li>
         <li><button onClick={this.changePlatform.bind(this, 'IOS')} className={cn({'on': this.state.platform == 'IOS'})}>IOS</button></li>
         <li><button onClick={this.changePlatform.bind(this, 'PC')}  className={cn({'on': this.state.platform == 'PC'})}>PC Web</button></li>
@@ -261,11 +263,15 @@ class BannerList extends React.Component {
           break
       }
 
+      let thumbnail = banner.get('imgSmallUrl')
+      if(thumbnail === undefined) {
+        thumbnail = banner.get('imgLargeUrl')
+      }
       return (
         <tr key={banner.get('bannerSeq')}>
-          <td><input type="checkbox" name="postBox" /></td>
+          <td><input type="checkbox" name="postBox"  value={banner.get('bannerSeq')} /></td>
           <td className="bn1" onClick={this._moveBannerDetail.bind(this, banner.get('bannerSeq'))}>{banner.get('bannerSeq')}</td>
-          <td onClick={this._moveBannerDetail.bind(this, banner.get('bannerSeq'))}><img className="thumbnail" src={banner.get('imgSmallUrl')} alt="thumbnail"/></td>
+          <td onClick={this._moveBannerDetail.bind(this, banner.get('bannerSeq'))}><img className="thumbnail" src={thumbnail} alt="thumbnail"/></td>
           <td onClick={this._moveBannerDetail.bind(this, banner.get('bannerSeq'))}>{bannertype}</td>
           <td onClick={this._moveBannerDetail.bind(this, banner.get('bannerSeq'))}>{platform}</td>
           <td onClick={this._moveBannerDetail.bind(this, banner.get('bannerSeq'))}>{moment(banner.get('bannerStartDt')).format('YYYY-MM-DD HH:MM')}</td>
@@ -276,8 +282,9 @@ class BannerList extends React.Component {
   }
 
   // Event
-  changePlatform(platform) {
+  changePlatform = (platform) => {
     AppActions.ChangePlatform(platform)
+    this.getBannerList(1, this.state.searchDate, platform)
   }
 
   changeSearchDate = (action) => {
@@ -287,11 +294,26 @@ class BannerList extends React.Component {
     } else if (action === 'next') {
       searchDate = searchDate.add(1, 'day').format('YYYY-MM-DD')
     }
-    this.setState({searchDate:searchDate})
-    $('#bannerDate').datepicker('setDate', searchDate)
+
+    AppActions.ChangeSearchDate(searchDate)
     this.getBannerList(1, searchDate, this.state.platform)
   }
-  
+
+
+  deleteSelectedItem= () => {
+    let checkedList = []
+    $("input[name='postBox']:checked").each(function () {
+      checkedList.push($(this).val())
+    })
+
+    if (checkedList.length > 0 && window.confirm(intlStores.get('common.COMMON_MSG_DEL'))) {
+      AppActions.deleteBannerList(checkedList, () => {
+        this.getBannerList(1, this.state.searchDate, this.state.platform )
+      })
+      $("input[name='postBox']").prop('checked', false)
+    }
+  }
+
   _moveBannerDetail = (bannerSeq) => {
     this.context.router.push('/service/mgmt/banner/' + bannerSeq)
   }

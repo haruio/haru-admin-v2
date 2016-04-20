@@ -27,6 +27,10 @@ class Channel extends React.Component {
     }
   }
 
+  componentWillMount() {
+    AppActions.getChannels()
+  }
+
   componentDidMount() {
     $('#channel_list').sortable({})
   }

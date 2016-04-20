@@ -14,7 +14,7 @@ import moment from 'moment'
 
 class BannerStore extends MapStore {
   getInitialState() {
-    return Immutable.Map({banners:Immutable.List(), searchDate:moment().format('YYYY-MM-DD'), platform:'AND'})
+    return Immutable.Map({banners:Immutable.List(), searchDate:moment().format('YYYY-MM-DD'), platform:'ALL'})
   }
 
   getBanners() {

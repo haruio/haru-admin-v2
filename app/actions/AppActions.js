@@ -12,7 +12,7 @@ import request from 'superagent'
 
 import utility from '../utils/util.js'
 
-import { currentuser, URL, middleware_accesstoken } from './AuthActions.js'
+import { currentuser, URL, OLD_URL, middleware_accesstoken } from './AuthActions.js'
 
 import moment from 'moment'
 import Alert from 'react-s-alert'
@@ -218,20 +218,14 @@ const AppActions = {
           return
         }
 
-        Alert.success('메인피드를 등록했습니다.', {
-          position: 'top-right',
-          effect: 'slide',
-          timeout: 3000
-        })
-
         AppDispatcher.handleViewAction({
           type: AppConstants.COMPLETE_REGISTE_MAINFEED
         })
 
       })
   },
-  updateMainFeed(dataObj) {
-    request.put(URL + '/sm/feed/template')
+  updateMainFeed(dataObj, groupId) {
+    request.put(`${URL}/sm/feed/template/${groupId}`)
       .use(middleware_accesstoken)
       .send(dataObj)
       .end(function (err, res) {
@@ -358,60 +352,68 @@ const AppActions = {
         })
       })
   },
-  getBannerChannelList(pageNo, pageSize, startDate, endDate, platform) {
-    request.get(URL + '/sm/banners/channel')
+  getBannerChannelList(pageNo, pageSize, platform) {
+    let requestbanner = request.get(URL + '/sm/banners/repeated')
       .use(middleware_accesstoken)
       .query({ pageNum: pageNo, pageSize: pageSize })
-      .query({ platform: platform})
-      .end(function (err, res) {
-        if(utility.errorHandler(err, res)) {
-          return
-        }
 
-        AppDispatcher.handleViewAction({
-          type: AppConstants.GET_BANNER_LIST,
-          contents : res.body.data,
-          pagination: {
-            pageSize: res.body.pageSize,
-            firstPageNo: res.body.firstPageNo,
-            startPageNo: res.body.startPageNo,
-            prevPageNo: res.body.prevPageNo,
-            pageNo: res.body.pageNo,
-            nextPageNo: res.body.nextPageNo,
-            endPageNo: res.body.endPageNo,
-            finalPageNo: res.body.finalPageNo,
-            totalCount: res.body.totalCount
-          }
-        })
+    if (platform !== 'ALL') {
+      requestbanner = requestbanner.query({platform: platform})
+    }
+
+    requestbanner.end(function (err, res) {
+      if(utility.errorHandler(err, res)) {
+        return
+      }
+
+      AppDispatcher.handleViewAction({
+        type: AppConstants.GET_BANNER_LIST,
+        contents : res.body.data,
+        pagination: {
+          pageSize: res.body.pageSize,
+          firstPageNo: res.body.firstPageNo,
+          startPageNo: res.body.startPageNo,
+          prevPageNo: res.body.prevPageNo,
+          pageNo: res.body.pageNo,
+          nextPageNo: res.body.nextPageNo,
+          endPageNo: res.body.endPageNo,
+          finalPageNo: res.body.finalPageNo,
+          totalCount: res.body.totalCount
+        }
       })
+    })
   },
   getBannerOtherList(pageNo, pageSize, startDate, endDate, platform) {
-    request.get(URL + '/sm/banners/other')
+    let requestbanner = request.get(URL + '/sm/banners/fixed')
       .use(middleware_accesstoken)
-      .query({ pageNum: pageNo, pageSize: pageSize })
-      .query({ startDate: startDate, endDate: endDate })
-      .query({ platform: platform})
-      .end(function (err, res) {
-        if(utility.errorHandler(err, res)) {
-          return
-        }
+      .query({pageNum: pageNo, pageSize: pageSize})
+      .query({startDate: startDate, endDate: endDate})
 
-        AppDispatcher.handleViewAction({
-          type: AppConstants.GET_BANNER_LIST,
-          contents : res.body.data,
-          pagination: {
-            pageSize: res.body.pageSize,
-            firstPageNo: res.body.firstPageNo,
-            startPageNo: res.body.startPageNo,
-            prevPageNo: res.body.prevPageNo,
-            pageNo: res.body.pageNo,
-            nextPageNo: res.body.nextPageNo,
-            endPageNo: res.body.endPageNo,
-            finalPageNo: res.body.finalPageNo,
-            totalCount: res.body.totalCount
-          }
-        })
+    if (platform !== 'ALL') {
+      requestbanner = requestbanner.query({platform: platform})
+    }
+
+    requestbanner.end(function (err, res) {
+      if (utility.errorHandler(err, res)) {
+        return
+      }
+
+      AppDispatcher.handleViewAction({
+        type: AppConstants.GET_BANNER_LIST,
+        contents: res.body.data,
+        pagination: {
+          pageSize: res.body.pageSize,
+          firstPageNo: res.body.firstPageNo,
+          startPageNo: res.body.startPageNo,
+          prevPageNo: res.body.prevPageNo,
+          pageNo: res.body.pageNo,
+          nextPageNo: res.body.nextPageNo,
+          endPageNo: res.body.endPageNo,
+          finalPageNo: res.body.finalPageNo,
+          totalCount: res.body.totalCount
+        }
       })
+    })
   },
   getBanner(seq) {
     request.get(`${URL}/sm/banners/${seq}`)
@@ -427,7 +429,9 @@ const AppActions = {
           content : res.body
         })
 
-        if(res.body && res.body.bannerUrl && (res.body.bannerUrl.indexOf('post') >= 0)) {
+        /*url 안에 post 이면 해당 포스트데이터를 로딩한다. 채널 카테고리는 이미 가지고 있기 때문인가부다*/
+        if(res.body && res.body.bannerUrl
+          && (res.body.bannerUrl.indexOf('post') >= 0)) {
           AppActions.getPostByUrl(res.body.bannerUrl.split(/post\//)[1])
         }
       })
@@ -438,7 +442,7 @@ const AppActions = {
     })
   },
   getPostByUrl(url) {
-    request.get(`${URL}/contents/url/${url}`)
+    request.get(`${URL}/cm/contents/url/${url}`)
       .use(middleware_accesstoken)
       .end(function (err, res) {
 
@@ -470,7 +474,7 @@ const AppActions = {
       searchDate: searchDate
     })
   },
-  createBanner(data) {
+  createBanner(data, callback) {
     request.post(URL + '/sm/banners')
       .use(middleware_accesstoken)
       .send(data)
@@ -478,17 +482,30 @@ const AppActions = {
         if(utility.errorHandler(err, res)) {
           return
         }
+
+        Alert.success('배너가 등록되었습니다.', {
+          position: 'top-right',
+          effect: 'slide',
+          timeout: 3000
+        })
+        callback()
       })
   },
-  modifyBanner(seq, data) {
+  modifyBanner(seq, data, callback) {
     request.put(`${URL}/sm/banners/${seq}`)
       .use(middleware_accesstoken)
       .send(data)
       .end(function (err, res) {
-
         if(utility.errorHandler(err, res)) {
           return
         }
+
+        Alert.success('배너가 수정되었습니다.', {
+          position: 'top-right',
+          effect: 'slide',
+          timeout: 3000
+        })
+        callback()
       })
   },
   deleteBanner(seq, data) {
@@ -502,17 +519,18 @@ const AppActions = {
         }
       })
   },
-  deleteBannerList(idLists, startDate, endDate, platform) {
+  deleteBannerList(idLists, callback) {
     request.post(URL + '/sm/banners/delete')
       .use(middleware_accesstoken)
       .send({orderList: idLists})
       .end(function (err, res) {
-
         if(utility.errorHandler(err, res)) {
           return
         }
 
-        AppActions.getBannerList(1, 10, startDate, endDate, platform)
+        if(callback) {
+          callback()
+        }
       })
   },
   updateBannerPlatform(platform) {
@@ -632,7 +650,7 @@ const AppActions = {
   },
 
   getPost(postSeq) {
-    request.get(URL + '/contents/' + postSeq)
+    request.get(`${URL}/cm/contents/${postSeq}`)
       .use(middleware_accesstoken)
       .end(function (err, res) {
         if(utility.errorHandler(err, res)) {
@@ -658,8 +676,6 @@ const AppActions = {
       type: AppConstants.CLEAR_RECOMMEND_POST_DETAIL
     })
   },
-
-
   getRecommendPost(seq) {
     // 추천컨텐츠에서 PostSeq를 얻어온다???
     request.get(URL + '/sm/recommends/post/'+ seq)
@@ -669,8 +685,8 @@ const AppActions = {
           return
         }
 
-        let content = res.body
-        request.get(URL + '/contents/' + content.postSeq)
+        let recommendpost = res.body
+        request.get(`${URL}/cm/contents/${recommendpost.postSeq}`)
           .use(middleware_accesstoken)
           .end(function (err2, res2) {
             if(utility.errorHandler(err2, res2)) {
@@ -680,14 +696,14 @@ const AppActions = {
             let post = res2.body
             AppDispatcher.handleViewAction({
               type: AppConstants.GET_RECOMMEND_POST,
-              content : content,
+              recommendpost : recommendpost,
               post : post
             })
           })
       })
   },
   // TODO : 수정 혹은 삭제를 하면 첫페이지로 이동하는 문제가 있음
-  createRecommendPost(data) {
+  createRecommendPost(data, callback) {
     request.post(URL + '/sm/recommends/post')
       .use(middleware_accesstoken)
       .send(data)
@@ -696,11 +712,13 @@ const AppActions = {
           return
         }
 
-        AppActions.getRecommendPostList()
+        if(callback) {
+          callback()
+        }
       })
   },
 
-  modifyRecommendPost(seq, data) {
+  modifyRecommendPost(seq, data, callback) {
     request.put(URL + '/sm/recommends/post/' + seq)
       .use(middleware_accesstoken)
       .send(data)
@@ -709,7 +727,10 @@ const AppActions = {
           return
         }
 
-        AppActions.getRecommendPostList()
+        //AppActions.getRecommendPostList()
+        if(callback) {
+          callback()
+        }
       })
   },
   deleteRecommendPostList(idLists) {
@@ -724,7 +745,21 @@ const AppActions = {
         AppActions.getRecommendPostList()
       })
   },
-
+  updateRecommendMeta(key, data) {
+    AppDispatcher.handleViewAction({
+      type: AppConstants.UPDATE_RECOMMEND_META,
+      key : key,
+      data : data
+    })
+  },
+  updateRecommendDate(key, startDate, endDate) {
+    AppDispatcher.handleViewAction({
+      type: AppConstants.UPDATE_RECOMMEND_DATE,
+      key : key,
+      startDate : startDate,
+      endDate: endDate
+    })
+  },
   /***
    * Channel API
    */
@@ -771,7 +806,7 @@ const AppActions = {
       type: AppConstants.CLEAR_CHANNEL_DETAIL
     })
   },
-  addChannel(channelObject) {
+  addChannel(channelObject, callback) {
     request.post(URL + '/sm/channels')
       .use(middleware_accesstoken)
       .send(channelObject)
@@ -779,23 +814,29 @@ const AppActions = {
         if (utility.errorHandler(err, res)) {
           return
         }
-        AppActions.getChannels()
+
+        if(callback) {
+          callback()
+        }
       })
   },
-  putChannel(channelObject) {
-    request.put(URL + '/sm/channels')
+  putChannel(channelObject, seq, callback) {
+    request.put(`${URL}/sm/channels/${seq}`)
       .use(middleware_accesstoken)
       .send(channelObject)
       .end(function (err, res) {
         if (utility.errorHandler(err, res)) {
           return
         }
-        AppActions.getChannels()
+
+        if(callback) {
+          callback()
+        }
       })
   },
   deleteChannel(channelSeq) {
     let reqData = {'channelSeq': channelSeq}
-    request.del(URL + '/sm/channels')
+    request.del(`${URL}/sm/channels/${channelSeq}`)
       .use(middleware_accesstoken)
       .send(reqData)
       .end(function (err, res) {
@@ -821,21 +862,21 @@ const AppActions = {
       target: target
     })
   },
+  updateChannelMeta(key, data) {
+    AppDispatcher.handleViewAction({
+      type: AppConstants.UPDATE_CHANNEL_META,
+      key: key,
+      data: data
+    })
+  },
   /***
    * Category API
    */
   getCategories() {
-    request.get(URL + '/sm/categories/')
+    request.get(URL + '/sm/categories')
       .use(middleware_accesstoken)
       .end(function (err, res) {
         // TODO 에러처리를 Generic 하게 처리하자
-        if (res.body.errorCode === 'ADMIN.INVALID_SESSION_TOKEN' || res.body.errorCode === 'ADMIN.MISSING_SESSION_TOKEN') {
-          AppDispatcher.handleViewAction({
-            type: AppConstants.INVALID_SESSION_TOKEN,
-            contents: res.body
-          })
-          return
-        }
         if (utility.errorHandler(err, res)) {
           return
         }
@@ -864,7 +905,7 @@ const AppActions = {
       type: AppConstants.CLEAR_CATEGORY_DETAIL
     })
   },
-  addCategories(categoryObject) {
+  addCategories(categoryObject, callback) {
     request.post(URL + '/sm/categories')
       .use(middleware_accesstoken)
       .send(categoryObject)
@@ -872,29 +913,36 @@ const AppActions = {
         if (utility.errorHandler(err, res)) {
           return
         }
-        AppActions.getCategories()
+
+        if(callback) {
+          callback()
+        }
       })
   },
-  putCategories(categoryObject) {
-    request.put(URL + '/sm/categories')
+  putCategories(categoryObject, categorySeq, callback) {
+    request.put(`${URL}/sm/categories/${categorySeq}`)
       .use(middleware_accesstoken)
       .send(categoryObject)
       .end(function (err, res) {
         if (utility.errorHandler(err, res)) {
           return
         }
-        AppActions.getCategories()
+
+        if(callback) {
+          callback()
+        }
       })
   },
   deleteCategory(categorySeq) {
     let reqData = {'categorySeq': categorySeq}
-    request.del(URL + '/sm/categories')
+    request.del(`${URL}/sm/categories/${categorySeq}`)
       .use(middleware_accesstoken)
       .send(reqData)
       .end(function (err, res) {
         if (utility.errorHandler(err, res)) {
           return
         }
+
         AppActions.getCategories()
       })
 
@@ -915,7 +963,13 @@ const AppActions = {
       target: target
     })
   },
-
+  updateCategoryMeta(key, data) {
+    AppDispatcher.handleViewAction({
+      type: AppConstants.UPDATE_CATEGORY_META,
+      key: key,
+      data: data
+    })
+  },
   /***
    * Member API
    */
@@ -992,11 +1046,10 @@ const AppActions = {
         } else {
           //서버에 리턴 값이 없어서 주석 처리
           if ('ERROR' != res.body.type) {
-            alert('사용자를 Ban 처리했습니다.')
-
             AppDispatcher.handleViewAction({
               type: AppConstants.GET_USER_STAT_BAN,
-              contents: res.body
+              contents: res.body,
+              userId: userList.userId
             })
           } else {
             alert('처리하지 못 했습니다.')
@@ -1015,11 +1068,12 @@ const AppActions = {
         } else {
           //서버에 리턴 값이 없어서 주석 처리
           if ('ERROR' != res.body.type) {
-            alert('사용자를 Unban 처리했습니다.')
+            //alert('사용자를 Unban 처리했습니다.')
 
             AppDispatcher.handleViewAction({
               type: AppConstants.GET_USER_STAT_ACT,
-              contents: res.body
+              contents: res.body,
+              userId: userList.userId
             })
           } else {
             alert('처리하지 못 했습니다.')

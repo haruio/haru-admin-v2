@@ -4,6 +4,7 @@
 import React from 'react'
 import {Container} from 'flux/utils'
 import moment from 'moment'
+import Alert from 'react-s-alert'
 
 import debug from 'debug'
 const log = debug('application:ReportPost.jsx')
@@ -73,7 +74,7 @@ class ReportPost extends React.Component {
           </div>
           <PageList pageObj={this.state.pagination} clickAction={this.movePage} />
           <p className="btn_r">
-            <a  className="purple">삭제하기</a>
+            <a onClick={this.onHandleDelete} className="purple btn_w140">삭제하기(미구현)</a>
           </p>
         </div>
       </article>
@@ -90,7 +91,7 @@ class ReportPost extends React.Component {
     return this.state.posts.map((post, i) => {
       return (
         <tr key={i}>
-          <td><input type="checkbox" name="postBox"/></td>
+          <td><input type="checkbox" name="postBox" value={post.get('reportSeq')}/></td>
           <td>{post.get('reportSeq')}</td>
           <td><img src={post.getIn(['post', 'thumbnailUrl'], '')} onError={this.onImageError} width="140px" className="thumbnailUrl" alt="userProfile"/></td>
           <td>{post.getIn(['post', 'postTitle'], '')}</td>
@@ -101,6 +102,25 @@ class ReportPost extends React.Component {
       )
     })
   }
+
+  onHandleDelete() {
+    let checkedList = []
+    $("input[name='postBox']:checked").each(function () {
+      checkedList.push($(this).val())
+    })
+
+    if (checkedList.length > 0 && window.confirm(intlStores.get('common.COMMON_MSG_DEL'))) {
+      // TODO 미구현
+      Alert.error('미구현되었습니다', {
+        position: 'top-right',
+        effect: 'slide',
+        timeout: 3000
+      })
+      
+      $("input[name='postBox']").prop('checked', false)
+    }
+  }
+
 
   /***
    * Move Page
@@ -113,6 +133,7 @@ class ReportPost extends React.Component {
 
   searchContents() {
     //TODO
+
   }
 
 
