@@ -1159,19 +1159,18 @@ const AppActions = {
         })
       })
   },
-  deleteComment(commentObj) {
-    request.del(URL + '/sm/comments/' + commentObj.commentSeq)
+  deleteComment(commentSeq) {
+    request.del(URL + '/sm/comments/' + commentSeq)
       .use(middleware_accesstoken)
       .end(function (err, res) {
         if (utility.errorHandler(err, res)) {
           return
         }  else {
           //TODO : body.type check 부분은 errorHandler에서.
-          if('ERROR' != res.body.type && commentObj.isLast) {
-            alert('삭제 했습니다.')
-          }
+          log(res)
           AppDispatcher.handleViewAction({
             type: AppConstants.DELETE_COMMENTS,
+            commentSeq : commentSeq
           })
         }
       })
@@ -1204,7 +1203,9 @@ const AppActions = {
       .query({searchText: userObj.searchText||''})
       .query({pageNum: userObj.pageNo||1, pageSize: userObj.pageSize||10 })
       .end(function (err, res) {
-
+        if (utility.errorHandler(err, res)) {
+          return
+        }
         AppDispatcher.handleViewAction({
           type: AppConstants.GET_REPORT_POST_LIST,
           data: res.body.data,
@@ -1229,7 +1230,9 @@ const AppActions = {
       .query({searchText: userObj.searchText||''})
       .query({pageNum: userObj.pageNo||1, pageSize: userObj.pageSize||10 })
       .end(function (err, res) {
-
+        if (utility.errorHandler(err, res)) {
+          return
+        }
         AppDispatcher.handleViewAction({
           type: AppConstants.GET_REPORT_COMMENT_LIST,
           data: res.body.data,
@@ -1247,6 +1250,32 @@ const AppActions = {
         })
       })
   },
+  blindReportComment(reportSeq) {
+    request.post(`${URL}/sm/report/comments/${reportSeq}/blind`)
+      .use(middleware_accesstoken)
+      .end(function (err, res) {
+        if (utility.errorHandler(err, res)) {
+          return
+        }
+        AppDispatcher.handleViewAction({
+          type: AppConstants.BLIND_REPORT_COMMENT,
+          reportSeq : reportSeq
+        })
+      })
+  },
+  deleteReportComment(reportSeq) {
+    request.del(`${URL}/sm/report/comments/${reportSeq}`)
+      .use(middleware_accesstoken)
+      .end(function (err, res) {
+        if (utility.errorHandler(err, res)) {
+          return
+        }
+        AppDispatcher.handleViewAction({
+          type: AppConstants.DELETE_REPORT_COMMENT,
+          reportSeq : reportSeq
+        })
+      })
+  },
   /***
    * Push API
    */
@@ -1257,7 +1286,9 @@ const AppActions = {
       .query({searchText: userObj.searchText||''})
       .query({pageNum: userObj.pageNo||1, pageSize: userObj.pageSize||10 })
       .end(function (err, res) {
-
+        if (utility.errorHandler(err, res)) {
+          return
+        }
         AppDispatcher.handleViewAction({
           type: AppConstants.GET_PUSH_LIST,
           pushList: res.body.data,

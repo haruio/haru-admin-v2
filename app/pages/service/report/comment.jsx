@@ -14,6 +14,8 @@ import intlStores from '../../../utils/IntlStore'
 import PaginationStore from '../../../stores/PaginationStore'
 import ReportCommentsStore from '../../../stores/ReportCommentsStore'
 import AppActions from '../../../actions/AppActions'
+import Alert from 'react-s-alert'
+
 
 class ReportComment extends React.Component {
   static getStores() {
@@ -54,7 +56,7 @@ class ReportComment extends React.Component {
           <p className="table_info">{intlStores.get('common.COMMON_FLD_TOTAL') + ' ' + this.state.pagination.get('totalCount') + ' ' + intlStores.get('common.COMMON_FLD_COUNT')}</p>
           <div className="table_wrap">
             <table className="listTable">
-              <colgroup><col width="6%" /><col width="4%" /><col width="18%" /><col width="18%" /><col width="*" /><col width="10%" /><col width="14%" /></colgroup>
+              <colgroup><col width="6%" /><col width="3%" /><col width="20%" /><col width="25%" /><col width="*" /><col width="8%" /><col width="10%" /></colgroup>
               <thead>
               <tr>
                 <th><input type="checkbox" id="checkAll" ref="checkAll" value="-1" onClick={this.toggleCheckBox}/></th>
@@ -88,16 +90,33 @@ class ReportComment extends React.Component {
       </tr>)
     }
 
-    return this.state.comments.map((post, i) => {
+    return this.state.comments.map((comment, i) => {
+      let commenttxt = null
+      if(comment.get('commentStsCd') === 'B') {
+        commenttxt = <p title={comment.get('reportReason')}>신고되어 블라인드 처리된 댓글입니다</p>
+      } else {
+        commenttxt = comment.get('reportReason')
+      }
+
+      let reportStsCd = ''
+      switch(comment.get('reportStsCd')) {
+        case 'QUE':
+          reportStsCd = '대기'
+          break
+        case 'REG':
+          reportStsCd = '처리완료'
+          break
+      }
+
       return (
         <tr key={i}>
-          <td><input type="checkbox" name="postBox"/></td>
-          <td>{post.get('reportSeq')}</td>
-          <td><img src={post.getIn(['post', 'thumbnailUrl'], '')} onError={this.onImageError} width="140px" className="thumbnailUrl" alt="userProfile"/></td>
-          <td>{post.get('commentTxt')}</td>
-          <td>{post.get('reportReason')}</td>
-          <td>{post.get('reportStsCd')}</td>
-          <td>{moment(post.get('createDt')).format('YYYY-MM-DD')}</td>
+          <td><input type="checkbox" name="postBox" value={comment.get('reportSeq')}/></td>
+          <td>{comment.get('reportSeq')}</td>
+          <td><img src={comment.getIn(['post', 'thumbnailUrl'], '')} onError={this.onImageError} width="140px" className="thumbnailUrl" alt="userProfile"/></td>
+          <td>{commenttxt}</td>
+          <td>{comment.get('reportReason')}</td>
+          <td>{reportStsCd}</td>
+          <td>{moment(comment.get('createDt')).format('YYYY-MM-DD')}</td>
         </tr>
       )
     })
@@ -109,11 +128,16 @@ class ReportComment extends React.Component {
       checkedList.push($(this).val())
     })
 
-    if (checkedList.length > 0 && window.confirm(intlStores.get('common.COMMON_MSG_DEL'))) {
-      AppActions.deleteBannerList(checkedList, () => {
-        AppActions.getReportCommentList({})
+    if (checkedList.length > 0 && window.confirm('블라인드 처리 하시겠습니까?')) {
+      checkedList.forEach((value) => {
+        AppActions.blindReportComment(value)
       })
       $("input[name='postBox']").prop('checked', false)
+      Alert.success('블라인드 처리 되었습니다.', {
+        position: 'top-right',
+        effect: 'slide',
+        timeout: 3000
+      })
     }
   }
 
@@ -124,13 +148,19 @@ class ReportComment extends React.Component {
     })
 
     if (checkedList.length > 0 && window.confirm(intlStores.get('common.COMMON_MSG_DEL'))) {
-      AppActions.deleteBannerList(checkedList, () => {
-        this.getBannerList(1, this.state.searchDate, this.state.platform )
+      checkedList.forEach((value) => {
+        AppActions.deleteReportComment(value)
       })
       $("input[name='postBox']").prop('checked', false)
+
+      Alert.success('삭제되었습니다', {
+        position: 'top-right',
+        effect: 'slide',
+        timeout: 3000
+      })
     }
   }
-  
+
   /***
    * Move Page
    * @param page {number} - 이동할 페이지

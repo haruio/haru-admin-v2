@@ -28,15 +28,11 @@ class ReportPost extends React.Component {
     }
   }
 
-
   componentDidMount() {
-    //TODO
     AppActions.getReportPostList({})
-
   }
 
   render() {
-    log(this.state.posts.toJS())
     return (
       <article>
         <hgroup>
@@ -111,23 +107,22 @@ class ReportPost extends React.Component {
 
     if (checkedList.length > 0 && window.confirm(intlStores.get('common.COMMON_MSG_DEL'))) {
       // TODO 미구현
-      Alert.error('미구현되었습니다', {
+      Alert.warning('준비중입니다', {
         position: 'top-right',
         effect: 'slide',
         timeout: 3000
       })
-      
+
       $("input[name='postBox']").prop('checked', false)
     }
   }
-
 
   /***
    * Move Page
    * @param page {number} - 이동할 페이지
    */
   movePage(pageNo) {
-    //TODO
+    //TODO ???
     AppActions.getReportPostList({pageNo: pageNo})
   }
 
@@ -135,8 +130,7 @@ class ReportPost extends React.Component {
     //TODO
 
   }
-
-
+  
   toggleCheckBox = () => {
     $("input[name='postBox']").prop('checked', $(this.refs.checkAll).prop('checked'))
   }

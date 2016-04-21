@@ -11,6 +11,9 @@ import UserProfile from './tab/UserProfileTab'
 import Comment from './tab/CommentTab'
 import debug from 'debug'
 const log = debug('application:MemberPopup.jsx')
+import AppActions from '../../../actions/AppActions'
+import Alert from 'react-s-alert'
+import intlStores from '../../../utils/IntlStore'
 
 export default class MemberPopup extends React.Component {
   static propTypes = {
@@ -54,22 +57,65 @@ export default class MemberPopup extends React.Component {
     if (this.state.tab === USERPROFILE) {
       return (
         <p className="btn_c">
-          <a href="" className="gray">Ban</a>
-          <a href="" className="purple">강제탈퇴</a>&nbsp;&nbsp;&nbsp;
+          <a onClick={this.banUser} className="gray">Ban</a>
+          <a onClick={this.deleteUser} className="purple">강제탈퇴</a>&nbsp;&nbsp;&nbsp;
           <a onClick={this.props.close}>닫기</a>
         </p>
       )
     } else {
       return (
         <p className="btn_c">
-          <a href="" className="gray">삭제하기</a>
-          <a href="" className="purple">블라인드</a>&nbsp;&nbsp;&nbsp;
+          <a onClick={this.deleteComment} className="gray">삭제하기</a>
+          <a onClick={this.blindComment} className="purple">블라인드</a>&nbsp;&nbsp;&nbsp;
           <a onClick={this.props.close}>닫기</a>
         </p>
       )
     }
   }
-  
+  banUser = () => {
+    if (window.confirm('해당 유저를 Ban 하시겠습니까?')) {
+      AppActions.banUser({userId: this.props.userId})
+
+      Alert.success('Ban 등록이 완료되었습니다', {
+        position: 'top-right',
+        effect: 'slide',
+        timeout: 3000
+      })
+    }
+  }
+
+  deleteUser = () => {
+    if (window.confirm(intlStores.get('common.COMMON_MSG_DEL'))) {
+      AppActions.deleteUser({userId : this.props.userId})
+
+      Alert.success('강제 탈퇴되었습니다', {
+        position: 'top-right',
+        effect: 'slide',
+        timeout: 3000
+      })
+
+      this.props.close()
+    }
+  }
+
+  deleteComment() {
+    // TODO 미구현
+    Alert.warning('준비중입니다', {
+      position: 'top-right',
+      effect: 'slide',
+      timeout: 3000
+    })
+  }
+
+  blindComment() {
+    // TODO 미구현
+    Alert.warning('준비중입니다', {
+      position: 'top-right',
+      effect: 'slide',
+      timeout: 3000
+    })
+  }
+
   /***
    * 선택된 tab index
    * @param index {Integer} - selected tab index

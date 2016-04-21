@@ -170,8 +170,8 @@ export default keyMirror({
    */
   GET_REPORT_POST_LIST: null,
   GET_REPORT_COMMENT_LIST: null,
-
-
+  BLIND_REPORT_COMMENT: null,
+  DELETE_REPORT_COMMENT: null,
   /**
    * CHART
    */

@@ -20,6 +20,7 @@ import util from '../../../utils/util'
 import {POPUP} from '../../../constants/AppConstants'
 
 const defaultImage = require('image!../../../assets/img/default.png')
+import Alert from 'react-s-alert'
 
 class Comment extends React.Component {
   static getStores() {
@@ -94,7 +95,7 @@ class Comment extends React.Component {
           </div>
           <PageList pageObj={this.state.pagination} clickAction={this.movePage}/>
           <p className="btn_r">
-            <a onClick={this.deleteComment} className="purple btn_w140">선택된 댓글 {intlStores.get('common.COMMON_BTN_DELETE')}</a>
+            <a onClick={this.onHandleDelete} className="purple btn_w140">선택된 댓글 {intlStores.get('common.COMMON_BTN_DELETE')}</a>
           </p>
         </div>
       </article>
@@ -104,7 +105,7 @@ class Comment extends React.Component {
   get getCommentList() {
     return this.state.comments.map((comment) => {
       return (<tr key={comment.get('commentSeq')}>
-        <td><input type="checkbox" value={comment.get('commentSeq')} onClick={this.checkBoxHandler}/></td>
+        <td><input type="checkbox" name="postBox" value={comment.get('commentSeq')}/></td>
         <td onClick={this.onPopupUserProfile.bind(null, {userId:comment.get('userId'), tab:2})}><img src={comment.get('postThumbnailUrl') || ''} onError={(e) => {e.target.src = defaultImage}} className="thumbnail"/></td>
         <td onClick={this.onPopupUserProfile.bind(null, {userId:comment.get('userId'), tab:2})} className="al">{comment.get('postTitle')}</td>
         <td onClick={this.onPopupUserProfile.bind(null, {userId:comment.get('userId'), tab:2})} className="al">{comment.get('commentTxt')}</td>
@@ -112,6 +113,26 @@ class Comment extends React.Component {
         <td onClick={this.onPopupUserProfile.bind(null, {userId:comment.get('userId'), tab:2})}>{moment(comment.createDt).format('YYYY-MM-DD')}</td>
       </tr>)
     })
+  }
+
+  onHandleDelete() {
+    let checkedList = []
+    $("input[name='postBox']:checked").each(function () {
+      checkedList.push($(this).val())
+    })
+
+    if (checkedList.length > 0 && window.confirm(intlStores.get('common.COMMON_MSG_DEL'))) {
+      checkedList.forEach((value) => {
+        AppActions.deleteComment(value)
+      })
+      $("input[name='postBox']").prop('checked', false)
+
+      Alert.success('삭제되었습니다', {
+        position: 'top-right',
+        effect: 'slide',
+        timeout: 3000
+      })
+    }
   }
 
   /***
