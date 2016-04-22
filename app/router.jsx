@@ -11,6 +11,7 @@ const log = debug('application:router')
 import MyContent from './pages/content/mycontent.jsx'
 import Compose from './pages/content/compose.jsx'
 import Inspection from './pages/content/Inspection.jsx'
+import InspectionDetail from './pages/content/inspectiondetail.jsx'
 import Publish from './pages/content/Publish.jsx'
 import Reserved from './pages/content/reserved.jsx'
 import Deleted from './pages/content/deleted.jsx'
@@ -102,6 +103,14 @@ export default class extends React.Component {
               </Route>
               <Route path="image" component={ Compose }>
                 <Route path=":id" component={ Compose }/>
+              </Route>
+            </Route>
+            <Route path="inspection">
+              <Route path="video">
+                <Route path=":id" component={ InspectionDetail }/>
+              </Route>
+              <Route path="image">
+                <Route path=":id" component={ InspectionDetail }/>
               </Route>
             </Route>
           </Route>

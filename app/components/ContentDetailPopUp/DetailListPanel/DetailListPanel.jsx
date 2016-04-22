@@ -60,8 +60,22 @@ export default class DetailListPanel extends React.Component {
     const cnt = this.props.content.get('contents').size
 
     let detaillist = []
-    for (let i = 0; cnt >= i; i += 7) {
-      const list = this.props.content.get('contents').splice(i, 7).map((content) => {
+    // splice 함수가 2번째 파라미터 숫자(7)보다 작으면 그냥 아무것도 리턴하지 않음
+    if(cnt > 7) {
+      for (let i = 0; cnt >= i; i += 7) {
+        const list = this.props.content.get('contents').splice(i, 7).map((content) => {
+          log(content)
+          return <li key={content.get('contentSeq')}
+                     className={cn({'on': content.get('contentSeq') === this.state.contentSeq})}
+                     onClick={this.onClickListItem.bind(this, content.get('contentSeq'))}>
+            <p style={{backgroundImage:'url('+content.get('contentUrl')+')'}}></p>
+          </li>
+        })
+
+        detaillist.push(<ul key={i}>{list}</ul>)
+      }
+    } else {
+      const list = this.props.content.get('contents').map((content) => {
         return <li key={content.get('contentSeq')}
                    className={cn({'on': content.get('contentSeq') === this.state.contentSeq})}
                    onClick={this.onClickListItem.bind(this, content.get('contentSeq'))}>
@@ -69,7 +83,7 @@ export default class DetailListPanel extends React.Component {
         </li>
       })
 
-      detaillist.push(<ul key={i}>{list}</ul>)
+      detaillist.push(<ul key={1}>{list}</ul>)
     }
     return detaillist.reverse()
   }

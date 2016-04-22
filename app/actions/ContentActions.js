@@ -232,7 +232,7 @@ const ContentActions = {
    * 컨텐츠 승인요청
    * @param submitData {Object} - 컨텐츠 임시저장용 데이터
    */
-  appoveContent(submitData) {
+  appoveContent(submitData, callback) {
     request.post(URL + '/cm/contents/pending/request')
       .use(middleware_accesstoken)
       .send(submitData)
@@ -247,6 +247,10 @@ const ContentActions = {
           effect: 'slide',
           timeout: 3000
         })
+
+        if(callback) {
+          callback()
+        }
       })
   },
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

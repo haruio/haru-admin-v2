@@ -1,5 +1,5 @@
 import React from 'react'
-
+import {Link} from 'react-router'
 import debug from 'debug'
 const log = debug('application:ContentAddMovieZone.jsx')
 
@@ -33,14 +33,11 @@ export default class ContentAddMovieZone extends React.Component {
         <ul id="drag_list2">
           {this.renderContents}
         </ul>
-        <p className="btn_add">
-          <a onClick={this.videoContentAddEmptyImage}><img src={icon_images2} alt={intlStores.get('cms.CMS_BTN_ADD_IMAGE')}/></a>
-          <a onClick={this.videoContentAddEmptyText}><img src={icon_images} alt={intlStores.get('cms.CMS_BTN_ADD_TXT')}/></a>
-        </p>
+        {this.renderAddSubContent}
         <p className="btn_r">
-          <a className="gray">{intlStores.get('cms.CMS_BTN_LIST')}</a>
+          <Link to="/content/mycontent" className="gray">{intlStores.get('cms.CMS_BTN_LIST')}</Link>
           <a className="tinyGreen" onClick={this.submitContent.bind(this, PUBLISH.TEMP)}>{intlStores.get('cms.CMS_BTN_TEMP_SAVE')}</a>
-          <a className="purple btn_w340" onClick={this.submitContent.bind(this, PUBLISH.APPROVE)}>{intlStores.get('cms.CMS_BTN_REQUEST')}</a>
+          <a className="purple" onClick={this.submitContent.bind(this, PUBLISH.APPROVE)}>{intlStores.get('cms.CMS_BTN_REQUEST')}</a>
         </p>
       </div>
     )
@@ -55,11 +52,25 @@ export default class ContentAddMovieZone extends React.Component {
     })
   }
 
+  get renderAddSubContent() {
+    if(this.props.inspection) {
+      return null
+    }
+
+    return (<p className="btn_add">
+      <a onClick={this.videoContentAddEmptyImage}><img src={icon_images2} alt={intlStores.get('cms.CMS_BTN_ADD_IMAGE')}/></a>
+      <a onClick={this.videoContentAddEmptyText}><img src={icon_images} alt={intlStores.get('cms.CMS_BTN_ADD_TXT')}/></a>
+    </p>)
+  }
+
   submitContent = (type) => {
     this.props.onSubmit(type)
   }
 
   videoContentAddEmptyImage() {
+    if(this.props.inspection) {
+      return
+    }
     ContentActions.addSubContent({
       contentSeq: Date.now(),
       type: 'IMG',
@@ -70,6 +81,10 @@ export default class ContentAddMovieZone extends React.Component {
   }
 
   videoContentAddEmptyText() {
+    if(this.props.inspection) {
+      return
+    }
+
     ContentActions.addSubContent({
       contentSeq: Date.now(),
       type: 'TXT',

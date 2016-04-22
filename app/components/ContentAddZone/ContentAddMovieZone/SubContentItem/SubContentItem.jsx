@@ -39,7 +39,9 @@ export default class SubContentItem extends React.Component {
     } else {
       return (
         <li key={content.get('contentSeq')}>
-          <p className="text"><textarea placeholder={intlStores.get('cms.CMS_MSG_ERROR_DESC')}></textarea></p>
+          <p className="text"><textarea placeholder={intlStores.get('cms.CMS_MSG_ERROR_DESC')}
+                                        defaultValue={content.get('body')}
+                                        onBlur={this.onSubContentTextUpdate.bind(this, content.get('contentSeq'))}></textarea></p>
           <input type="image" src={btn_close} alt="닫기"
                  onClick={this.clickRemoveBtn.bind(this, content.get('contentSeq'))}/>
         </li>)
@@ -54,6 +56,14 @@ export default class SubContentItem extends React.Component {
     } else {
       return <img src={content.get('contentUrl')} alt="image"/>
     }
+  }
+  onSubContentTextUpdate(contentSeq, e) {
+    ContentActions.updateSubContent({
+      contentSeq: contentSeq,
+      type: 'TXT',
+      body: e.target.value,
+      contentResourceSeq: ''
+    })
   }
 
   onSubContentUpdate(contentSeq, e) {

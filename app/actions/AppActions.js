@@ -12,7 +12,7 @@ import request from 'superagent'
 
 import utility from '../utils/util.js'
 
-import { currentuser, URL, OLD_URL, middleware_accesstoken } from './AuthActions.js'
+import { currentuser, URL, middleware_accesstoken } from './AuthActions.js'
 
 import moment from 'moment'
 import Alert from 'react-s-alert'
@@ -1170,6 +1170,22 @@ const AppActions = {
           log(res)
           AppDispatcher.handleViewAction({
             type: AppConstants.DELETE_COMMENTS,
+            commentSeq : commentSeq
+          })
+        }
+      })
+  },
+  blindComment(commentSeq) {
+    request.post(`${URL}/sm/comments/${commentSeq}/blind`)
+      .use(middleware_accesstoken)
+      .end(function (err, res) {
+        if (utility.errorHandler(err, res)) {
+          return
+        }  else {
+          //TODO : body.type check 부분은 errorHandler에서.
+          log(res)
+          AppDispatcher.handleViewAction({
+            type: AppConstants.BLIND_COMMENTS,
             commentSeq : commentSeq
           })
         }

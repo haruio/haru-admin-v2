@@ -31,12 +31,12 @@ export default class LeftMenu extends React.Component {
           <Link to="/content/compose" activeClassName="on">{intlStores.get('cms.MENU_TXT_MAKE_CONTENT')}</Link>
           <ul id="lnb">
             <li className={cn({ 'on': router.isActive('/content/mycontent') })}>
-              <Link to="/content/mycontent" className="l1_a">{intlStores.get('cms.MENU_TXT_MY_CONTENT')}</Link><b>?</b>
+              <Link to="/content/mycontent" className="l1_a">{intlStores.get('cms.MENU_TXT_MY_CONTENT')}</Link>
             </li>
             <li className={cn({ 'on': router.isActive('/content/list') })}>
               <Link to="/content/list/publish" className="l1_b">{intlStores.get('cms.MENU_TXT_CONTENT_LIST')}</Link>
               <ul>
-                <li><Link to="/content/list/publish" activeClassName="on">{intlStores.get('cms.PUBLISHED_CONTENTS')}</Link><b>??</b></li>
+                <li><Link to="/content/list/publish" activeClassName="on">{intlStores.get('cms.PUBLISHED_CONTENTS')}</Link></li>
                 <li><Link to="/content/list/reserved" activeClassName="on">{intlStores.get('cms.RESERVED_CONTENTS')}</Link></li>
                 <li><Link to="/content/list/deleted" activeClassName="on">{intlStores.get('cms.DELETED_CONTENTS')}</Link></li>
               </ul>

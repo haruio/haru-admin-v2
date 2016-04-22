@@ -55,10 +55,20 @@ export default class ImageUploader extends React.Component {
     return (
       <td>
         <input type="text" className="txt t6" id={'input-' + this.props.id} value={value} readOnly placeholder={placeholder}/>
-        <span className="btn_file">Choose file<input type="file" id={'file-input-' + this.props.id} onChange={this.onChange}/></span>
+        {this.renderChooseFile}
         {this.previewImage}
-        <a id={'btn-del-' + this.props.id} className={cn('btn_del', {'hide': value == ''})} onClick={this.props.onClearImage.bind(this, this.props)}></a>
+        {this.renderDelete}
       </td>
+    )
+  }
+
+  get renderChooseFile() {
+    if(this.props.inspection) {
+      return null
+    }
+
+    return (
+      <span className="btn_file">Choose file<input type="file" id={'file-input-' + this.props.id} onChange={this.onChange}/></span>
     )
   }
 
@@ -69,6 +79,17 @@ export default class ImageUploader extends React.Component {
     } else {
       return <a id={'btn-preview-' + this.props.id} className="btn_preview has" ><img alt="" src={value} /></a>
     }
+  }
+
+  get renderDelete() {
+    if(this.props.inspection) {
+      return null
+    }
+
+    const value = this.props.value.get(this.props.id) ? this.props.value.get(this.props.id) : ''
+    return (
+      <a id={'btn-del-' + this.props.id} className={cn('btn_del', {'hide': value == ''})} onClick={this.props.onClearImage.bind(this, this.props)}></a>
+    )
   }
 
   getImagePath = () => {

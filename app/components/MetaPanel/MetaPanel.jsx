@@ -17,7 +17,7 @@ let Tags = ReactTags.WithContext
 import ContentActions from '../../actions/ContentActions'
 import '../../assets/style/reactTag.css'
 import Immutable from 'immutable'
-let suggestKeyword = ['music']
+let suggestKeyword = []
 
 
 /**
@@ -97,6 +97,7 @@ export default class MetaPanel extends React.Component {
 
   _makeSuggestKeywordList = (nextProps) => {
     // tagsinput 에 suggest keyword 만들기. channels, categories를 통해서 만든다
+    suggestKeyword = []
     nextProps.channels.forEach((channel) => {
       suggestKeyword.push(channel.get('name'))
     })
@@ -107,6 +108,7 @@ export default class MetaPanel extends React.Component {
   }
 
   render() {
+    log(this.props.inspection)
     return (
       <div id="add_info" ref="add_info">
         <table className="writeTable">
@@ -127,11 +129,11 @@ export default class MetaPanel extends React.Component {
           </tr>
           <tr>
             <th>{intlStores.get('cms.CMS_FLD_THUMBNAIL')}</th>
-            <ImageUploader id="thumbnail" type="VIDEO" value={this.props.content} ref="thumbnail" />
+            <ImageUploader id="thumbnail" type="VIDEO" value={this.props.content} inspection={this.props.inspection} ref="thumbnail" />
           </tr>
           <tr>
             <th>{intlStores.get('cms.CMS_FLD_SHARE_IMG')}</th>
-            <ImageUploader id="shareImage" type="VIDEO" value={this.props.content} ref="shareImage" />
+            <ImageUploader id="shareImage" type="VIDEO" value={this.props.content} inspection={this.props.inspection} ref="shareImage" />
           </tr>
           {this.renderLastImage}
           <tr>
@@ -189,7 +191,7 @@ export default class MetaPanel extends React.Component {
     if(this.props.type === 'image') {
       return (<tr>
         <th>{intlStores.get('cms.CMS_FLD_LAST_IMG')}</th>
-        <ImageUploader id="lastImageUrl" type="IMAGE" value={this.props.content}  ref="lastImageUrl" />
+        <ImageUploader id="lastImageUrl" type="IMAGE" value={this.props.content} inspection={this.props.inspection} ref="lastImageUrl" />
       </tr>)
     }
   }
@@ -291,6 +293,9 @@ export default class MetaPanel extends React.Component {
    * @param e - 이벤트가 발생한 object
    */
   handleChange(key, e) {
+    if(this.props.inspection) {
+      return
+    }
     // channelSeq의 경우 바로 Select인 것을 감안하여 store 로 바로 변경
     // 다른 키의 경우 onBlur에서 변경
     if(key === 'channelSeq') {
@@ -307,6 +312,10 @@ export default class MetaPanel extends React.Component {
   }
 
   onUpdateStore(key, e) {
+    if(this.props.inspection) {
+      return
+    }
+
     ContentActions.updateContentMeta({
       key:key,
       value:e.target.value
@@ -393,6 +402,10 @@ export default class MetaPanel extends React.Component {
   }
 
   selectCategory(categorySeq, e) {
+    if(this.props.inspection) {
+      return
+    }
+
     const category = this.props.categories.find((select) => { return select.get('categorySeq') === categorySeq})
 
     if(e.target.classList.contains('on')) {

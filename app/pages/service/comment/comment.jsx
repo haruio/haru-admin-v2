@@ -95,7 +95,8 @@ class Comment extends React.Component {
           </div>
           <PageList pageObj={this.state.pagination} clickAction={this.movePage}/>
           <p className="btn_r">
-            <a onClick={this.onHandleDelete} className="purple btn_w140">선택된 댓글 {intlStores.get('common.COMMON_BTN_DELETE')}</a>
+            <a onClick={this.onHandleBlind} className="blue btn_w140">블라인드</a>
+            <a onClick={this.onHandleDelete} className="purple btn_w140">{intlStores.get('common.COMMON_BTN_DELETE')}</a>
           </p>
         </div>
       </article>
@@ -128,6 +129,26 @@ class Comment extends React.Component {
       $("input[name='postBox']").prop('checked', false)
 
       Alert.success('삭제되었습니다', {
+        position: 'top-right',
+        effect: 'slide',
+        timeout: 3000
+      })
+    }
+  }
+
+  onHandleBlind() {
+    let checkedList = []
+    $("input[name='postBox']:checked").each(function () {
+      checkedList.push($(this).val())
+    })
+
+    if (checkedList.length > 0 && window.confirm('블라인트 처리하시겠습니까?')) {
+      checkedList.forEach((value) => {
+        AppActions.blindComment(value)
+      })
+      $("input[name='postBox']").prop('checked', false)
+
+      Alert.success('블라인드 되었습니다', {
         position: 'top-right',
         effect: 'slide',
         timeout: 3000

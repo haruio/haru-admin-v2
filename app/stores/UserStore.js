@@ -65,7 +65,7 @@ class UserStore extends ReduceStore {
     return state
   }
 
-  
+
   reduce(state, action) {
     switch (action.type) {
       case AppConstants.USER_LOGIN:

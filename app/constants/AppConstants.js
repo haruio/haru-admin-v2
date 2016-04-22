@@ -164,6 +164,7 @@ export default keyMirror({
   GET_COMMENTS: null,
   GET_USER_COMMENT: null,
   DELETE_COMMENTS: null,
+  BLIND_COMMENTS: null,
   DELETE_USER_COMMENTS: null,
   /***
    * Report Management

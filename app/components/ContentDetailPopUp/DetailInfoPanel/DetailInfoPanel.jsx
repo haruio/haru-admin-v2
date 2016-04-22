@@ -29,6 +29,10 @@ export default class DetailInfoPanel extends React.Component {
       return item.get('contentSeq') === this.state.contentSeq
     })
 
+    if(!currentImg) {
+      return null
+    }
+
     return (
         <div id="detail_info">
           <p style={{backgroundImage:'url(' +currentImg.get('contentUrl') + ')'}}><em dangerouslySetInnerHTML={this.getHtmlBody()}></em></p>

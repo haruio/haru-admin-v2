@@ -23,10 +23,10 @@ import Alert from 'react-s-alert'
 
 /**
  * A page to Compose
- * 컨텐츠를 작성하는 페이지 (video type, image type)
+ * 컨텐츠를 작성하는 페이지 (video type, image type) 에서 대부분에 소스를 가져옴
  * author : jungun.park
  */
-class Compose extends React.Component {
+class InspectionDetail extends React.Component {
   static contextTypes = {
     router: React.PropTypes.object.isRequired
   }
@@ -42,7 +42,6 @@ class Compose extends React.Component {
       channels: ChannelStore.getChannels()
     }
   }
-
 
   componentWillReceiveProps(prevProps) {
     if (this.props !==  prevProps.params) {
@@ -92,16 +91,16 @@ class Compose extends React.Component {
     return (
         <article id="contents_add" className="add">
           <ul id="tab_menu">
-            <li><Link to="/content/compose/video" activeClassName="on" className={cn({'disabled-link' : this.props.params.id !== undefined})}>Video Type</Link></li>
-            <li><Link to="/content/compose/image" activeClassName="on" className={cn({'disabled-link' : this.props.params.id !== undefined})}>Image Type</Link></li>
+            <li><Link to="/content/inspection/video" activeClassName="on" className={cn({'disabled-link' : this.props.params.id !== undefined})}>Video Type</Link></li>
+            <li><Link to="/content/inspection/image" activeClassName="on" className={cn({'disabled-link' : this.props.params.id !== undefined})}>Image Type</Link></li>
           </ul>
           <MetaPanel type={type}
-                     inspection={false}
+                     inspection={true}
                      categories={this.state.categories}
                      channels={this.state.channels}
                      content={this.state.content} />
           <ContentAddZone type={type}
-                          inspection={false}
+                          inspection={true}
                           content={this.state.content}
                           onSubmit={this.onSubmit}/>
         </article>
@@ -109,65 +108,8 @@ class Compose extends React.Component {
   }
 
   onSubmit = (submitType) => {
-    // validation
-    log(this.state.content.toJS())
-    if(this.state.content.get('title') === '') {
-      Alert.info('타이틀을 입력해주세요', {
-        position: 'top-right',
-        effect: 'slide',
-        timeout: 3000
-      })
-      return
-    }
 
-    if(this.state.content.get('thumbnail') === '') {
-      Alert.info('섬네일 등록해주십시오', {
-        position: 'top-right',
-        effect: 'slide',
-        timeout: 3000
-      })
-      return
-    }
-
-    if(this.state.content.get('shareImage') === '') {
-      Alert.info('공유화면 이미지를 등록해주십시오', {
-        position: 'top-right',
-        effect: 'slide',
-        timeout: 3000
-      })
-      return
-    }
-
-    if(this.state.content.get('channelSeq') === null) {
-      Alert.info('채널을 선택해주세요', {
-        position: 'top-right',
-        effect: 'slide',
-        timeout: 3000
-      })
-      return
-    }
-    if(this.state.content.get('categoriesSeq').size === 0) {
-      Alert.info('카테고리를 선택해주세요', {
-        position: 'top-right',
-        effect: 'slide',
-        timeout: 3000
-      })
-      return
-    }
-
-
-    if(submitType == PUBLISH.TEMP) {
-      ContentActions.saveTemporaryContent(this.state.content.toJS())
-    } else if(submitType == PUBLISH.APPROVE) {
-      //승인요청
-      // "/contents/pending/request";
-      if (window.confirm(intlStores.get('cms.CMS_MSG_NEED_APPROVE'))) {
-        ContentActions.appoveContent(this.state.content.toJS(), () => {
-          this.context.router.push('/content/mycontent')
-        })
-      }
-    }
   }
 }
-const ComposeContainer = Container.create(Compose)
-export default ComposeContainer
+const InspectionDetailContainer = Container.create(InspectionDetail)
+export default InspectionDetailContainer

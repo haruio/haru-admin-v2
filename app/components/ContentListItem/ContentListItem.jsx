@@ -1,5 +1,6 @@
 import React from 'react'
 import {Link} from 'react-router'
+import moment from 'moment'
 
 import debug from 'debug'
 const log = debug('application:ContentListItem.jsx')
@@ -39,7 +40,7 @@ export default class ContentListItem extends React.Component {
 
   render() {
     const content = this.props.content
-    
+    log(content.toJS())
     let thumnail
     let author
     let title
@@ -70,7 +71,7 @@ export default class ContentListItem extends React.Component {
         {this.renderPublishInfo}
         <dl>
           <dt>{title}</dt>
-          <dd>임시저장 : 2015-08-08 PM 12:25</dd>
+          {this.renderDate}
           <dd>{'작성자 : ' + author}</dd>
         </dl>
       </li>
@@ -153,7 +154,7 @@ export default class ContentListItem extends React.Component {
       case CONTENT.INSPECTION: // 검수
         return (
           <span>
-            <Link to={`/content/compose/${contenttype}/${contentid}`}><img src={ct_edit1} alt="" title="수정"/></Link>
+            <Link to={`/content/inspection/${contenttype}/${contentid}`}><img src={ct_edit1} alt="" title="수정"/></Link>
           <a onClick={this.showPublishDeletePopup}><img src={ct_edit2} alt="" title="삭제"/></a>
           <a onClick={this.showHistoryPopup}><img src={ct_edit3} alt="" title="히스토리"/></a>
           <a onClick={this.showRejectPopup}><img src={ct_edit5} alt="" title="반려"/></a>
@@ -188,6 +189,28 @@ export default class ContentListItem extends React.Component {
       </p>)
   }
 
+  get renderDate() {
+    switch (this.props.type) {
+      case CONTENT.CREATE: // 작성중
+        return <dd>{intlStores.get('cms.CMS_BTN_TEMP_SAVE')} : {moment(this.props.content.get('updateDt')).format('YYYY-MM-DD a hh:mm')}</dd>
+      case CONTENT.WAITING: // 승인요청
+        return <dd>{intlStores.get('cms.CMS_BTN_REQUEST')} : {moment(this.props.content.get('updateDt')).format('YYYY-MM-DD a hh:mm')}</dd>
+      case CONTENT.RETRUN: // 반려
+        return <dd>{intlStores.get('cms.CMS_FLD_REJECT')} : {moment(this.props.content.get('updateDt')).format('YYYY-MM-DD a hh:mm')}</dd>
+      case CONTENT.PUBLISHED: // 발행된
+        return <dd>{intlStores.get('cms.CMS_FLD_SUBMITTED_DATE')} : {moment(this.props.content.get('publishStartDt')).format('YYYY-MM-DD a hh:mm')}</dd>
+      case CONTENT.RESERVED:  // 예약된
+        return <dd>{intlStores.get('cms.CMS_FLD_SCHEDULED_DATE')} : {moment(this.props.content.get('publishStartDt')).format('YYYY-MM-DD a hh:mm')}</dd>
+      case CONTENT.DELETEED: // 삭제된
+        return <dd>{intlStores.get('cms.CMS_FLD_DELETED_DATE')} : {moment(this.props.content.get('publishEndDt')).format('YYYY-MM-DD a hh:mm')}</dd>
+      case CONTENT.INSPECTION: // 검수
+        return <dd>{intlStores.get('cms.CMS_BTN_REQUEST')} : {moment(this.props.content.get('updateDt')).format('YYYY-MM-DD a hh:mm')}</dd>
+      default:
+        return <dd>{intlStores.get('cms.CMS_BTN_REQUEST')} : {moment(this.props.content.get('updateDt')).format('YYYY-MM-DD a hh:mm')}</dd>
+    }
+
+
+  }
 
   showHistoryPopup = ()=> {
     PopupActions.openPopup(POPUP.HISTORY, {postSeq: this.props.content.get('postSeq')})

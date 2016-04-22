@@ -1,5 +1,5 @@
 import React from 'react'
-
+import {Link} from 'react-router'
 import debug from 'debug'
 const log = debug('application:ContentAddImageZone.jsx')
 
@@ -34,7 +34,7 @@ export default class ContentAddImageZone extends React.Component {
       })
     }, 200)
   }
-  
+
   render() {
     return (
       <div id="add_images">
@@ -46,9 +46,9 @@ export default class ContentAddImageZone extends React.Component {
           {this.renderContents}
         </div>
         <p className="btn_r">
-          <a className="gray">{intlStores.get('cms.CMS_BTN_LIST')}</a>
+          <Link to="/content/mycontent" className="gray">{intlStores.get('cms.CMS_BTN_LIST')}</Link>
           <a className="tinyGreen" onClick={this.submitContent.bind(this, PUBLISH.TEMP)}>{intlStores.get('cms.CMS_BTN_TEMP_SAVE')}</a>
-          <a className="purple btn_w340" onClick={this.submitContent.bind(this, PUBLISH.APPROVE)}>{intlStores.get('cms.CMS_BTN_REQUEST')}</a>
+          <a className="purple" onClick={this.submitContent.bind(this, PUBLISH.APPROVE)}>{intlStores.get('cms.CMS_BTN_REQUEST')}</a>
         </p>
       </div>
     )
@@ -71,23 +71,25 @@ export default class ContentAddImageZone extends React.Component {
         )
       })
 
-      contentlist.push(<li key="empty">
-        <dl>
-          <dt><img src={txt1} alt="Drag & Drop"/></dt>
-          <dd><b>※ 이곳에 이미지를 끌어다 넣으세요!</b></dd>
-          <dd>(이미지 파일을 <u>최대 10개</u>까지 <br />한꺼번에 등록할 수 있습니다.)</dd>
-        </dl>
-      </li>)
-
       return (
         <ul id="drag_list">
           {contentlist}
+          <li key="empty">
+            <dl>
+              <dt><img src={txt1} alt="Drag & Drop"/></dt>
+              <dd><b>※ 이곳에 이미지를 끌어다 넣으세요!</b></dd>
+              <dd>(이미지 파일을 <u>최대 10개</u>까지 <br />한꺼번에 등록할 수 있습니다.)</dd>
+            </dl>
+          </li>
         </ul>
       )
     }
   }
 
-  clickRemoveBtn(contentSeq) {
+  clickRemoveBtn(contentSeq, e) {
+    e.preventDefault()
+    e.stopPropagation()
+
     ContentActions.deleteSubContent(contentSeq)
   }
 
@@ -169,6 +171,10 @@ export default class ContentAddImageZone extends React.Component {
    * 파일 업로드 요청
    */
   imgDrop = (e) => {
+    if(this.props.inspection) {
+      return
+    }
+
     e.preventDefault()
     this.refs.dragarea.style.border = '2px dashed #d2d2d4'
 
