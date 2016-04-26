@@ -86,16 +86,20 @@ class PublishedContentPopup extends React.Component {
     ContentActions.getPublishContents(page)
   }
 
+  /***
+   * 퍼블리시 컨텐츠에서 선택햇을 경우 
+   * banner, Recommend Post로 나누어짐
+   * @param id
+     */
   selectItem(id) {
     if(this.props.view == 'banner') {
-
       AppActions.getBannerPost(PublishedListStore.getContentListById(id))
     } else {
       AppActions.getPostDetail(PublishedListStore.getContentListById(id))
     }
     this.props.close()
   }
-  
+
   /***
    * 상위 이벤트가 하위에 내려오는 것을 맊는 기능
    * 팝업 밖을 클릭할때 팝업을 닫는 기능이 있는데 팝업을 누를때도 먹을 수 있어서 기능이 내려가지 않도록 stopPropagation함

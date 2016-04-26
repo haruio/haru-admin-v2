@@ -49,11 +49,17 @@ class PostTrendPopup extends React.Component {
       </div>
     )
   }
-//
+
   clearEvent(e) {
     e.stopPropagation()
   }
 
+  /***
+   * post daily chart 데이터로 만들어주는 함수
+   * TODO : 나중에 chart util 함수로 뽑는것도 괜찮을듯
+   * @param chartData {object} - raw chart data
+   * @returns {*} - post daily chart data
+   */
   postDailyChartHandler(chartData) {
     let userChartDataLength = chartData.length || 0
 

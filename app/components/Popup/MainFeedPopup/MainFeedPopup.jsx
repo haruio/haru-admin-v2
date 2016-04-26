@@ -21,15 +21,6 @@ import AppActions from '../../../actions/AppActions'
 import {IMAGE_VALIDATION} from '../../../constants/AppConstants'
 import Alert from 'react-s-alert'
 
-/***
- * TODO
- * 1. 검색어 조회 기능 (compelete)
- * 2. 이미지 업로드
- * 3. 메인피드 부분에 업데이트
- * 4. 메인피드 예약하기
- * 5. 메인피드 삭제하기
- */
-
 class MainFeedPopup extends React.Component {
 
   static getStores() {
@@ -120,10 +111,15 @@ class MainFeedPopup extends React.Component {
     </table>)
   }
 
+  /***
+   * ImageUploader 에서 이미지 업로드 오버라이드 구현체
+   * @param e {*} - 이벤트 오브젝트
+   * @param props {Object} - 해당 props값
+     */
   uploadImage = (e, props) => {
+    // 기전 이미지를 기존에 보낸 props값으로 받아냄.
     this.prethumbnail = props.value.get('thumbnailUrl')
 
-    log(props.value.toJS())
     let imageid = props.id
     /* main feed 전용 */
     if (this.props.feedStyleCd === 'V') {
@@ -139,11 +135,19 @@ class MainFeedPopup extends React.Component {
       this.props.feedIdx)
   }
 
+  /***
+   * 이미지 삭제
+   * @param props {Object} - 삭제할경우 prethumbnail로 변경??? 버그 아닌 버그일듯. ㅋㅋㅋ
+     */
   onClearImage = (props) => {
-    log(this.props)
     AppActions.clearMainFeedThumbnailImage(this.props.feedIdx, this.prethumbnail)
   }
 
+  /***
+   * 엔터을 입력하면 컨텐츠 검색되도록 이벤트 처리
+   * @param e
+   * @private
+     */
   _handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       this.searchContents()
@@ -167,6 +171,10 @@ class MainFeedPopup extends React.Component {
     ContentActions.getPublishContents(page)
   }
 
+  /***
+   * 메인피드 팝업에서 선택된 요소 변경하는 함수 
+   * @param id {number} - 선택된 요소의 인덱스
+     */
   selectItem = (id) => {
     this.setState({selected: id})
   }
@@ -180,17 +188,23 @@ class MainFeedPopup extends React.Component {
     e.stopPropagation()
   }
 
+  /***
+   * 메인피드 등록
+   */
   registerMainFeed = () => {
     const selectedItem = PublishedListStore.getContentListById(this.state.selected)
-    log(selectedItem)
     AppActions.updateMainFeedTemplate(this.props.feedIdx, selectedItem)
     this.props.close()
   }
 
+  /***
+   * 메인피드 등록 취소
+   */
   onHandleCanceled = () => {
     AppActions.clearMainFeedThumbnailImage(this.props.feedIdx, this.prethumbnail || '')
     this.props.close()
   }
 }
+
 const MainFeedPopupContainer = Container.create(MainFeedPopup, {withProps: true})
 export default MainFeedPopupContainer

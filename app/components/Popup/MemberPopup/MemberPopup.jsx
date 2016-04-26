@@ -45,6 +45,10 @@ export default class MemberPopup extends React.Component {
     )
   }
 
+  clearEvent(e) {
+    e.stopPropagation()
+  }
+
   get Body() {
     if (this.state.tab == USERPROFILE) {
       return <UserProfile userId={this.props.userId} />
@@ -72,6 +76,10 @@ export default class MemberPopup extends React.Component {
       )
     }
   }
+
+  /***
+   * 해당 유저를 Ban하는 함수
+   */
   banUser = () => {
     if (window.confirm('해당 유저를 Ban 하시겠습니까?')) {
       AppActions.banUser({userId: this.props.userId})
@@ -84,6 +92,9 @@ export default class MemberPopup extends React.Component {
     }
   }
 
+  /***
+   * 해당 유저를 강제탈퇴하는 함수
+   */
   deleteUser = () => {
     if (window.confirm(intlStores.get('common.COMMON_MSG_DEL'))) {
       AppActions.deleteUser({userId : this.props.userId})
@@ -98,6 +109,9 @@ export default class MemberPopup extends React.Component {
     }
   }
 
+  /***
+   * 덧글을 지우는 함수
+   */
   deleteComment() {
     // TODO 미구현
     Alert.warning('준비중입니다', {
@@ -107,6 +121,9 @@ export default class MemberPopup extends React.Component {
     })
   }
 
+  /***
+   * 덧글을 블라인드 하는 함수
+   */
   blindComment() {
     // TODO 미구현
     Alert.warning('준비중입니다', {
@@ -122,9 +139,5 @@ export default class MemberPopup extends React.Component {
    */
   onTabClick(index) {
     this.setState({tab: index})
-  }
-
-  clearEvent(e) {
-    e.stopPropagation()
   }
 }

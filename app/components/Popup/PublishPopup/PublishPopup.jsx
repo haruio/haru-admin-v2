@@ -68,9 +68,16 @@ export default class PublishPopup extends React.Component {
     e.stopPropagation()
   }
 
+  /***
+   * 달력을 보여주는 함수
+   */
   showCalendar() {
     $('#publishDate').datepicker('show')
   }
+
+  /***
+   * 컨텐츠 발행을 하는 함수
+   */
   requestContentInspection = () => {
     // TODO : Jquery 걷어내기
 

@@ -4,9 +4,6 @@ import React from 'react'
 import debug from 'debug'
 const log = debug('application:MetaPanel.jsx')
 
-//import ImageMetaPanel from './ImageMetaPanel'
-//import VideoMetaPanel from './VideoMetaPanel'
-
 import intlStores from '../../utils/IntlStore'
 import ImageUploader from '../ImageUploader'
 
@@ -51,6 +48,11 @@ export default class MetaPanel extends React.Component {
     this._adjustPanelHeight(true)
   }
 
+  /**
+   * 패널의 높이를 조절하는 함수
+   * @param ismount {boolean} - 마운트 여부. 마운트가 안되었다면 timeout을 줌. 아직 textarea의 높이를 구하는데 시간이 걸려서...
+   * @private
+     */
   _adjustPanelHeight(ismount = false) {
     let timeout = 0
     if(ismount) {
@@ -95,6 +97,11 @@ export default class MetaPanel extends React.Component {
     this._adjustPanelHeight(false)
   }
 
+  /***
+   * react-tag-input에 추천어를 입력하는 함수
+   * @param nextProps {Object} - 기존에 props을 가져와서 거기에서 channels, categories 정보를 추가
+   * @private
+     */
   _makeSuggestKeywordList = (nextProps) => {
     // tagsinput 에 suggest keyword 만들기. channels, categories를 통해서 만든다
     suggestKeyword = []
@@ -108,7 +115,6 @@ export default class MetaPanel extends React.Component {
   }
 
   render() {
-    log(this.props.inspection)
     return (
       <div id="add_info" ref="add_info">
         <table className="writeTable">
@@ -285,7 +291,7 @@ export default class MetaPanel extends React.Component {
     }
   }
 
-
+  // TODO : state를 활용하지 말고 바로 store를 활용하도록 수정이 필요함
   /***
    * React Uncontrolled Components 에 대한 handler 처리
    * https://facebook.github.io/react/docs/forms.html
@@ -311,6 +317,13 @@ export default class MetaPanel extends React.Component {
     }
   }
 
+  /***
+   * controlled input 에서 state를 통해서 관리하였기 때문에 수정된 내용을 onblur일때 store에 반영함
+   * 나름 처음 작성할때는 action -> dispatch -> store로 가는 걸 줄이려고 했을듯..
+   * 하지만 나중에 알게된거지만 그냥 store로 돌리는게 더 좋은거 같다. 일단 코드가 간결하다.
+   * @param key
+   * @param e
+     */
   onUpdateStore(key, e) {
     if(this.props.inspection) {
       return
@@ -336,6 +349,11 @@ export default class MetaPanel extends React.Component {
       value:keywordlist.join(',')
     })
   }
+
+  /***
+   * 키워드 추가
+   * @param keyword {string} - 추가할 키워드
+     */
   handleAddition = (keyword) => {
     let keywords = this.state.keywords
     keywords.push({
@@ -352,6 +370,13 @@ export default class MetaPanel extends React.Component {
       value:keywordlist.join(',')
     })
   }
+
+  /***
+   * 키워드 순서 변경
+   * @param keyword {string} - 선택된 텍스트
+   * @param currPos {number} - 현재 위치
+   * @param newPos {number}  - 변경될 위치
+     */
   handleDrag = (keyword, currPos, newPos) => {
     let keywords = this.state.keywords
 
@@ -375,7 +400,6 @@ export default class MetaPanel extends React.Component {
    */
   onBlurVideoURL = () => {
     /**
-     * todo :
      * 비디오 영상에 대한 정확한 정보를 전달 받지 못하여서 임시방편으로 youtube / 위캔디오에 대한 처리를 문자열 스트링으로 함.
      * youtube 및 위캔디오 컨텐츠 발행자의 입력 url style이 어떤 것이 있는지 short url은 무엇인지 전달받지 못함.
      */
@@ -401,6 +425,11 @@ export default class MetaPanel extends React.Component {
     }
   }
 
+  /***
+   * 카테고리를 선택하는 것을 제어하는 함수
+   * @param categorySeq {number} - 선택된 category Seq
+   * @param e {MouseEvent} - click event object
+     */
   selectCategory(categorySeq, e) {
     if(this.props.inspection) {
       return

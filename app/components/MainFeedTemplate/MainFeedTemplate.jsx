@@ -16,7 +16,7 @@ import {POPUP} from '../../constants/AppConstants'
  */
 
 export default class MainFeedTemplate extends React.Component {
-  //TODO readonly 처리 필요 ??? 
+  //TODO readonly 처리 필요 ???
   render() {
     if(this.props.mainfeed.get('feeds').size === 0) {
       return null
@@ -66,10 +66,17 @@ export default class MainFeedTemplate extends React.Component {
     return (<ul className="main_list">{feedList}</ul>)
   }
 
+  /***
+   * Mainfeed Popup을 띄움
+   * @param feedObj {Object} - 피드 오브젝트??
+     */
   onPopupFeedList(feedObj) {
     PopupActions.openPopup(POPUP.MAINFEED, feedObj)
   }
 
+  /*
+  hover event 
+   */
   movseOver = (e) => {
     const target = this._getTargetClass($(e.target), 'item')
     $(target).find('.modifi').stop().fadeIn(300).stop().animate({opacity: 1}, 100)
@@ -80,6 +87,13 @@ export default class MainFeedTemplate extends React.Component {
     $(target).find('.modifi').stop().fadeOut(300)
   }
 
+  /***
+   * item class 를 가진 element를 리턴함. li tag임.
+   * @param el {Element} - hover된 엘리먼트
+   * @param targetClass - 선택하고 싶은 target className
+   * @returns {*} - 선택된 클래스
+     * @private
+     */
   _getTargetClass(el, targetClass) {
     let tempEl = el[0]
     if (tempEl.className == targetClass) {

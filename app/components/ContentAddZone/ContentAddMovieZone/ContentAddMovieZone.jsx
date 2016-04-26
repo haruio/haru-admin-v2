@@ -15,7 +15,8 @@ import SubContentItem from './SubContentItem'
 import {PUBLISH} from '../../../constants/AppConstants'
 
 /**
- * A component to ContentAddImageZone
+ * A component to ContentAddMovieZone
+ * SubContentItem component list 를 담고 있음
  * author : jungun.park
  */
 

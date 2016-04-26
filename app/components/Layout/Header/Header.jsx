@@ -18,6 +18,7 @@ const logo = require('image!../../../assets/img/login_logo.png')
  */
 export default class Header extends React.Component {
   render() {
+    // 관리자인 사람만 service, stats, system 페이지 접근 권한을 줌
     if(this.props.user.managerYn === 'Y') {
       return (
         <header>

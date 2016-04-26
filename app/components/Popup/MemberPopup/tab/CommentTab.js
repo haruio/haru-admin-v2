@@ -33,7 +33,7 @@ class UserCommentTab extends React.Component {
   componentWillMount() {
     this._readUserComment({pageNo:1})
   }
-
+  
   _readUserComment = (userObj) => {
     AppActions.getUserCommentList({userId:this.props.userId, pageNo:userObj.pageNo})
   }

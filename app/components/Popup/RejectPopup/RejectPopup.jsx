@@ -28,6 +28,9 @@ export default class RejectPopup extends React.Component {
     )
   }
 
+  /***
+   * 승인 거절하는 함수
+   */
   onRejectContent = () => {
     ContentActions.requestContentReject(this.props.postSeq, this.refs.rejectReason.value)
 
