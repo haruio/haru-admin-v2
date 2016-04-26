@@ -62,7 +62,7 @@ class RecommendPostEdit extends React.Component {
       AppActions.updateRecommendDate('date', picker.startDate.valueOf(), picker.endDate.valueOf())
     })
 
-    $('.txt.daterange').data('daterangepicker').setStartDate(moment(this.state.postdetail.get('recommendStartDt')).format('YYYY-MM-DD'));
+    $('.txt.daterange').data('daterangepicker').setStartDate(moment(this.state.postdetail.get('recommendStartDt')).format('YYYY-MM-DD'))
     $('.txt.daterange').data('daterangepicker').setEndDate(moment(this.state.postdetail.get('recommendEndDt')).format('YYYY-MM-DD'))
   }
 

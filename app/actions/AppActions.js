@@ -1321,6 +1321,153 @@ const AppActions = {
           }
         })
       })
+  },
+  getPushDetail(pushId) {
+    request.get(`${URL}/sm/push/${pushId}`)
+      .use(middleware_accesstoken)
+      .end(function (err, res) {
+        AppDispatcher.handleViewAction({
+          type: AppConstants.PUSH_DETAIL,
+          content: res.body
+        })
+
+
+        /*url 안에 post 이면 해당 포스트데이터를 로딩한다. 채널 카테고리는 이미 가지고 있기 때문인가부다*/
+        if(res.body && res.body.message.url
+          && (res.body.message.url.indexOf('post') >= 0)) {
+          AppActions.getPostByUrl(res.body.message.url.split(/post\//)[1])
+        }
+      })
+  },
+  clearPush() {
+    AppDispatcher.handleViewAction({
+      type: AppConstants.CLEAR_PUSH
+    })
+  },
+  updatePushSendType(value) {
+    AppDispatcher.handleViewAction({
+      type: AppConstants.PUSH_CHANGE_SENDTYPE,
+      value: value
+    })
+  },
+  updatePushCondition(key, value) {
+    AppDispatcher.handleViewAction({
+      type: AppConstants.PUSH_CHANGE_CONDITION,
+      key:key,
+      value: value
+    })
+  },
+  updatePushMessage(key, value) {
+    AppDispatcher.handleViewAction({
+      type: AppConstants.PUSH_CHANGE_MESSAGE,
+      key:key,
+      value: value
+    })
+  },
+  updatePushURL(url) {
+    AppDispatcher.handleViewAction({
+      type: AppConstants.PUSH_CHANGE_URL,
+      url: url
+    })
+  },
+  updatePushDate(publishDt) {
+    AppDispatcher.handleViewAction({
+      type: AppConstants.PUSH_CHANGE_DATE,
+      publishDt: publishDt
+    })
+  },
+  sendPush(pushObj, callback) {
+    delete pushObj.post
+
+    // condition에 해당하지 않으면 다 지워야함
+    if(pushObj.condition.gender === '') {
+      delete pushObj.condition.gender
+    }
+    if(pushObj.condition.osType === '') {
+      delete pushObj.condition.osType
+    }
+    if(pushObj.condition.channelSeq === '') {
+      delete pushObj.condition.channelSeq
+    } else {
+      // Number 여야함 ㅠㅠ
+      pushObj.condition.channelSeq = Number(pushObj.condition.channelSeq)
+    }
+    if(pushObj.condition.user == '') {
+      delete pushObj.condition.user
+    }
+
+    if(pushObj.pushStatus === 'DRCT') {
+      delete pushObj.publishDt
+      delete pushObj.pushStatus
+    } else {
+      delete pushObj.pushStatus
+    }
+
+    request.post(URL + '/sm/push')
+      .use(middleware_accesstoken)
+      .send(pushObj)
+      .end(function (err, res) {
+        if (utility.errorHandler(err, res)) {
+          return
+        }
+
+        if(callback) {
+          callback()
+        }
+      })
+  },
+  updatePush(pushObj, pushId, callback) {
+    delete pushObj.post
+
+    // condition에 해당하지 않으면 다 지워야함
+    if(pushObj.condition.gender === '') {
+      delete pushObj.condition.gender
+    }
+    if(pushObj.condition.osType === '') {
+      delete pushObj.condition.osType
+    }
+    if(pushObj.condition.channelSeq === '') {
+      delete pushObj.condition.channelSeq
+    } else {
+      // Number 여야함 ㅠㅠ
+      pushObj.condition.channelSeq = Number(pushObj.condition.channelSeq)
+    }
+    if(pushObj.condition.user == '') {
+      delete pushObj.condition.user
+    }
+
+    if(pushObj.pushStatus === 'DRCT') {
+      delete pushObj.publishDt
+      delete pushObj.pushStatus
+    } else {
+      delete pushObj.pushStatus
+    }
+
+    request.put(`${URL}/sm/push/reserved/${pushId}`)
+      .use(middleware_accesstoken)
+      .send(pushObj)
+      .end(function (err, res) {
+        if (utility.errorHandler(err, res)) {
+          return
+        }
+
+        if(callback) {
+          callback()
+        }
+      })
+  },
+  cancelPush(pushId, callback) {
+    request.del(`${URL}/sm/push/reserved/${pushId}`)
+      .use(middleware_accesstoken)
+      .end(function (err, res) {
+        if (utility.errorHandler(err, res)) {
+          return
+        }
+
+        if(callback) {
+          callback()
+        }
+      })
   }
 }
 

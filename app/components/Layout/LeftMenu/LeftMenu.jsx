@@ -21,7 +21,6 @@ export default class LeftMenu extends React.Component {
   }
 
   render() {
-    log('left')
     let router = this.context.router
 
     // URL을 기반으로 Left Menu를 뿌려줌. react-router isActive, activeClassName을 활용하여 개발

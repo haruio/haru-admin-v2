@@ -16,7 +16,6 @@ const logo = require('image!../../../assets/img/login_logo.png')
  * 그래서 UserProfile을 해당 컴포넌트로 분리해서 Store에 영향받는걸 최하위로 내려버림
  * author : jungun.park
  */
-
 export default class Header extends React.Component {
   render() {
     return (

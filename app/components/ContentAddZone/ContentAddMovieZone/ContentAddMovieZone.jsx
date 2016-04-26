@@ -48,11 +48,12 @@ export default class ContentAddMovieZone extends React.Component {
       return null
 
     return this.props.content.get('contents').map((content) => {
-      return <SubContentItem content={content} key={content.get('contentSeq')}/>
+      return <SubContentItem content={content} inspection={this.props.inspection} key={content.get('contentSeq')}/>
     })
   }
 
   get renderAddSubContent() {
+    // 제보에서는 서브 컨텐츠 추가하는 기능을 제거함
     if(this.props.inspection) {
       return null
     }
@@ -63,14 +64,19 @@ export default class ContentAddMovieZone extends React.Component {
     </p>)
   }
 
+  /***
+   * 발행기능
+   * 해당 페이지의 최상위 부모인 compose.jsx에서 호출됨
+   * @param type {String} - PUBLISH.TEMP(임시저장), PUBLISH.APPROVE(승인
+     */
   submitContent = (type) => {
     this.props.onSubmit(type)
   }
 
+  /***
+   * Video 포스트에서 이미지+텍스트 서브 컨텐츠를 만드는 함수
+   */
   videoContentAddEmptyImage() {
-    if(this.props.inspection) {
-      return
-    }
     ContentActions.addSubContent({
       contentSeq: Date.now(),
       type: 'IMG',
@@ -80,11 +86,10 @@ export default class ContentAddMovieZone extends React.Component {
     })
   }
 
+  /***
+   * Video 포스트에서 텍스트 서브 컨텐츠를 만드는 함수
+   */
   videoContentAddEmptyText() {
-    if(this.props.inspection) {
-      return
-    }
-
     ContentActions.addSubContent({
       contentSeq: Date.now(),
       type: 'TXT',

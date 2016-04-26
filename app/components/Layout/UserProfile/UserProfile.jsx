@@ -33,12 +33,15 @@ class UserProfile extends React.Component {
   render() {
     return (
       <p onClick={this.onLogOut} style={{cursor:'pointer'}}>
-        <b><a >{this.state.user.realNm}</a></b>
+        <b><a>{this.state.user.realNm}</a></b>
         <img src={defaultimg} alt="default"/><a href=""></a>
       </p>
     )
   }
 
+  /***
+   * 로그아웃 이벤트
+   */
   onLogOut() {
     if (confirm('are you logout??')) {
       AuthActions.Logout()

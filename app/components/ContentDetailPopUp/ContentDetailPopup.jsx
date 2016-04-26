@@ -45,11 +45,16 @@ class ContentDetailPopup extends React.Component {
     )
   }
 
+  /**
+   * 리스트에서 이미지를 선택했을 때 infoPanel을 변경하는 함수
+   * @param index {Number} - 선택된 인덱스
+     */
   changeSelectedImage = (index) => {
     if(this.refs.detailinfo) {
       this.refs.detailinfo.changeSelectedImage(index)
     }
   }
+  
   /***
    * 팝업을 닫는 이벤트
    * @param e {MoveEvent} - click event clear

@@ -64,7 +64,6 @@ class BannerList extends React.Component {
   }
 
   getBannerList(page, initdate, platform) {
-    log(initdate)
     const startDate = moment(initdate + ' 00:00:00', 'YYYYMMDD HH:mm:ss').utc().format('YYYY-MM-DD HH:mm:ss')
     const endDate = moment(initdate + ' 23:59:59', 'YYYYMMDD HH:mm:ss').utc().format('YYYY-MM-DD HH:mm:ss')
 
@@ -282,11 +281,20 @@ class BannerList extends React.Component {
   }
 
   // Event
+  /***
+   * 검색조건 plaform변경
+   * @param platform {String} - 플랫폼 변경, (AND, IOS, PC, MW)
+     */
   changePlatform = (platform) => {
     AppActions.ChangePlatform(platform)
     this.getBannerList(1, this.state.searchDate, platform)
   }
 
+  /***
+   * searchDate를 기준으로 검색조건 날짜 변경 (이전, 다음 버튼)
+   * 달력을 통해 직접 변경시에는 datepicker 이벤트로 변경함
+   * @param action {String} - 이전, 이후 (prev, next)
+     */
   changeSearchDate = (action) => {
     let searchDate = moment(this.state.searchDate)
     if (action === 'prev') {

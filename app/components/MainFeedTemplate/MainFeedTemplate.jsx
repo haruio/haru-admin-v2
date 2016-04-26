@@ -16,7 +16,7 @@ import {POPUP} from '../../constants/AppConstants'
  */
 
 export default class MainFeedTemplate extends React.Component {
-  //TODO readonly 처리 필요
+  //TODO readonly 처리 필요 ??? 
   render() {
     if(this.props.mainfeed.get('feeds').size === 0) {
       return null

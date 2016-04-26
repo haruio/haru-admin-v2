@@ -18,7 +18,8 @@ let Logger = (function () {
 
   function init() {
     let cohort = getCohortString()
-    ga('set', dimensions.cohort, cohort)
+    logQueue.push(cohort)
+    //ga('set', dimensions.cohort, cohort)
   }
 
   function getCohortString() {
@@ -56,6 +57,7 @@ let Logger = (function () {
 
   function _sendLog() {
     // send log from queue to server
+    log(logQueue)
     _emptyQueue()
   }
 

@@ -25,6 +25,7 @@ export default keyMirror({
   CREATE_SUBCONTENT: null,
   UPDATE_SUBCONTENT: null,
   DELETE_SUBCONTENT: null,
+  UPDATE_SUBCONTENT_IMAGE: null,
 
   /**
    * Compose Image
@@ -199,6 +200,12 @@ export default keyMirror({
   PUSH_GET_CATEGORIES: null,
   PUSH_POST_CONTENTS: null,
   PUSH_DETAIL: null,
+  CLEAR_PUSH: null,
+  PUSH_CHANGE_CONDITION: null,
+  PUSH_CHANGE_MESSAGE: null,
+  PUSH_CHANGE_SENDTYPE: null,
+  PUSH_CHANGE_URL: null,
+  PUSH_CHANGE_DATE: null,
 
   OPEN_POPUP: null,
   CLOSE_POPUP: null,

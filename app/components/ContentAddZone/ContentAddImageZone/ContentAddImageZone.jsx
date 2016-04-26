@@ -3,14 +3,16 @@ import {Link} from 'react-router'
 import debug from 'debug'
 const log = debug('application:ContentAddImageZone.jsx')
 
+import {POPUP, PUBLISH} from '../../../constants/AppConstants'
+import ContentActions from '../../../actions/ContentActions'
+import PopupActions from '../../../actions/PopupActions'
+
 import intlStores from '../../../utils/IntlStore'
 
 const txt1 = require('image!../../../assets/img/txt1.png')
 const icon_images = require('image!../../../assets/img/icon_images.png')
 
-import ContentActions from '../../../actions/ContentActions'
-import PopupActions from '../../../actions/PopupActions'
-import {POPUP, PUBLISH} from '../../../constants/AppConstants'
+import util from '../../../utils/util'
 /**
  * A component to ContentAddImageZone
  * author : jungun.park
@@ -61,7 +63,7 @@ export default class ContentAddImageZone extends React.Component {
       return this.EmptyDescriptionDropImageZone
     } else {
       let contentlist = this.props.content.get('contents').map((content) => {
-        let getHtmlBody = () => {return {__html: this.replaceAll(content.get('body'), '\n', '<br />')}}
+        let getHtmlBody = () => {return {__html: util.replaceAll(content.get('body'), '\n', '<br />')}}
 
         return (
           <li key={content.get('contentSeq')} onClick={this.onPopupUserProfile.bind(this, content.get('contentSeq'))}>
@@ -84,13 +86,6 @@ export default class ContentAddImageZone extends React.Component {
         </ul>
       )
     }
-  }
-
-  clickRemoveBtn(contentSeq, e) {
-    e.preventDefault()
-    e.stopPropagation()
-
-    ContentActions.deleteSubContent(contentSeq)
   }
 
   get EmptyDescriptionDropImageZone() {
@@ -131,12 +126,16 @@ export default class ContentAddImageZone extends React.Component {
       </div>)
   }
 
-  replaceAll(str, target, replacement) {
-    if(str) {
-      return str.split(target).join(replacement)
-    } else {
-      return str
-    }
+  /***
+   * 이미지 삭제 버튼
+   * @param contentSeq {String} - 삭제할 서브 컨텐츠의 contentSeq
+   * @param e {MouseEvent} - mouse event
+     */
+  clickRemoveBtn(contentSeq, e) {
+    e.preventDefault()
+    e.stopPropagation()
+
+    ContentActions.deleteSubContent(contentSeq)
   }
 
   /***
@@ -156,7 +155,6 @@ export default class ContentAddImageZone extends React.Component {
     this.refs.dragarea.style.border = '2px solid #d2d2d4'
   }
 
-
   /**
    * 타겟 영역에 마우스 오버 이벤트 제거
    */
@@ -171,6 +169,7 @@ export default class ContentAddImageZone extends React.Component {
    * 파일 업로드 요청
    */
   imgDrop = (e) => {
+    // 검수 상태에서는 이미지 추가가 안되도록 막음
     if(this.props.inspection) {
       return
     }
@@ -182,6 +181,7 @@ export default class ContentAddImageZone extends React.Component {
     this._handleFileUpload(files)
   }
 
+  // TODO : 약간에 버그로 활용하고 있지 않음 나중에 고민해 보자
   imgLeave = (e) => {
     log('leave')
     e.preventDefault()
@@ -192,13 +192,13 @@ export default class ContentAddImageZone extends React.Component {
 
   /**
    * 업로드 요청 된 파일들 formData로 변환
+   * @param files {FileList} - 드레그 앤 드랍으로 생성된 파일들
    */
   _handleFileUpload(files) {
     for (let i = 0; i < files.length; i++) {
       ContentActions.uploadImagesUpdateSubContent(files[i])
     }
   }
-
 
   /***
    * PopUp User Profile

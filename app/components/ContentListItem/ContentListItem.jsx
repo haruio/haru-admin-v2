@@ -23,24 +23,10 @@ const ct_edit7 = require('image!../../assets/img/ct_edit7.png')
  * A component to ContentList
  * author : jungun.park
  */
-// TODO : 임시저장 부분
-
 export default class ContentListItem extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      content: {
-        viewCnt: 0,
-        likeCnt: 0,
-        commentCnt: 0,
-        shareCnt: 0
-      }
-    }
-  }
-
   render() {
     const content = this.props.content
-    log(content.toJS())
+
     let thumnail
     let author
     let title
@@ -177,14 +163,14 @@ export default class ContentListItem extends React.Component {
       || this.props.type == CONTENT.RETRUN)
       return null
 
-    const content = this.state.content
+    const content = this.props.content
     return (
       <p>
         <span>
-          <i title="뷰">{content.viewCnt}</i>
-          <i title="좋아요">{content.likeCnt}</i>
-          <i title="댓글">{content.commentCnt}</i>
-          <i title="공유">{content.shareCnt}</i>
+          <i title="뷰">{content.get('viewCnt')}</i>
+          <i title="좋아요">{content.get('likeCnt')}</i>
+          <i title="댓글">{content.get('commentCnt')}</i>
+          <i title="공유">{content.get('shareCnt')}</i>
         </span>
       </p>)
   }
@@ -208,28 +194,41 @@ export default class ContentListItem extends React.Component {
       default:
         return <dd>{intlStores.get('cms.CMS_BTN_REQUEST')} : {moment(this.props.content.get('updateDt')).format('YYYY-MM-DD a hh:mm')}</dd>
     }
-
-
   }
 
+  /***
+   * 컨텐츠 히스토리 팝업
+   */
   showHistoryPopup = ()=> {
     PopupActions.openPopup(POPUP.HISTORY, {postSeq: this.props.content.get('postSeq')})
   }
 
+  /***
+   * 검수 완료 후 발행 팝업
+   */
   showPublishPopup = ()=> {
     PopupActions.openPopup(POPUP.PUBLISH, {postSeq: this.props.content.get('postSeq')})
   }
 
+  /***
+   * 검수시 검수 거절 팝업
+   */
   showRejectPopup = ()=> {
     PopupActions.openPopup(POPUP.REJECT, {postSeq: this.props.content.get('postSeq')})
   }
 
+  /***
+   * 작성중인 상태에서 삭제 클릭시 이벤트
+   */
   showDeletePopup = ()=> {
     if (window.confirm(intlStores.get('common.COMMON_MSG_DEL'))) {
       ContentActions.deleteContent(this.props.content.get('postSeq'))
     }
   }
 
+  /***
+   * 승인요청된 상태에서 삭제 클릭시 이벤트
+   */
   showPublishDeletePopup = ()=> {
     if (window.confirm(intlStores.get('common.COMMON_MSG_DEL'))) {
       switch (this.props.type) {
@@ -245,17 +244,22 @@ export default class ContentListItem extends React.Component {
     }
   }
 
+  /***
+   * 승인 취소 클릭 이벤트
+   */
   showCancelRequest = ()=> {
     if (window.confirm(intlStores.get('cms.CMS_MSG_NEED_APPROVE'))) {
       ContentActions.requestCancelRequest(this.props.content.get('postSeq'))
     }
   }
 
+  /***
+   * Mose Hover Event
+   */
   movseOver = () => {
     $(this.refs.item).find('div p').stop().fadeIn(300).stop().animate({opacity: 1}, 100)
   }
   mouseOut = () => {
     $(this.refs.item).find('div p').stop().fadeOut(300)
   }
-
 }

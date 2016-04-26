@@ -21,10 +21,10 @@ import MainFeedPopup from '../components/Popup/MainFeedPopup'
 import PublishedContentPopup from '../components/Popup/PublishedContentPopup'
 import ContentDetailPopup from '../components/ContentDetailPopUp'
 import PostTrendPopup from '../components/Popup/PostTrendPopup'
-/*
+
 import ga from 'react-google-analytics'
 var GAInitiailizer = ga.Initializer
-*/
+
 import Alert from 'react-s-alert'
 
 export default class App extends React.Component {
@@ -37,8 +37,8 @@ export default class App extends React.Component {
 
   componentDidMount() {
     //GA initalize
-    //var GA_TRACKING_CODE = 'UA-53731828-10'
-    //ga('create', GA_TRACKING_CODE, 'auto')
+    let GA_TRACKING_CODE = 'UA-53731828-19'
+    ga('create', GA_TRACKING_CODE, 'auto')
   }
 
   render() {
@@ -49,7 +49,7 @@ export default class App extends React.Component {
           <LeftMenu/>
           {this.props.children}
         </section>
-        
+
         <Popup>
           <MemberPopup key={POPUP.MEMBER}/>
           <HistoryPopup key={POPUP.HISTORY}/>
@@ -61,11 +61,9 @@ export default class App extends React.Component {
           <PostTrendPopup key={POPUP.POSTTREND}/>
         </Popup>
         <Alert stack={{limit: 3}} />
+        <GAInitiailizer />
       </section>
     )
   }
-  //<GAInitiailizer />
+
 }
-
-//import ContentDetailPopup from '../../components/ContentDetailPopUp'
-

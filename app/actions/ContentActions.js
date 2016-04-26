@@ -141,6 +141,14 @@ const ContentActions = {
       subcontent: subcontent
     })
   },
+  updateSubContentImage(contentSeq, key, value) {
+    AppDispatcher.handleViewAction({
+      type: AppConstants.UPDATE_SUBCONTENT_IMAGE,
+      contentSeq: contentSeq,
+      key: key,
+      value:value
+    })
+  },
   uploadImageupdateSubContent(file, contentSeq, body) {
 
     request.post(URL + '/resources')

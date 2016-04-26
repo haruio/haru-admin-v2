@@ -220,5 +220,20 @@ export default {
       return true
     }
     return false
+  },
+
+  /***
+   * target 을 replacement로 바꾸는 함수
+   * @param str {String} - 전체 내용
+   * @param target - 바꿀 내용
+   * @param replacement - 바뀔 내용
+   * @returns {string} - 변경된 결과
+   */
+  replaceAll(str, target, replacement) {
+    if(str) {
+      return str.split(target).join(replacement)
+    } else {
+      return str
+    }
   }
 }

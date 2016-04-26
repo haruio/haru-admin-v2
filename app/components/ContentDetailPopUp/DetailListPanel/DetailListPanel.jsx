@@ -21,6 +21,7 @@ export default class DetailListPanel extends React.Component {
       contentSeq : props.contentSeq
     }
   }
+
   componentDidMount() {
     // detail list cycle
     $('#detail_list>div').cycle({
@@ -37,10 +38,12 @@ export default class DetailListPanel extends React.Component {
       $('#next_list')[index == opts.slideCount - 1 ? 'hide' : 'show']()
     }
 
+    // 키 입력 이벤트 등록
     document.addEventListener('keydown', this.handleKeyPress)
   }
 
   componentWillUnmount() {
+    // 키 입력 이벤트 제거
     document.removeEventListener('keydown', this.handleKeyPress)
   }
 
@@ -88,6 +91,10 @@ export default class DetailListPanel extends React.Component {
     return detaillist.reverse()
   }
 
+  /***
+   * 리스트에서 해당 컨텐츠를 클릭하면 DetailInfoPanel에 해당 선택된 이미지 상세 정보가 나와야함
+   * @param contentSeq {Number} - 선택된 컨텐츠 ContentSeq
+     */
   onClickListItem =(contentSeq) => {
     if(this.props.changeSelectedImage) {
       this.props.changeSelectedImage(contentSeq)
@@ -95,6 +102,10 @@ export default class DetailListPanel extends React.Component {
     }
   }
 
+  /***
+   * 방향키, ESC 입력시 선택되는 컨텐츠 이동
+   * @param e {KeyboardEvent} - 입력된 키 이벤트
+     */
   handleKeyPress = (e) => {
     const contents = this.props.content.get('contents')
     if (e.code === 'ArrowRight') {
@@ -119,7 +130,7 @@ export default class DetailListPanel extends React.Component {
         return item.get('contentSeq') === this.state.contentSeq
       })
 
-      if(index === 0) {
+      if(index === 0) {  // ???
         index = 0
       } else {
         index = index -1

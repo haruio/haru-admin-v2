@@ -127,6 +127,14 @@ class ContentDetailStore extends MapStore {
     return state
   }
 
+  _updateSubContentImage(state, action) {
+    const index = state.get('contents').findIndex(function (item) {
+      return item.get('contentSeq') === action.contentSeq
+    })
+
+    return state.setIn(['contents', index, action.key], action.value)
+  }
+
   reduce(state, action) {
     switch (action.type) {
       case AppConstants.CHANGE_CONTENT_TYPE:
@@ -157,6 +165,8 @@ class ContentDetailStore extends MapStore {
         return this._initialState()
       case AppConstants.UPLOAD_POST_IMAGE:
         return state.set(action.target, action.image.resourceUrl)
+      case AppConstants.UPDATE_SUBCONTENT_IMAGE:
+        return this._updateSubContentImage(state, action)
       default:
         return state
     }

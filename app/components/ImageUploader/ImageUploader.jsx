@@ -6,13 +6,11 @@ const log = debug('application:ImageUploader.jsx')
 
 import AppActions from '../../actions/AppActions'
 import {IMAGE_VALIDATION} from '../../constants/AppConstants'
-
 import ImmutablePropTypes from 'react-immutable-proptypes'
 /**
  * A component to ImageUploader
  * author : jungun.park
  */
-
 export default class ImageUploader extends React.Component {
   static defaultProps = {
     uploadImage: (e, props) => {
@@ -92,15 +90,19 @@ export default class ImageUploader extends React.Component {
     )
   }
 
-  getImagePath = () => {
-    return this.props.value.get(this.props.id)
-  }
-
   /***
    * 파일 업로드, store로 업로드 경로 전달
    * @param e {ChangeEventPlugin} - onChange event
    */
   onChange = (e) => {
     this.props.uploadImage(e, this.props)
+  }
+
+  /***
+   * 현재 입력된 ImagePath를 리턴함
+   * @returns {*} - Current Image Path
+   */
+  getImagePath = () => {
+    return this.props.value.get(this.props.id)
   }
 }
