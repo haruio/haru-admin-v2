@@ -10,7 +10,7 @@ const log = debug('application:router')
 // content
 import MyContent from './pages/content/mycontent.jsx'
 import Compose from './pages/content/compose.jsx'
-import Inspection from './pages/content/Inspection.jsx'
+import Inspection from './pages/content/inspection.jsx'
 import InspectionDetail from './pages/content/inspectiondetail.jsx'
 import Publish from './pages/content/Publish.jsx'
 import Reserved from './pages/content/reserved.jsx'
