@@ -12,7 +12,7 @@ import MyContent from './pages/content/mycontent.jsx'
 import Compose from './pages/content/compose.jsx'
 import Inspection from './pages/content/inspection.jsx'
 import InspectionDetail from './pages/content/inspectiondetail.jsx'
-import Publish from './pages/content/Publish.jsx'
+import Publish from './pages/content/publish.jsx'
 import Reserved from './pages/content/reserved.jsx'
 import Deleted from './pages/content/deleted.jsx'
 // service
