@@ -19,7 +19,7 @@ import RejectPopup from '../components/Popup/RejectPopup'
 import PublishPopup from '../components/Popup/PublishPopup'
 import MainFeedPopup from '../components/Popup/MainFeedPopup'
 import PublishedContentPopup from '../components/Popup/PublishedContentPopup'
-import ContentDetailPopup from '../components/ContentDetailPopUp'
+import ContentDetailPopup from '../components/Popup/ContentDetailPopUp'
 import PostTrendPopup from '../components/Popup/PostTrendPopup'
 
 import ga from 'react-google-analytics'
