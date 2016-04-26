@@ -155,6 +155,15 @@ class Compose extends React.Component {
       return
     }
 
+    if(this.state.content.get('categoriesSeq').size >= 4) {
+      Alert.info('최대 4개까지 카테고리 선택이 가능합니다.', {
+        position: 'top-right',
+        effect: 'slide',
+        timeout: 3000
+      })
+      return
+    }
+
 
     if(submitType == PUBLISH.TEMP) {
       ContentActions.saveTemporaryContent(this.state.content.toJS())

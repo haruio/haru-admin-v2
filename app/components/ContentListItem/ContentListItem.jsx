@@ -248,7 +248,7 @@ export default class ContentListItem extends React.Component {
    * 승인 취소 클릭 이벤트
    */
   showCancelRequest = ()=> {
-    if (window.confirm(intlStores.get('cms.CMS_MSG_NEED_APPROVE'))) {
+    if (window.confirm('승인 취소를 하시겠습니까?')) {
       ContentActions.requestCancelRequest(this.props.content.get('postSeq'))
     }
   }
