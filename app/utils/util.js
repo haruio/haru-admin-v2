@@ -46,13 +46,6 @@ export default {
 
       // 처리 방식 변경 필요
       //alert(res.body.message)
-      setTimeout(function () {
-        Alert.success(res.body.message, {
-          position: 'top-right',
-          effect: 'slide',
-          timeout: 3000
-        })
-      }, 500)
       //location.href = '/'
 
       AppDispatcher.handleViewAction({

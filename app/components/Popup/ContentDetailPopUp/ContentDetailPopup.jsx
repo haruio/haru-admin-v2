@@ -4,11 +4,11 @@ import {Container} from 'flux/utils'
 import debug from 'debug'
 const log = debug('application:ContentDetailPopup.jsx')
 
-const btn_pop_close = require('image!../../assets/img/btn_pop_close.png')
+const btn_pop_close = require('image!../../../assets/img/btn_pop_close.png')
 
-import PopupActions from '../../actions/PopupActions'
-import {POPUP} from '../../constants/AppConstants'
-import ContentDetailStore from '../../stores/ContentDetailStore'
+import PopupActions from '../../../actions/PopupActions'
+import {POPUP} from '../../../constants/AppConstants'
+import ContentDetailStore from '../../../stores/ContentDetailStore'
 
 import DetailInfoPanel from './DetailInfoPanel'
 import DetailListPanel from './DetailListPanel'
@@ -32,7 +32,6 @@ class ContentDetailPopup extends React.Component {
   }
 
   render() {
-
     return (
       <div id="contents_detail" onClick={this.clearEvent}>
         <DetailInfoPanel ref="detailinfo" contentSeq={this.props.contentSeq} content={this.state.content} />
@@ -54,7 +53,7 @@ class ContentDetailPopup extends React.Component {
       this.refs.detailinfo.changeSelectedImage(index)
     }
   }
-  
+
   /***
    * 팝업을 닫는 이벤트
    * @param e {MoveEvent} - click event clear

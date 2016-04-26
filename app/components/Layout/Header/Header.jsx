@@ -18,18 +18,32 @@ const logo = require('image!../../../assets/img/login_logo.png')
  */
 export default class Header extends React.Component {
   render() {
-    return (
-      <header>
-        <h1><Link to="/content/mycontent"><img src={logo} alt="MAKE US" style={{width:'160px'}}/></Link></h1>
-        <ul>
-          <li><Link to="/content" activeClassName="on">Contents Management</Link></li>
-          <li><Link to="/service" activeClassName="on">Service Management</Link></li>
-          <li><Link to="/stats"   activeClassName="on">Statistic Management</Link></li>
-          <li><Link to="/system"  activeClassName="on">System Management</Link></li>
-        </ul>
-        <LangSelector lang="ko_KR" />
-        <UserProfile />
-      </header>
-    )
+    if(this.props.user.managerYn === 'Y') {
+      return (
+        <header>
+          <h1><Link to="/content/mycontent"><img src={logo} alt="MAKE US" style={{width:'160px'}}/></Link></h1>
+          <ul>
+            <li><Link to="/content" activeClassName="on">Contents Management</Link></li>
+            <li><Link to="/service" activeClassName="on">Service Management</Link></li>
+            <li><Link to="/stats"   activeClassName="on">Statistic Management</Link></li>
+            <li><Link to="/system"  activeClassName="on">System Management</Link></li>
+          </ul>
+          <LangSelector lang="ko_KR" />
+          <UserProfile />
+        </header>
+      )
+    } else {
+      return (
+        <header>
+          <h1><Link to="/content/mycontent"><img src={logo} alt="MAKE US" style={{width:'160px'}}/></Link></h1>
+          <ul>
+            <li><Link to="/content" activeClassName="on">Contents Management</Link></li>
+          </ul>
+          <LangSelector lang="ko_KR" />
+          <UserProfile />
+        </header>
+      )
+    }
+
   }
 }

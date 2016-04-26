@@ -3,9 +3,9 @@ import React from 'react'
 import debug from 'debug'
 const log = debug('application:DetailInfoPanel.jsx')
 
-import ContentActions from '../../../actions/ContentActions'
-import intlStores from '../../../utils/IntlStore'
-import util from '../../../utils/util'
+import ContentActions from '../../../../actions/ContentActions'
+import intlStores from '../../../../utils/IntlStore'
+import util from '../../../../utils/util'
 
 /**
  * A component to ContentDetailPopup

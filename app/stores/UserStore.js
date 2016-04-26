@@ -15,8 +15,10 @@ class UserStore extends ReduceStore {
   getInitialState() {
     // restore user data
     const token = localStorage.getItem('ls.AccessToken')
-    const user = JSON.parse(localStorage.getItem('ls.UserModel'))
-
+    let user = JSON.parse(localStorage.getItem('ls.UserModel'))
+    if(user === undefined) {
+      user = {realNm:'',userSeq:0,userTypeSeq:0,managerYn:'N'}
+    }
     return Immutable.Map({error: {code: 0, msg: ''}, user: user, token: token})
   }
 
@@ -40,6 +42,13 @@ class UserStore extends ReduceStore {
     localStorage.removeItem('ls.AccessToken')
     localStorage.removeItem('ls.UserModel')
 
+    setTimeout(function () {
+      Alert.warning('토큰이 말료되었습니다. 다시 로그인해주세요', {
+        position: 'top-right',
+        effect: 'slide',
+        timeout: 3000
+      })
+    }, 300)
     // login
     browserHistory.replace('/login')
   }
@@ -59,7 +68,7 @@ class UserStore extends ReduceStore {
         effect: 'slide',
         timeout: 3000
       })
-    }, 500)
+    }, 300)
     browserHistory.replace('/login')
 
     return state

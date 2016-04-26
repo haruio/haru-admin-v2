@@ -25,27 +25,54 @@ export default class LeftMenu extends React.Component {
 
     // URL을 기반으로 Left Menu를 뿌려줌. react-router isActive, activeClassName을 활용하여 개발
     if (router.isActive('/content')) {
-      return (
-        <nav>
-          <Link to="/content/compose" activeClassName="on">{intlStores.get('cms.MENU_TXT_MAKE_CONTENT')}</Link>
-          <ul id="lnb">
-            <li className={cn({ 'on': router.isActive('/content/mycontent') })}>
-              <Link to="/content/mycontent" className="l1_a">{intlStores.get('cms.MENU_TXT_MY_CONTENT')}</Link>
-            </li>
-            <li className={cn({ 'on': router.isActive('/content/list') })}>
-              <Link to="/content/list/publish" className="l1_b">{intlStores.get('cms.MENU_TXT_CONTENT_LIST')}</Link>
-              <ul>
-                <li><Link to="/content/list/publish" activeClassName="on">{intlStores.get('cms.PUBLISHED_CONTENTS')}</Link></li>
-                <li><Link to="/content/list/reserved" activeClassName="on">{intlStores.get('cms.RESERVED_CONTENTS')}</Link></li>
-                <li><Link to="/content/list/deleted" activeClassName="on">{intlStores.get('cms.DELETED_CONTENTS')}</Link></li>
-              </ul>
-            </li>
-            <li className={cn({ 'on': router.isActive('/content/inspection') })}>
-              <Link to="/content/inspection" className="l1_c">{intlStores.get('cms.CONTENTS_INSPECTION')}</Link>
-            </li>
-          </ul>
-        </nav>
-      )
+      if(this.props.user.managerYn === 'Y') {
+        return (
+          <nav>
+            <Link to="/content/compose" activeClassName="on">{intlStores.get('cms.MENU_TXT_MAKE_CONTENT')}</Link>
+            <ul id="lnb">
+              <li className={cn({ 'on': router.isActive('/content/mycontent') })}>
+                <Link to="/content/mycontent" className="l1_a">{intlStores.get('cms.MENU_TXT_MY_CONTENT')}</Link>
+              </li>
+              <li className={cn({ 'on': router.isActive('/content/list') })}>
+                <Link to="/content/list/publish" className="l1_b">{intlStores.get('cms.MENU_TXT_CONTENT_LIST')}</Link>
+                <ul>
+                  <li><Link to="/content/list/publish"
+                            activeClassName="on">{intlStores.get('cms.PUBLISHED_CONTENTS')}</Link></li>
+                  <li><Link to="/content/list/reserved"
+                            activeClassName="on">{intlStores.get('cms.RESERVED_CONTENTS')}</Link></li>
+                  <li><Link to="/content/list/deleted"
+                            activeClassName="on">{intlStores.get('cms.DELETED_CONTENTS')}</Link></li>
+                </ul>
+              </li>
+              <li className={cn({ 'on': router.isActive('/content/inspection') })}>
+                <Link to="/content/inspection" className="l1_c">{intlStores.get('cms.CONTENTS_INSPECTION')}</Link>
+              </li>
+            </ul>
+          </nav>
+        )
+      } else {
+        return (
+          <nav>
+            <Link to="/content/compose" activeClassName="on">{intlStores.get('cms.MENU_TXT_MAKE_CONTENT')}</Link>
+            <ul id="lnb">
+              <li className={cn({ 'on': router.isActive('/content/mycontent') })}>
+                <Link to="/content/mycontent" className="l1_a">{intlStores.get('cms.MENU_TXT_MY_CONTENT')}</Link>
+              </li>
+              <li className={cn({ 'on': router.isActive('/content/list') })}>
+                <Link to="/content/list/publish" className="l1_b">{intlStores.get('cms.MENU_TXT_CONTENT_LIST')}</Link>
+                <ul>
+                  <li><Link to="/content/list/publish"
+                            activeClassName="on">{intlStores.get('cms.PUBLISHED_CONTENTS')}</Link></li>
+                  <li><Link to="/content/list/reserved"
+                            activeClassName="on">{intlStores.get('cms.RESERVED_CONTENTS')}</Link></li>
+                  <li><Link to="/content/list/deleted"
+                            activeClassName="on">{intlStores.get('cms.DELETED_CONTENTS')}</Link></li>
+                </ul>
+              </li>
+            </ul>
+          </nav>
+        )
+      }
     } else if (router.isActive('/service')) {
       return (
         <nav>

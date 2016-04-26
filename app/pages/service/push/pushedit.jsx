@@ -24,7 +24,6 @@ const edit1 = require('image!../../../assets/img/ct_edit1.png')
 const icon_plus = require('image!../../../assets/img/icon_plus.png')
 import util from '../../../utils/util'
 
-const iphone_preview = require('image!../../../assets/img/iphone_preview_trans.png')
 
 class PushEdit extends React.Component {
   static contextTypes = {
@@ -327,9 +326,8 @@ class PushEdit extends React.Component {
   get renderChannel() {
     let ChannelList = []
 
-    const bannerUrl = this.state.push.getIn(['message', 'url'], '')
-    log(bannerUrl)
-    let defaultCategory = bannerUrl.indexOf('channel') >= 0 ? bannerUrl.split(/channel\//)[1] : ''
+    const pushurl = this.state.push.getIn(['message', 'url'], '')
+    let defaultCategory = pushurl.indexOf('channel') >= 0 ? pushurl.split(/channel\//)[1] : ''
 
     this.state.channels.map((channel, i) => {
       ChannelList.push(<option key={i} value={channel.get('urlNm')}>{channel.get('name') + ' ' + ((channel.get('channelViewCd') == 'N') ? '(' + intlStores.get('common.COMMON_FLD_PRIVATE') + ')' : '')}</option>)
@@ -354,8 +352,8 @@ class PushEdit extends React.Component {
   get renderCategory() {
     let CategoryList = []
 
-    const bannerUrl = this.state.push.getIn(['message', 'url'], '')
-    let defaultCategory = bannerUrl.indexOf('category') >= 0 ? bannerUrl.split(/category\//)[1] : ''
+    const pushurl = this.state.push.getIn(['message', 'url'], '')
+    let defaultCategory = pushurl.indexOf('category') >= 0 ? pushurl.split(/category\//)[1] : ''
 
     this.state.categories.map((category, i) => {
       CategoryList.push(<option key={i}

@@ -16,7 +16,6 @@ import CommentsStore from '../../../stores/CommentsStore'
 import PaginationStore from '../../../stores/PaginationStore'
 
 import intlStores from '../../../utils/IntlStore'
-import util from '../../../utils/util'
 import {POPUP} from '../../../constants/AppConstants'
 
 const defaultImage = require('image!../../../assets/img/default.png')

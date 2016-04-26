@@ -3,8 +3,8 @@ import cn from 'classnames'
 import debug from 'debug'
 const log = debug('application:DetailListPanel.jsx')
 
-const btn_prev = require('image!../../../assets/img/btn_prev.png')
-const btn_next = require('image!../../../assets/img/btn_next.png')
+const btn_prev = require('image!../../../../assets/img/btn_prev.png')
+const btn_next = require('image!../../../../assets/img/btn_next.png')
 
 /**
  * A component to ContentDetailPopup

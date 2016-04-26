@@ -2,7 +2,7 @@
  * Created by pheadra on 7/8/15.
  */
 import React from 'react'
-
+import {Container} from 'flux/utils'
 import debug from 'debug'
 const log = debug('application:app.jsx')
 
@@ -24,15 +24,25 @@ import PostTrendPopup from '../components/Popup/PostTrendPopup'
 
 import ga from 'react-google-analytics'
 var GAInitiailizer = ga.Initializer
-
 import Alert from 'react-s-alert'
 
-export default class App extends React.Component {
+import UserStore from '../stores/UserStore'
+class App extends React.Component {
   constructor(props) {
     super(props)
 
     AppAction.getChannels()
     AppAction.getCategories()
+  }
+
+  static getStores() {
+    return [UserStore]
+  }
+
+  static calculateState() {
+    return {
+      user: UserStore.getUser()
+    }
   }
 
   componentDidMount() {
@@ -42,11 +52,12 @@ export default class App extends React.Component {
   }
 
   render() {
+    log(this.state.user)
     return (
       <section>
-        <Header />
+        <Header user={this.state.user}/>
         <section id="container">
-          <LeftMenu/>
+          <LeftMenu user={this.state.user}/>
           {this.props.children}
         </section>
 
@@ -65,5 +76,7 @@ export default class App extends React.Component {
       </section>
     )
   }
-
 }
+
+const AppContainer = Container.create(App)
+export default AppContainer
