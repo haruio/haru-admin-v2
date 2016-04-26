@@ -20,8 +20,6 @@ import 'react-s-alert/dist/s-alert-css-effects/genie.css'
 import 'react-s-alert/dist/s-alert-css-effects/jelly.css'
 import 'react-s-alert/dist/s-alert-css-effects/stackslide.css'
 
-import 'TraceKit'
-
 import debug from 'debug'
 const log = debug('application:bootstrap')
 
@@ -31,12 +29,6 @@ if (process.env.NODE_ENV !== 'production') {
 } else {
   debug.enable('-application:*')
 }
-
-TraceKit.report.subscribe(function yourLogger(errorReport) {
-  //send via ajax to server, or use console.error in development
-  //to get you started see: https://gist.github.com/4491219
-  log(errorReport)
-})
 
 import React from 'react'
 import ReactDOM from 'react-dom'
