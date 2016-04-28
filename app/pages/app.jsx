@@ -23,13 +23,18 @@ import ContentDetailPopup from '../components/Popup/ContentDetailPopUp'
 import PostTrendPopup from '../components/Popup/PostTrendPopup'
 
 import ga from 'react-google-analytics'
-var GAInitiailizer = ga.Initializer
+let GAInitiailizer = ga.Initializer
 import Alert from 'react-s-alert'
 
 import UserStore from '../stores/UserStore'
+import util from '../utils/util'
+
 class App extends React.Component {
   constructor(props) {
     super(props)
+
+    
+    util.urlParser()
 
     AppAction.getChannels()
     AppAction.getCategories()

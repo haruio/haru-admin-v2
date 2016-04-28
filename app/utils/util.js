@@ -137,6 +137,7 @@ export default {
       host = 'dev-admin.dingo.tv'
     }
 
+    console.log(host)
     localStorage.setItem('ls.Protocol', protocol)
     localStorage.setItem('ls.Host', host)
   },
