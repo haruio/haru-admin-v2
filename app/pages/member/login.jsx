@@ -22,6 +22,7 @@ const INVALID_EMAIL = 2
 const NO_INPUT_PW = 3
 const LOGINFAIL = 4
 
+import util from '../../utils/util'
 /**
  * A pages to Login
  */
@@ -35,6 +36,13 @@ class Login extends React.Component {
       user: UserStore.getUser(),
       error: UserStore.getError()
     }
+  }
+
+  constructor(props) {
+    super(props)
+
+    util.localStorageClear()
+    util.urlParser()
   }
 
   render() {
@@ -82,7 +90,7 @@ class Login extends React.Component {
       </div>
     )
   }
-  
+
   /***
    * handle 'enter key'
    * @param e {KeyboardEvent} - keyboard event listener object

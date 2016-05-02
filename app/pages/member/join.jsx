@@ -20,9 +20,7 @@ import AuthActions from '../../actions/AuthActions'
 export default class Join extends React.Component {
   constructor(props) {
     super(props)
-  }
 
-  componentDidMount() {
     util.localStorageClear()
     util.urlParser()
   }
