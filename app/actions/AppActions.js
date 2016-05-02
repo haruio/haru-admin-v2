@@ -1198,12 +1198,11 @@ const AppActions = {
         if (utility.errorHandler(err, res)) {
           return
         } else {
-
           if('ERROR' != res.body.type && commentObj.isLast) {
             alert('삭제 했습니다.')
           }
           AppDispatcher.handleViewAction({
-            type: AppConstants.DELETE_USER_COMMENTS,
+            type: AppConstants.DELETE_USER_COMMENTS
           })
         }
       })

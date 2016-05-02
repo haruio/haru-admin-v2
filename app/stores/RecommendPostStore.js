@@ -19,8 +19,8 @@ class RecommendPostStore extends ReduceStore {
 
   _init() {
     return {
-      contents: Immutable.List(), // RecommendPost list에서 활용
-      post: Immutable.Map(),      // RecommendEdit 에서 선택된 post 정보
+      contents: Immutable.List([]), // RecommendPost list에서 활용
+      post: Immutable.Map({}),      // RecommendEdit 에서 선택된 post 정보
       recommendpost: Immutable.Map({
         recommendStartDt:moment().valueOf(),
         recommendEndDt:moment().add(1, 'days').valueOf(),
@@ -56,7 +56,7 @@ class RecommendPostStore extends ReduceStore {
   reduce(state, action) {
     switch (action.type) {
       case AppConstants.GET_RECOMMEND_POST_LIST:
-        return state.set('contents', Immutable.fromJS(action.contents))
+        return state.set('contents', Immutable.fromJS(action.contents || []))
       case AppConstants.GET_RECOMMEND_POST:
         return state.set('post', Immutable.fromJS(action.post)).set('recommendpost', Immutable.fromJS(action.recommendpost))
       case AppConstants.GET_RECOMMEND_POST_DETAIL:
