@@ -169,7 +169,7 @@ export default {
   },
 
   _getRequestServiceType(type) {
-    let host = this.getUrl(type)
+    let host = localStorage.getItem('ls.Host')
     if(type == null || type == undefined) {
       host = host + '/kerberos'
     } else {
