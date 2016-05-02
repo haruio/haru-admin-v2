@@ -93,9 +93,9 @@ class ReportComment extends React.Component {
     return this.state.comments.map((comment, i) => {
       let commenttxt = null
       if(comment.get('commentStsCd') === 'B') {
-        commenttxt = <p title={comment.get('reportReason')}>신고되어 블라인드 처리된 댓글입니다</p>
+        commenttxt = <p title={comment.get('commentTxt')}>신고되어 블라인드 처리된 댓글입니다</p>
       } else {
-        commenttxt = comment.get('reportReason')
+        commenttxt = comment.get('commentTxt')
       }
 
       let reportStsCd = ''
