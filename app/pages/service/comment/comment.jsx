@@ -110,7 +110,7 @@ class Comment extends React.Component {
         <td onClick={this.onPopupUserProfile.bind(null, {userId:comment.get('userId'), tab:2})} className="al">{comment.get('postTitle')}</td>
         <td onClick={this.onPopupUserProfile.bind(null, {userId:comment.get('userId'), tab:2})} className="al">{comment.get('commentTxt')}</td>
         <td onClick={this.onPopupUserProfile.bind(null, {userId:comment.get('userId'), tab:2})}>{comment.get('commentAuthor')}</td>
-        <td onClick={this.onPopupUserProfile.bind(null, {userId:comment.get('userId'), tab:2})}>{moment(comment.createDt).format('YYYY-MM-DD')}</td>
+        <td onClick={this.onPopupUserProfile.bind(null, {userId:comment.get('userId'), tab:2})}>{moment(comment.get('createDt')).format('YYYY-MM-DD')}</td>
       </tr>)
     })
   }
