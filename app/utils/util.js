@@ -169,11 +169,7 @@ export default {
   },
 
   _getRequestServiceType(type) {
-    let host = localStorage.getItem('ls.Host')
-    console.log(host)
-    if(host === undefined) {
-      host = 'dev-admin.dingo.tv'
-    }
+    let host = getServiceUrl()
 
     if(type == null || type == undefined) {
       host = host + '/kerberos'
