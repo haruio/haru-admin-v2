@@ -12,12 +12,14 @@ const log = debug('application:BannerList.jsx')
 
 import AppActions from '../../../actions/AppActions'
 import intlStores from'../../../utils/IntlStore'
+import PageList from '../../../components/PageList'
 
 const btn_prev2 = require('image!../../../assets/img/btn_prev2.png')
 const btn_next2 = require('image!../../../assets/img/btn_next2.png')
 const bg_calendar = require('image!../../../assets/img/bg_calendar.png')
 
 import BannerStore from '../../../stores/BannerStore'
+import PaginationStore from '../../../stores/PaginationStore'
 
 /***
  * Banner List
@@ -29,7 +31,7 @@ class BannerList extends React.Component {
   }
 
   static getStores() {
-    return [BannerStore]
+    return [BannerStore, PaginationStore]
   }
 
   static calculateState(prevState, props) {
@@ -42,7 +44,8 @@ class BannerList extends React.Component {
     return {
       banners: BannerStore.getBanners(),
       searchDate:searchDate,
-      platform:BannerStore.getBannerSearchPlatform()
+      platform:BannerStore.getBannerSearchPlatform(),
+      pagination:PaginationStore.getPagination()
     }
   }
 
@@ -70,6 +73,10 @@ class BannerList extends React.Component {
     AppActions.getBannerOtherList(page, 10, startDate, endDate, platform)
   }
 
+  movePage(page) {
+    AppActions.getRecommendPostList(page, 10)
+  }
+  
   render() {
     return (
       <article>
@@ -118,6 +125,7 @@ class BannerList extends React.Component {
               </tbody>
             </table>
           </div>
+          <PageList pageObj={this.state.pagination} clickAction={this.movePage} />
           <p className="btn_r">
             <Link to="/service/mgmt/banner/new"
                   className="purple btn_w140">{intlStores.get('common.COMMON_BTN_REGISTER')}</Link>&nbsp;

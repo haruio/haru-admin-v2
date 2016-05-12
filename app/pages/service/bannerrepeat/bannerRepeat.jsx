@@ -9,9 +9,11 @@ import moment from 'moment'
 
 import debug from 'debug'
 const log = debug('application:BannerChannelList.jsx')
+import PageList from '../../../components/PageList'
 
 import AppActions from '../../../actions/AppActions'
 import BannerStore from '../../../stores/BannerStore'
+import PaginationStore from '../../../stores/PaginationStore'
 import intlStores from'../../../utils/IntlStore'
 
 
@@ -25,13 +27,14 @@ class BannerChannelList extends React.Component {
   }
 
   static getStores() {
-    return [BannerStore]
+    return [BannerStore, PaginationStore]
   }
 
   static calculateState(prevState, props) {
     return {
       banners: BannerStore.getBanners(),
-      platform:BannerStore.getBannerSearchPlatform()
+      platform:BannerStore.getBannerSearchPlatform(),
+      pagination:PaginationStore.getPagination()
     }
   }
 
@@ -44,6 +47,10 @@ class BannerChannelList extends React.Component {
     AppActions.getBannerChannelList(page, 10, platform)
   }
 
+  movePage(page) {
+    AppActions.getRecommendPostList(page, 10)
+  }
+  
   render() {
     return (
       <article>
@@ -79,6 +86,7 @@ class BannerChannelList extends React.Component {
               </tbody>
             </table>
           </div>
+          <PageList pageObj={this.state.pagination} clickAction={this.movePage} />
           <p className="btn_r">
             <Link to="/service/mgmt/bannerrepeat/new" className="purple btn_w140">{intlStores.get('common.COMMON_BTN_REGISTER')}</Link>&nbsp;
             <a onClick={this.deleteSelectedItem}>{intlStores.get('common.COMMON_BTN_DELETE')}</a>
