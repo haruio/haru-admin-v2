@@ -79,7 +79,7 @@ class BannerList extends React.Component {
     const endDate = moment(initdate + ' 23:59:59', 'YYYYMMDD HH:mm:ss').utc().format('YYYY-MM-DD HH:mm:ss')
 
 
-    AppActions.getRecommendPostList(page, 10, startDate, endDate, this.state.platform)
+    AppActions.getBannerOtherList(page, 10, startDate, endDate, this.state.platform)
   }
 
   render() {

@@ -48,9 +48,9 @@ class BannerChannelList extends React.Component {
   }
 
   movePage(page) {
-    AppActions.getRecommendPostList(page, 10)
+    AppActions.getBannerChannelList(page, 10)
   }
-  
+
   render() {
     return (
       <article>
