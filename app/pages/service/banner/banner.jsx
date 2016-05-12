@@ -73,10 +73,15 @@ class BannerList extends React.Component {
     AppActions.getBannerOtherList(page, 10, startDate, endDate, platform)
   }
 
-  movePage(page) {
-    AppActions.getRecommendPostList(page, 10)
+  movePage = (page) => {
+    const initdate = this.state.searchDate
+    const startDate = moment(initdate + ' 00:00:00', 'YYYYMMDD HH:mm:ss').utc().format('YYYY-MM-DD HH:mm:ss')
+    const endDate = moment(initdate + ' 23:59:59', 'YYYYMMDD HH:mm:ss').utc().format('YYYY-MM-DD HH:mm:ss')
+
+
+    AppActions.getRecommendPostList(page, 10, startDate, endDate, this.state.platform)
   }
-  
+
   render() {
     return (
       <article>
