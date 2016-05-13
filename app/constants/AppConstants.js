@@ -11,6 +11,7 @@ export default keyMirror({
    */
   GET_CONTENT: null,
   GET_MYCONTENT: null,
+  GET_WEBHOOKCONTENT: null,
   DELETE_CONTENT: null,
 
   UPDATE_CONTENTMETA: null,

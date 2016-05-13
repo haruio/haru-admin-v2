@@ -59,6 +59,8 @@ class MyContentListStore extends ReduceStore {
 
   reduce(state, action) {
     switch (action.type) {
+      case AppConstants.GET_WEBHOOKCONTENT:
+        return this._getMyContent(state, action)
       case AppConstants.GET_MYCONTENT:
         return this._getMyContent(state, action)
       case AppConstants.CHANGE_SEARCHTYPE:

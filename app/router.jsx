@@ -9,6 +9,7 @@ const log = debug('application:router')
 
 // content
 import MyContent from './pages/content/mycontent.jsx'
+import WebHookContent from './pages/content/webhookcontent.jsx'
 import Compose from './pages/content/compose.jsx'
 import Inspection from './pages/content/inspection.jsx'
 import InspectionDetail from './pages/content/inspectiondetail.jsx'
@@ -90,6 +91,7 @@ export default class extends React.Component {
           <Route path="content">
             <IndexRedirect to="mycontent" />
             <Route path="mycontent" component={ MyContent }/>
+            <Route path="webhookcontent" component={ WebHookContent }/>
             <Route path="inspection" component={ Inspection }/>
             <Route path="list" >
               <Route path="publish" component={ Publish }/>

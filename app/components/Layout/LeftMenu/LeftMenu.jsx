@@ -47,6 +47,9 @@ export default class LeftMenu extends React.Component {
               <li className={cn({ 'on': router.isActive('/content/inspection') })}>
                 <Link to="/content/inspection" className="l1_c">{intlStores.get('cms.CONTENTS_INSPECTION')}</Link>
               </li>
+              <li className={cn({ 'on': router.isActive('/content/webhookcontent') })}>
+                <Link to="/content/webhookcontent">WebHook Content</Link>
+              </li>
             </ul>
           </nav>
         )

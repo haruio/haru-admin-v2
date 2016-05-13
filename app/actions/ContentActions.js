@@ -40,7 +40,24 @@ const ContentActions = {
         })
       })
   },
+  getWebHookContents(pageNo = 1, pageSize = 30, orderField = '', orderMethod = '', searchField = '', searchText = '', channel = '', categories = '', type = '') {
+    request.get(URL + '/cm/contents/pending/webhook')
+      .use(middleware_accesstoken)
+      .query({searchField: searchField, searchText: searchText})
+      .query({channel: channel, categories: categories})
+      .query({type: type})
+      .end(function (err, res) {
+        if (utility.errorHandler(err, res)) {
+          return
+        }
 
+        AppDispatcher.handleViewAction({
+          type: AppConstants.GET_WEBHOOKCONTENT,
+          contents: res.body.data,
+          totalCnt: res.body.totalCnt
+        })
+      })
+  },
   /**
    * my content 삭제 메소드
    */
