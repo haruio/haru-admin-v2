@@ -64,7 +64,7 @@ export default class MyContentHead extends React.Component {
     if (searchType == 'ALL') {
       searchType = ''
     }
-    ContentActions.getMyContents(1, 30, '', '',
+    this.props.onSearch(1, 30, '', '',
       this.refs.searchField.value,
       this.refs.searchText.value,
       '',

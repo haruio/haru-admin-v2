@@ -79,6 +79,7 @@ class WebHookContent extends React.Component {
       <article id="my_contents" ref="mycontent">
         <TabMenu onSearch={ContentActions.getWebHookContents} searchType={this.state.searchType} />
         <MyContentHead ref="mycontenthead"
+                       onSearch={ContentActions.getWebHookContents}
                        moveSection={this.moveSection}
                        searchType={this.state.searchType}
                        writecnt={this.state.writing.size}

@@ -79,6 +79,7 @@ class MyContent extends React.Component {
       <article id="my_contents" ref="mycontent">
         <TabMenu onSearch={ContentActions.getMyContents} searchType={this.state.searchType} />
         <MyContentHead ref="mycontenthead"
+                       onSearch={ContentActions.getMyContents}
                        moveSection={this.moveSection}
                        searchType={this.state.searchType}
                        writecnt={this.state.writing.size}
