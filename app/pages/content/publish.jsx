@@ -19,17 +19,19 @@ import { CONTENT } from '../../constants/AppConstants'
 import ContentActions from '../../actions/ContentActions'
 import ContentListStore from '../../stores/ContentListStore'
 import PaginationStore from '../../stores/PaginationStore'
+import SearchOptStore from '../../stores/SearchOptionStore'
 
 class Publish extends React.Component {
   static getStores() {
-    return [ContentListStore, PaginationStore]
+    return [ContentListStore, PaginationStore, SearchOptStore]
   }
 
   static calculateState() {
     return {
       publish: ContentListStore.getContentList(),
       pagination: PaginationStore.getPagination(),
-      searchType : ContentListStore.getSearchType()
+      searchType : ContentListStore.getSearchType(),
+      searchOpt : SearchOptStore.getSearchOption()
     }
   }
 
@@ -38,7 +40,6 @@ class Publish extends React.Component {
   }
 
   render() {
-    log(this.state)
     return (
       <article id="contents_list">
         <TabMenu onSearch={ContentActions.getViewedContents} searchType={this.state.searchType} />
@@ -54,11 +55,18 @@ class Publish extends React.Component {
    * @param page {String} - move page number
    */
   movePage = (page) => {
+    const orderField= this.state.searchOpt.get('orderField')
+    const orderMethod= this.state.searchOpt.get('orderMethod')
+    const searchField=  this.state.searchOpt.get('searchField')
+    const searchText= this.state.searchOpt.get('searchText')
+    const channel =  this.state.searchOpt.get('channel')
+    const categories =  this.state.searchOpt.get('categories')
+
     let searchType = this.state.searchType
     if (searchType == 'ALL') {
       searchType = ''
     }
-    ContentActions.getViewedContents(page, 30, '', '', '', '', '', '', searchType)
+    ContentActions.getViewedContents(page, 30, orderField, orderMethod, searchField, searchText, channel, categories, searchType)
   }
 
 }

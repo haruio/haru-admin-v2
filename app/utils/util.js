@@ -170,7 +170,6 @@ export default {
 
   _getRequestServiceType(type) {
     let host = localStorage.getItem('ls.Host')
-    console.log(host)
     if(host === undefined) {
       host = 'dev-admin.dingo.tv'
     }

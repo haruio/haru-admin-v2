@@ -84,7 +84,7 @@ class SearchBar extends React.Component {
 
   /***
    * search contents 검색을 하는 함수
-   * 
+   *
    */
   searchContents = () => {
     let searchChannel = this.refs.searchChannel.value

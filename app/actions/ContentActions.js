@@ -301,6 +301,15 @@ const ContentActions = {
         AppDispatcher.handleViewAction({
           type: AppConstants.GET_PUBLISH_CONTENT,
           contents: res.body.data,
+          searchOpt: {
+            orderField: orderField,
+            orderMethod: orderMethod,
+            searchField: searchField,
+            searchText: searchText,
+            channel: channel,
+            categories: categories,
+            type:type
+          },
           pagination: {
             pageSize: res.body.pageSize,
             firstPageNo: res.body.firstPageNo,
@@ -335,6 +344,15 @@ const ContentActions = {
         AppDispatcher.handleViewAction({
           type: AppConstants.GET_VIEWED_CONTENT,
           contents: res.body.data,
+          searchOpt: {
+            orderField: orderField,
+            orderMethod: orderMethod,
+            searchField: searchField,
+            searchText: searchText,
+            channel: channel,
+            categories: categories,
+            type:type
+          },
           pagination: {
             pageSize: res.body.pageSize,
             firstPageNo: res.body.firstPageNo,
@@ -377,6 +395,15 @@ const ContentActions = {
         AppDispatcher.handleViewAction({
           type: AppConstants.GET_RESERVED_CONTENT,
           contents: res.body.data,
+          searchOpt: {
+            orderField: orderField,
+            orderMethod: orderMethod,
+            searchField: searchField,
+            searchText: searchText,
+            channel: channel,
+            categories: categories,
+            type:type
+          },
           pagination: {
             pageSize: res.body.pageSize,
             firstPageNo: res.body.firstPageNo,
@@ -421,6 +448,15 @@ const ContentActions = {
         AppDispatcher.handleViewAction({
           type: AppConstants.GET_DELETE_CONTENT,
           contents: res.body.data,
+          searchOpt: {
+            orderField: orderField,
+            orderMethod: orderMethod,
+            searchField: searchField,
+            searchText: searchText,
+            channel: channel,
+            categories: categories,
+            type:type
+          },
           pagination: {
             pageSize: res.body.pageSize,
             firstPageNo: res.body.firstPageNo,
@@ -464,6 +500,15 @@ const ContentActions = {
         AppDispatcher.handleViewAction({
           type: AppConstants.GET_INSPECTION_CONTENT,
           contents: res.body.data,
+          searchOpt: {
+            orderField: orderField,
+            orderMethod: orderMethod,
+            searchField: searchField,
+            searchText: searchText,
+            channel: channel,
+            categories: categories,
+            type:type
+          },
           pagination: {
             pageSize: res.body.pageSize,
             firstPageNo: res.body.firstPageNo,

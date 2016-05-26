@@ -21,6 +21,8 @@ import ContentListStore from '../../stores/ContentListStore'
 import PaginationStore from '../../stores/PaginationStore'
 import CategoryStore from '../../stores/CategoryStore'
 import ChannelStore from '../../stores/ChannelStore'
+import SearchOptStore from '../../stores/SearchOptionStore'
+
 
 class Inspection extends React.Component {
   static getStores() {
@@ -33,7 +35,8 @@ class Inspection extends React.Component {
       pagination: PaginationStore.getPagination(),
       searchType : ContentListStore.getSearchType(),
       categories: CategoryStore.getCategories(),
-      channels: ChannelStore.getChannels()
+      channels: ChannelStore.getChannels(),
+      searchOpt : SearchOptStore.getSearchOption()
     }
   }
 
@@ -58,11 +61,18 @@ class Inspection extends React.Component {
    * @param page {String} - move page number
    */
   movePage = (page) => {
+    const orderField= this.state.searchOpt.get('orderField')
+    const orderMethod= this.state.searchOpt.get('orderMethod')
+    const searchField=  this.state.searchOpt.get('searchField')
+    const searchText= this.state.searchOpt.get('searchText')
+    const channel =  this.state.searchOpt.get('channel')
+    const categories =  this.state.searchOpt.get('categories')
+    
     let searchType = this.state.searchType
     if (searchType == 'ALL') {
       searchType = ''
     }
-    ContentActions.getViewedContents(page, 30, '', '', '', '', '', '', searchType)
+    ContentActions.getViewedContents(page, 30, orderField, orderMethod, searchField, searchText, channel, categories,  searchType)
   }
 }
 
