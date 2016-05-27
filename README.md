@@ -1,4 +1,4 @@
-# Makeus React Web App - react.js + flux-utils
+# React Web App - react.js + flux-utils
 
 
 ## Features
