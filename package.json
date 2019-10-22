@@ -61,7 +61,7 @@
     "babel-preset-stage-1": "^6.5.0",
     "clean-webpack-plugin": "^0.1.9",
     "css-loader": "^0.23.1",
-    "eslint": "^2.10.2",
+    "eslint": "^6.5.1",
     "eslint-plugin-react": "^5.1.1",
     "expect": "^1.20.1",
     "expect-jsx": "^2.5.1",
