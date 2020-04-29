@@ -33,7 +33,7 @@
     "flux": "^2.1.1",
     "gsap": "^1.18.5",
     "immutable": "^3.8.1",
-    "jquery": "^2.2.4",
+    "jquery": "^3.5.0",
     "moment": "^2.13.0",
     "object-assign": "^4.1.0",
     "react": "^15.1.0",
